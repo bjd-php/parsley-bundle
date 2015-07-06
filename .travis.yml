@@ -12,7 +12,6 @@ env:
   - SYMFONY_VERSION=2.5.*
   - SYMFONY_VERSION=2.6.*
   - SYMFONY_VERSION=2.7.*
-  - SYMFONY_VERSION=dev-master
 
 before_install:
   - pear install pear/PHP_CodeSniffer

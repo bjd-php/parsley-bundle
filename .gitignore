@@ -35,3 +35,7 @@
 
 # Composer PHAR
 /composer.phar
+
+# Sublime-text files
+*.sublime-project
+*.sublime-workspace

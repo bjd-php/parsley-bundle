@@ -21,5 +21,9 @@ install:
   - composer require symfony/symfony:${SYMFONY_VERSION}
 
 script:
-  - phpunit --coverage-text
+  - phpunit --coverage-clover=coverage.clover
   - phpcs --ignore=/vendor/* --extensions=php --encoding=utf-8 --standard=PSR2 -np .
+
+post_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --access-token="b64151e5c9d22d8cae4165f73c8c90d4542f1bb03e8e424a6301c3cbbc24ce4b" --format=php-clover coverage.clover

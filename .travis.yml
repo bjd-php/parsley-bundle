@@ -16,11 +16,9 @@ before_install:
   - pear install pear/PHP_CodeSniffer
   - phpenv rehash
   - composer self-update
-  - composer --version
 
 install:
   - composer require symfony/symfony:${SYMFONY_VERSION}
-  - ls -l
 
 script:
   - phpunit --coverage-text

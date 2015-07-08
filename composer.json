@@ -1,0 +1,25 @@
+{
+    "name": "j-ben87/parsley-bundle",
+    "type": "symfony-bundle",
+    "description": "Convert Symfony constraints into data-attributes for client-side validation with Parsley.",
+    "keywords": ["symfony2", "bundle", "parsley", "validation", "client-side"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Benoit Jouhaud",
+            "email": "bjouhaud@gmail.com",
+            "homepage": "https://github.com/J-Ben87"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "symfony/symfony": "2.3.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "J-Ben87\\ParsleyBundle\\": ""
+        }
+    },
+    "target-dir": "J-Ben87/PrestaBundle",
+    "minimum-stability": "dev"
+}

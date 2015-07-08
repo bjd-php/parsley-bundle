@@ -4,4 +4,5 @@ checks:
         duplication: true
 
 tools:
-    external_code_coverage: true
+    external_code_coverage:
+        timeout: 1800

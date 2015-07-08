@@ -23,8 +23,10 @@ class Range implements ParsleyConstraintInterface
             throw new MissingOptionsException(['min', 'max']);
         }
 
-        $this->constraints['min']   = $this->createMin($options);
-        $this->constraints['max']   = $this->createMax($options);
+        $this->constraints = [
+            'min'   => $this->createMin($options),
+            'max'   => $this->createMax($options)
+        ];
     }
 
     /**
@@ -53,7 +55,7 @@ class Range implements ParsleyConstraintInterface
      */
     protected function createMin(array $defaults)
     {
-        $options['min'] = $defaults['min'];
+        $options = ['min' => $defaults['min']];
 
         if (isset($defaults['minMessage'])) {
             $options['message'] = $defaults['minMessage'];
@@ -69,7 +71,7 @@ class Range implements ParsleyConstraintInterface
      */
     protected function createMax(array $defaults)
     {
-        $options['max'] = $defaults['max'];
+        $options = ['max' => $defaults['max']];
 
         if (isset($defaults['maxMessage'])) {
             $options['message'] = $defaults['maxMessage'];

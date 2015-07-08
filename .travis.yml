@@ -20,7 +20,7 @@ before_install:
 
 install:
   - composer require symfony/symfony:${SYMFONY_VERSION}
-  - ll
+  - ls -l
 
 script:
   - phpunit --coverage-text

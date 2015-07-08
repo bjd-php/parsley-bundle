@@ -1,6 +1,6 @@
 <?php
 
-namespace ParsleyBundle\Validator\ParsleyConstraints;
+namespace JBen87\ParsleyBundle\Validator\ParsleyConstraints;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>

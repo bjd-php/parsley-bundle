@@ -1,6 +1,6 @@
 <?php
 
-namespace ParsleyBundle\Form\Extension;
+namespace JBen87\ParsleyBundle\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;

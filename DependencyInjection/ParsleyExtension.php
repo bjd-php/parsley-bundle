@@ -1,6 +1,6 @@
 <?php
 
-namespace ParsleyBundle\DependencyInjection;
+namespace JBen87\ParsleyBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

@@ -1,6 +1,6 @@
 <?php
 
-namespace ParsleyBundle\Exception\Validator\ParsleyConstraints;
+namespace JBen87\ParsleyBundle\Exception\Validator\ParsleyConstraints;
 
 use Symfony\Component\Validator\Constraint;
 

@@ -12,14 +12,17 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
-        "symfony/symfony": "2.3.*"
+        "php": "^5.4",
+        "symfony/symfony": "^2.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.7"
     },
     "autoload": {
-        "psr-0": {
-            "J-Ben87\\ParsleyBundle\\": ""
+        "psr-4": {
+            "JBen87\\ParsleyBundle\\": ""
         }
     },
-    "target-dir": "J-Ben87/PrestaBundle",
-    "minimum-stability": "dev"
+    "target-dir": "JBen87/ParsleyBundle",
+    "minimum-stability": "stable"
 }

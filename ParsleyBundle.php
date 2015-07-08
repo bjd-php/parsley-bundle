@@ -1,6 +1,6 @@
 <?php
 
-namespace ParsleyBundle;
+namespace JBen87\ParsleyBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

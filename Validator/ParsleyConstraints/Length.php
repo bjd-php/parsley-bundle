@@ -1,8 +1,8 @@
 <?php
 
-namespace ParsleyBundle\Validator\ParsleyConstraints;
+namespace JBen87\ParsleyBundle\Validator\ParsleyConstraints;
 
-use ParsleyBundle\Exception\Validator\ParsleyConstraints\MissingOptionsException;
+use JBen87\ParsleyBundle\Exception\Validator\ParsleyConstraints\MissingOptionsException;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>

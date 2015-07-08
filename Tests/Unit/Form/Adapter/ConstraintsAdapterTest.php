@@ -1,9 +1,9 @@
 <?php
 
-namespace ParsleyBundle\Tests\Unit\Form\Adapter;
+namespace JBen87\ParsleyBundle\Tests\Unit\Form\Adapter;
 
-use ParsleyBundle\Form\Adapter\ConstraintsAdapter;
-use ParsleyBundle\Validator\ParsleyConstraints\ParsleyConstraintInterface;
+use JBen87\ParsleyBundle\Form\Adapter\ConstraintsAdapter;
+use JBen87\ParsleyBundle\Validator\ParsleyConstraints\ParsleyConstraintInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;
@@ -134,7 +134,7 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertRequired(ParsleyConstraintInterface $constraint)
     {
-        $this->assertInstanceOf('ParsleyBundle\Validator\ParsleyConstraints\Required', $constraint);
+        $this->assertInstanceOf('JBen87\ParsleyBundle\Validator\ParsleyConstraints\Required', $constraint);
         $this->assertEquals([
             'data-parsley-required'         => 'true',
             'data-parsley-required-message' => 'Cette valeur ne doit pas être vide.'
@@ -150,7 +150,7 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertTypeEmail(ParsleyConstraintInterface $constraint)
     {
-        $this->assertInstanceOf('ParsleyBundle\Validator\ParsleyConstraints\Type', $constraint);
+        $this->assertInstanceOf('JBen87\ParsleyBundle\Validator\ParsleyConstraints\Type', $constraint);
         $this->assertEquals([
             'data-parsley-type'         => 'email',
             'data-parsley-type-message' => 'Adresse email invalide.'
@@ -166,7 +166,7 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertLength(ParsleyConstraintInterface $constraint)
     {
-        $this->assertInstanceOf('ParsleyBundle\Validator\ParsleyConstraints\Length', $constraint);
+        $this->assertInstanceOf('JBen87\ParsleyBundle\Validator\ParsleyConstraints\Length', $constraint);
         $this->assertEquals([
             'data-parsley-length'           => '[1, 1]',
             'data-parsley-length-message'   => sprintf(
@@ -192,7 +192,7 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertMinLength(ParsleyConstraintInterface $constraint)
     {
-        $this->assertInstanceOf('ParsleyBundle\Validator\ParsleyConstraints\MinLength', $constraint);
+        $this->assertInstanceOf('JBen87\ParsleyBundle\Validator\ParsleyConstraints\MinLength', $constraint);
         $this->assertEquals([
             'data-parsley-minlength'            => '3',
             'data-parsley-minlength-message'    => sprintf(
@@ -218,7 +218,7 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertMaxLength(ParsleyConstraintInterface $constraint)
     {
-        $this->assertInstanceOf('ParsleyBundle\Validator\ParsleyConstraints\MaxLength', $constraint);
+        $this->assertInstanceOf('JBen87\ParsleyBundle\Validator\ParsleyConstraints\MaxLength', $constraint);
         $this->assertEquals([
             'data-parsley-maxlength'            => '4',
             'data-parsley-maxlength-message'    => sprintf(
@@ -244,7 +244,7 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertRange(ParsleyConstraintInterface $constraint)
     {
-        $this->assertInstanceOf('ParsleyBundle\Validator\ParsleyConstraints\Range', $constraint);
+        $this->assertInstanceOf('JBen87\ParsleyBundle\Validator\ParsleyConstraints\Range', $constraint);
         $this->assertEquals([
             'data-parsley-min'          => '2',
             'data-parsley-min-message'  => 'Cette valeur doit être supérieure ou égale à {{ limit }}.',

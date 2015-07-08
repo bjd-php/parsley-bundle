@@ -1,8 +1,8 @@
 <?php
 
-namespace ParsleyBundle\Form\Type;
+namespace JBen87\ParsleyBundle\Form\Type;
 
-use ParsleyBundle\Form\Adapter\ConstraintsAdapter;
+use JBen87\ParsleyBundle\Form\Adapter\ConstraintsAdapter;
 use Symfony\Component\Form\AbstractType as BaseType;
 
 /**

@@ -1,9 +1,9 @@
 <?php
 
-namespace ParsleyBundle\Form\Adapter;
+namespace JBen87\ParsleyBundle\Form\Adapter;
 
-use ParsleyBundle\Exception\Validator\ParsleyConstraints\UndefinedParsleyConstraintException;
-use ParsleyBundle\Validator\ParsleyConstraints;
+use JBen87\ParsleyBundle\Exception\Validator\ParsleyConstraints\UndefinedParsleyConstraintException;
+use JBen87\ParsleyBundle\Validator\ParsleyConstraints;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 

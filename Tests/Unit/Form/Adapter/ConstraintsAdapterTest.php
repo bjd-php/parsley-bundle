@@ -6,10 +6,7 @@ use ParsleyBundle\Form\Adapter\ConstraintsAdapter;
 use ParsleyBundle\Validator\ParsleyConstraints\ParsleyConstraintInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Range;
+use Symfony\Component\Validator\Constraints;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
@@ -36,12 +33,12 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
     public function __construct()
     {
         $this->constraints = [
-            new NotBlank(),
-            new Email(['message' => 'Invalid email address.']),
-            new Length(['min' => 1, 'max' => 1]),
-            new Length(['min' => 3]),
-            new Length(['max' => 4]),
-            new Range(['min' => 2, 'max' => 5])
+            new Constraints\NotBlank(),
+            new Constraints\Email(['message' => 'Invalid email address.']),
+            new Constraints\Length(['min' => 1, 'max' => 1]),
+            new Constraints\Length(['min' => 3]),
+            new Constraints\Length(['max' => 4]),
+            new Constraints\Range(['min' => 2, 'max' => 5])
         ];
 
         $this->translations = [

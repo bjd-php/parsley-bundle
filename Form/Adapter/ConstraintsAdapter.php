@@ -94,8 +94,10 @@ class ConstraintsAdapter
      */
     protected function createLength(Constraint $constraint)
     {
-        $options['min'] = $constraint->min;
-        $options['max'] = $constraint->max;
+        $options = [
+            'min'   => $constraint->min,
+            'max'   => $constraint->max
+        ];
 
         if ($constraint->min === $constraint->max) {
             $options['message'] = $this->translator->trans($constraint->exactMessage, [], 'validators');
@@ -111,8 +113,10 @@ class ConstraintsAdapter
      */
     protected function createMaxLength(Constraint $constraint)
     {
-        $options['max']     = $constraint->max;
-        $options['message'] = $this->translator->trans($constraint->maxMessage, [], 'validators');
+        $options = [
+            'max'       => $constraint->max,
+            'message'   => $this->translator->trans($constraint->maxMessage, [], 'validators')
+        ];
 
         return new ParsleyConstraints\MaxLength($options);
     }
@@ -124,8 +128,10 @@ class ConstraintsAdapter
      */
     protected function createMinLength(Constraint $constraint)
     {
-        $options['min']     = $constraint->min;
-        $options['message'] = $this->translator->trans($constraint->minMessage, [], 'validators');
+        $options = [
+            'min'       => $constraint->min,
+            'message'   => $this->translator->trans($constraint->minMessage, [], 'validators')
+        ];
 
         return new ParsleyConstraints\MinLength($options);
     }
@@ -137,8 +143,10 @@ class ConstraintsAdapter
      */
     protected function createPattern(Constraint $constraint)
     {
-        $options['pattern'] = $constraint->pattern;
-        $options['message'] = $this->translator->trans($constraint->message, [], 'validators');
+        $options = [
+            'pattern'   => $constraint->pattern,
+            'message'   => $this->translator->trans($constraint->message, [], 'validators')
+        ];
 
         return new ParsleyConstraints\Pattern($options);
     }
@@ -150,6 +158,8 @@ class ConstraintsAdapter
      */
     protected function createRange(Constraint $constraint)
     {
+        $options = [];
+
         if (isset($constraint->min)) {
             $options['min']         = $constraint->min;
             $options['minMessage']  = $this->translator->trans($constraint->minMessage, [], 'validators');
@@ -170,7 +180,7 @@ class ConstraintsAdapter
      */
     protected function createRequired(Constraint $constraint)
     {
-        $options['message'] = $this->translator->trans($constraint->message, [], 'validators');
+        $options = ['message' => $this->translator->trans($constraint->message, [], 'validators')];
 
         return new ParsleyConstraints\Required($options);
     }
@@ -183,8 +193,10 @@ class ConstraintsAdapter
      */
     protected function createType(Constraint $constraint, $type)
     {
-        $options['type']    = $type;
-        $options['message'] = $this->translator->trans($constraint->message, [], 'validators');
+        $options = [
+            'type'      => $type,
+            'message'   => $this->translator->trans($constraint->message, [], 'validators')
+        ];
 
         return new ParsleyConstraints\Type($options);
     }

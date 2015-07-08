@@ -42,24 +42,8 @@ class Length extends ParsleyConstraint
     /**
      * {@inheritdoc}
      */
-    protected function getAttribute()
-    {
-        return $this->attribute;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getValue()
     {
         return sprintf('[%d, %d]', $this->min, $this->max);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function renderAttribute()
-    {
-        return sprintf('%s="[%d, %d]"', $this->attribute, $this->min, $this->max);
     }
 }

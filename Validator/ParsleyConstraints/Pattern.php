@@ -36,24 +36,8 @@ class Pattern extends ParsleyConstraint
     /**
      * {@inheritdoc}
      */
-    protected function getAttribute()
-    {
-        return $this->attribute;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getValue()
     {
         return $this->pattern;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function renderAttribute()
-    {
-        return sprintf('%s="%s"', $this->attribute, $this->pattern);
     }
 }

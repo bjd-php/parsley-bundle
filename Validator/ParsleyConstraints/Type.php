@@ -36,24 +36,8 @@ class Type extends ParsleyConstraint
     /**
      * {@inheritdoc}
      */
-    protected function getAttribute()
-    {
-        return $this->attribute;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getValue()
     {
         return $this->type;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function renderAttribute()
-    {
-        return sprintf('%s="%s"', $this->attribute, $this->type);
     }
 }

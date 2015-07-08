@@ -12,6 +12,11 @@ abstract class ParsleyConstraint implements ParsleyConstraintInterface
     /**
      * @var string
      */
+    protected $attribute;
+
+    /**
+     * @var string
+     */
     protected $message = 'Invalid.';
 
     /**
@@ -30,8 +35,8 @@ abstract class ParsleyConstraint implements ParsleyConstraintInterface
     public function toArray()
     {
         return [
-            $this->getAttribute()                           => $this->getValue(),
-            sprintf('%s-message', $this->getAttribute())    => $this->message
+            $this->attribute                        => $this->getValue(),
+            sprintf('%s-message', $this->attribute) => $this->message
         ];
     }
 
@@ -40,7 +45,7 @@ abstract class ParsleyConstraint implements ParsleyConstraintInterface
      */
     public function render()
     {
-        if (null === $this->renderAttribute() || '' === $this->renderAttribute()) {
+        if (null === $this->attribute) {
             throw new UndefinedAttributeException();
         }
 
@@ -50,17 +55,15 @@ abstract class ParsleyConstraint implements ParsleyConstraintInterface
     /**
      * @return string
      */
-    abstract protected function getAttribute();
-
-    /**
-     * @return string
-     */
     abstract protected function getValue();
 
     /**
      * @return string
      */
-    abstract protected function renderAttribute();
+    protected function renderAttribute()
+    {
+        return sprintf('%s="%s"', $this->attribute, $this->getValue());
+    }
 
     /**
      * @return string

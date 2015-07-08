@@ -11,6 +11,11 @@ use Symfony\Component\Form\AbstractType as BaseType;
 abstract class AbstractType extends BaseType
 {
     /**
+     * @var ConstraintsAdapter
+     */
+    protected $constraintsAdapter;
+
+    /**
      * @param ConstraintsAdapter $constraintsAdapter
      */
     public function __construct(ConstraintsAdapter $constraintsAdapter)

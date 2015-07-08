@@ -36,24 +36,8 @@ class MinLength extends ParsleyConstraint
     /**
      * {@inheritdoc}
      */
-    protected function getAttribute()
-    {
-        return $this->attribute;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getValue()
     {
         return $this->min;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function renderAttribute()
-    {
-        return sprintf('%s="%d"', $this->attribute, $this->min);
     }
 }

@@ -30,7 +30,7 @@ class ParsleyConstraintsTypeExtension extends AbstractTypeExtension
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefined(['parsley_constraints']);
+        $resolver->setOptional(['parsley_constraints']);
     }
 
     /**

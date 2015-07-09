@@ -45,6 +45,8 @@ class ConstraintsAdapter
      * @param Constraint $constraint
      *
      * @return ParsleyConstraints\ParsleyConstraint
+     *
+     * @throws UndefinedParsleyConstraintException
      */
     protected function generateConstraint(Constraint $constraint)
     {
@@ -80,11 +82,7 @@ class ConstraintsAdapter
             return $this->createMinLength($constraint);
         }
 
-        if (isset($constraint->max)) {
-            return $this->createMaxLength($constraint);
-        }
-
-        throw new UndefinedParsleyConstraintException($constraint);
+        return $this->createMaxLength($constraint);
     }
 
     /**

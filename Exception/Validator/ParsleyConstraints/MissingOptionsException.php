@@ -12,6 +12,12 @@ class MissingOptionsException extends ParsleyConstraintException
      */
     public function __construct(array $options)
     {
-        $this->message = sprintf('The options "%s" are required.', implode('", "', $options));
+        $message = 'The option "%s" is required.';
+
+        if (count($options) > 1) {
+            $message = 'The options "%s" are required.';
+        }
+
+        $this->message = sprintf($message, implode('", "', $options));
     }
 }

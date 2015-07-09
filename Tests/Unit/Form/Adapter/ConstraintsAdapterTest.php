@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints;
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
  *
- * bin/phpunit -c app/ src/ParsleyBundle/Tests/Unit/Form/Adapter/ConstraintsAdapterTest.php
+ * bin/phpunit -c app/ src/JBen87/ParsleyBundle/Tests/Unit/Form/Adapter/ConstraintsAdapterTest.php
  */
 class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,21 +34,22 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $this->constraints = [
             new Constraints\NotBlank(),
-            new Constraints\Email(['message' => 'Invalid email address.']),
+            new Constraints\Email(),
             new Constraints\Length(['min' => 1, 'max' => 1]),
+            new Constraints\Length(['min' => 0, 'max' => 6]),
             new Constraints\Length(['min' => 3]),
             new Constraints\Length(['max' => 4]),
             new Constraints\Range(['min' => 2, 'max' => 5])
         ];
 
         $this->translations = [
-            'This value should not be blank.'   => 'Cette valeur ne doit pas être vide.',
-            'Invalid email address.'            => 'Adresse email invalide.',
+            'This value should not be blank.'           => 'Cette valeur ne doit pas être vide.',
+            'This value is not a valid email address.'  => 'Cette valeur n\'est pas une adresse email valide.',
             sprintf(
                 '%s%s',
                 'This value should have exactly {{ limit }} character.|',
                 'This value should have exactly {{ limit }} characters.'
-            )                                   => sprintf(
+            )                                           => sprintf(
                 '%s%s',
                 'Cette chaine doit avoir exactement {{ limit }} caractère.|',
                 'Cette chaine doit avoir exactement {{ limit }} caractères.'
@@ -57,7 +58,7 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
                 '%s%s',
                 'This value is too short. It should have {{ limit }} character or more.|',
                 'This value is too short. It should have {{ limit }} characters or more.'
-            )                                   => sprintf(
+            )                                           => sprintf(
                 '%s%s',
                 'Cette chaine est trop courte. Elle doit avoir au minimum {{ limit }} caractère.|',
                 'Cette chaine est trop courte. Elle doit avoir au minimum {{ limit }} caractères.'
@@ -66,7 +67,7 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
                 '%s%s',
                 'This value is too long. It should have {{ limit }} character or less.|',
                 'This value is too long. It should have {{ limit }} characters or less.'
-            )                                   => sprintf(
+            )                                           => sprintf(
                 '%s%s',
                 'Cette chaine est trop longue. Elle doit avoir au maximum {{ limit }} caractère.|',
                 'Cette chaine est trop longue. Elle doit avoir au maximum {{ limit }} caractères.'
@@ -74,14 +75,14 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
             sprintf(
                 '%s',
                 'This value should be {{ limit }} or more.'
-            )                                   => sprintf(
+            )                                           => sprintf(
                 '%s',
                 'Cette valeur doit être supérieure ou égale à {{ limit }}.'
             ),
             sprintf(
                 '%s',
                 'This value should be {{ limit }} or less.'
-            )                                   => sprintf(
+            )                                           => sprintf(
                 '%s',
                 'Cette valeur doit être inférieure ou égale à {{ limit }}.'
             )
@@ -90,7 +91,10 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
         $this->parsleyConstraints = [];
     }
 
-    public function testGenerateConstraints()
+    /**
+     * @test
+     */
+    public function generateConstraints()
     {
         $constraintsAdapter         = $this->createConstraintsAdapter();
         $this->parsleyConstraints   = $constraintsAdapter->generateConstraints($this->constraints);
@@ -99,10 +103,21 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertRequired($this->parsleyConstraints[0]);
         $this->assertTypeEmail($this->parsleyConstraints[1]);
-        $this->assertLength($this->parsleyConstraints[2]);
-        $this->assertMinLength($this->parsleyConstraints[3]);
-        $this->assertMaxLength($this->parsleyConstraints[4]);
-        $this->assertRange($this->parsleyConstraints[5]);
+        $this->assertSameLength($this->parsleyConstraints[2]);
+        $this->assertDifferentLength($this->parsleyConstraints[3]);
+        $this->assertMinLength($this->parsleyConstraints[4]);
+        $this->assertMaxLength($this->parsleyConstraints[5]);
+        $this->assertRange($this->parsleyConstraints[6]);
+    }
+
+    /**
+     * @test
+     * @expectedException JBen87\ParsleyBundle\Exception\Validator\ParsleyConstraints\UndefinedParsleyConstraintException
+     */
+    public function generateUnknownConstraint()
+    {
+        $constraintsAdapter         = $this->createConstraintsAdapter();
+        $this->parsleyConstraints   = $constraintsAdapter->generateConstraints([new Constraints\True()]);
     }
 
     /**
@@ -153,10 +168,10 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('JBen87\ParsleyBundle\Validator\ParsleyConstraints\Type', $constraint);
         $this->assertEquals([
             'data-parsley-type'         => 'email',
-            'data-parsley-type-message' => 'Adresse email invalide.'
+            'data-parsley-type-message' => 'Cette valeur n\'est pas une adresse email valide.'
         ], $constraint->toArray());
         $this->assertEquals(
-            'data-parsley-type="email" data-parsley-type-message="Adresse email invalide."',
+            'data-parsley-type="email" data-parsley-type-message="Cette valeur n\'est pas une adresse email valide."',
             $constraint->render()
         );
     }
@@ -164,7 +179,7 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * @param ParsleyConstraintInterface $constraint
      */
-    protected function assertLength(ParsleyConstraintInterface $constraint)
+    protected function assertSameLength(ParsleyConstraintInterface $constraint)
     {
         $this->assertInstanceOf('JBen87\ParsleyBundle\Validator\ParsleyConstraints\Length', $constraint);
         $this->assertEquals([
@@ -182,6 +197,26 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
                 'data-parsley-length-message="',
                 'Cette chaine doit avoir exactement {{ limit }} caractère.|',
                 'Cette chaine doit avoir exactement {{ limit }} caractères."'
+            ),
+            $constraint->render()
+        );
+    }
+
+    /**
+     * @param ParsleyConstraintInterface $constraint
+     */
+    protected function assertDifferentLength(ParsleyConstraintInterface $constraint)
+    {
+        $this->assertInstanceOf('JBen87\ParsleyBundle\Validator\ParsleyConstraints\Length', $constraint);
+        $this->assertEquals([
+            'data-parsley-length'           => '[0, 6]',
+            'data-parsley-length-message'   => 'Invalid.'
+        ], $constraint->toArray());
+        $this->assertEquals(
+            sprintf(
+                '%s %s',
+                'data-parsley-length="[0, 6]"',
+                'data-parsley-length-message="Invalid."'
             ),
             $constraint->render()
         );

@@ -4,7 +4,7 @@ namespace JBen87\ParsleyBundle\Tests\Unit\Form\Adapter;
 
 use JBen87\ParsleyBundle\Form\Adapter\ConstraintsAdapter;
 use JBen87\ParsleyBundle\Validator\ParsleyConstraints\ParsleyConstraintInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;
 
@@ -117,7 +117,7 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
     public function generateUnknownConstraint()
     {
         $constraintsAdapter         = $this->createConstraintsAdapter();
-        $this->parsleyConstraints   = $constraintsAdapter->generateConstraints([new Constraints\True()]);
+        $this->parsleyConstraints   = $constraintsAdapter->generateConstraints([new Constraints\All()]);
     }
 
     /**
@@ -131,7 +131,7 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return TranslatorInterface
+     * @return ObjectProphecy
      */
     protected function createTranslator()
     {

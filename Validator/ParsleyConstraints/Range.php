@@ -10,7 +10,7 @@ use JBen87\ParsleyBundle\Exception\Validator\ParsleyConstraints\MissingOptionsEx
 class Range implements ParsleyConstraintInterface
 {
     /**
-     * @var ParsleyConstraintInterface[]
+     * @var array
      */
     protected $constraints;
 

@@ -1,8 +1,10 @@
 checks:
-    php:
-        code_rating: true
-        duplication: true
+    php: true
+
+filter:
+    excluded_paths:
+        - vendor/*
 
 tools:
     external_code_coverage:
-        timeout: 1800
+        timeout: 500

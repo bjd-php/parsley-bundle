@@ -45,10 +45,6 @@ abstract class ParsleyConstraint implements ParsleyConstraintInterface
      */
     public function render()
     {
-        if (null === $this->attribute) {
-            throw new UndefinedAttributeException();
-        }
-
         return sprintf('%s %s', $this->renderAttribute(), $this->renderMessage());
     }
 

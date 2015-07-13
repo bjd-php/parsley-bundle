@@ -137,21 +137,6 @@ class ConstraintsAdapter
     /**
      * @param Constraint $constraint
      *
-     * @return ParsleyConstraints\Pattern
-     */
-    protected function createPattern(Constraint $constraint)
-    {
-        $options = [
-            'pattern'   => $constraint->pattern,
-            'message'   => $this->translator->trans($constraint->message, [], 'validators')
-        ];
-
-        return new ParsleyConstraints\Pattern($options);
-    }
-
-    /**
-     * @param Constraint $constraint
-     *
      * @return ParsleyConstraints\Range
      */
     protected function createRange(Constraint $constraint)

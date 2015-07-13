@@ -120,6 +120,12 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
         $this->parsleyConstraints   = $constraintsAdapter->generateConstraints([new Constraints\Blank()]);
     }
 
+    public function renderWithoutAttribute()
+    {
+        $constraintsAdapter         = $this->createConstraintsAdapter();
+        $this->parsleyConstraints   = $constraintsAdapter->generateConstraints([new Constraints\Blank()]);
+    }
+
     /**
      * @return ConstraintsAdapter
      */

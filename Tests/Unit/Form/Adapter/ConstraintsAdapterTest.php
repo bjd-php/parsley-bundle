@@ -117,7 +117,7 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
     public function generateUnknownConstraint()
     {
         $constraintsAdapter         = $this->createConstraintsAdapter();
-        $this->parsleyConstraints   = $constraintsAdapter->generateConstraints([new Constraints\All()]);
+        $this->parsleyConstraints   = $constraintsAdapter->generateConstraints([new Constraints\IsTrue()]);
     }
 
     /**

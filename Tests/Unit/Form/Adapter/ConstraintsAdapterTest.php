@@ -4,7 +4,7 @@ namespace JBen87\ParsleyBundle\Tests\Unit\Form\Adapter;
 
 use JBen87\ParsleyBundle\Form\Adapter\ConstraintsAdapter;
 use JBen87\ParsleyBundle\Validator\ParsleyConstraints\ParsleyConstraintInterface;
-use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;
 
@@ -120,24 +120,16 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
         $this->parsleyConstraints   = $constraintsAdapter->generateConstraints([new Constraints\Blank()]);
     }
 
-    public function renderWithoutAttribute()
-    {
-        $constraintsAdapter         = $this->createConstraintsAdapter();
-        $this->parsleyConstraints   = $constraintsAdapter->generateConstraints([new Constraints\Blank()]);
-    }
-
     /**
      * @return ConstraintsAdapter
      */
     protected function createConstraintsAdapter()
     {
-        $translator = $this->createTranslator();
-
-        return new ConstraintsAdapter($translator->reveal());
+        return new ConstraintsAdapter($this->createTranslator());
     }
 
     /**
-     * @return ObjectProphecy
+     * @return TranslatorInterface
      */
     protected function createTranslator()
     {
@@ -147,7 +139,7 @@ class ConstraintsAdapterTest extends \PHPUnit_Framework_TestCase
             $translator->trans($key, [], 'validators')->willReturn($translation);
         }
 
-        return $translator;
+        return $translator->reveal();
     }
 
     /**

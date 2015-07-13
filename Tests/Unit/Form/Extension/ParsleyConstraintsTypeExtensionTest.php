@@ -76,7 +76,13 @@ class ParsleyConstraintsTypeExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension->setDefaultOptions($resolver);
 
-        $this->assertContains('parsley_constraints', $resolver->getDefinedOptions());
+        // handle symfony version <= 2.6
+        if (method_exists($resolver, 'getDefinedOptions')) {
+            $this->assertContains('parsley_constraints', $resolver->getDefinedOptions());
+        } else {
+            $this->assertTrue($resolver->isKnown('parsley_constraints'));
+        }
+
         $this->assertEquals('form', $extension->getExtendedType());
     }
 

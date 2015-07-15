@@ -1,6 +1,6 @@
 <?php
 
-namespace JBen87\ParsleyBundle\Validator\ParsleyConstraints;
+namespace JBen87\ParsleyBundle\Validator;
 
 use JBen87\ParsleyBundle\Exception\Validator\ParsleyConstraints\UndefinedAttributeException;
 

@@ -3,7 +3,7 @@
 namespace JBen87\ParsleyBundle\Tests\Unit\Form\Adapter;
 
 use JBen87\ParsleyBundle\Form\Adapter\ConstraintsAdapter;
-use JBen87\ParsleyBundle\Validator\ParsleyConstraints\ParsleyConstraintInterface;
+use JBen87\ParsleyBundle\Validator\ParsleyConstraintInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;

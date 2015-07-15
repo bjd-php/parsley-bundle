@@ -2,6 +2,8 @@
 
 namespace JBen87\ParsleyBundle\Validator\ParsleyConstraints;
 
+use JBen87\ParsleyBundle\Validator\ParsleyConstraint;
+
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
  */

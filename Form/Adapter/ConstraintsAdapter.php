@@ -3,6 +3,7 @@
 namespace JBen87\ParsleyBundle\Form\Adapter;
 
 use JBen87\ParsleyBundle\Exception\Validator\ParsleyConstraints\UndefinedParsleyConstraintException;
+use JBen87\ParsleyBundle\Validator\ParsleyConstraint;
 use JBen87\ParsleyBundle\Validator\ParsleyConstraints;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
@@ -44,7 +45,7 @@ class ConstraintsAdapter
     /**
      * @param Constraint $constraint
      *
-     * @return ParsleyConstraints\ParsleyConstraint
+     * @return ParsleyConstraint
      *
      * @throws UndefinedParsleyConstraintException
      */
@@ -70,7 +71,7 @@ class ConstraintsAdapter
     /**
      * @param Constraint $constraint
      *
-     * @return ParsleyConstraints\ParsleyConstraint
+     * @return ParsleyConstraint
      */
     protected function generateLengthConstraint(Constraint $constraint)
     {

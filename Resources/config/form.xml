@@ -5,24 +5,24 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="parsley.trigger_event">blur</parameter>
+        <parameter key="jben87_parsley.trigger_event">blur</parameter>
     </parameters>
 
     <services>
         <!-- ADAPTERS -->
-        <service id="parsley.form.adapter.constraints" class="ParsleyBundle\Form\Adapter\ConstraintsAdapter">
+        <service id="jben87_parsley.form.adapter.constraints" class="JBen87\ParsleyBundle\Form\Adapter\ConstraintsAdapter">
             <argument type="service" id="translator" />
         </service>
 
         <!-- EXTENSIONS -->
-        <service id="parsley.form.extension.parsley_constraints_type" class="ParsleyBundle\Form\Extension\ParsleyConstraintsTypeExtension">
-            <argument>%parsley.trigger_event%</argument>
+        <service id="jben87_parsley.form.extension.parsley_constraints_type" class="JBen87\ParsleyBundle\Form\Extension\ParsleyConstraintsTypeExtension">
+            <argument>%jben87_parsley.trigger_event%</argument>
             <tag name="form.type_extension" alias="form" />
         </service>
 
         <!-- TYPES -->
-        <service id="parsley.form.type.abstract" class="ParsleyBundle\Form\Type\AbstractType" abstract="true">
-            <argument type="service" id="parsley.form.adapter.constraints" />
+        <service id="jben87_parsley.form.type.abstract" class="JBen87\ParsleyBundle\Form\Type\AbstractType" abstract="true">
+            <argument type="service" id="jben87_parsley.form.adapter.constraints" />
         </service>
     </services>
 

@@ -39,3 +39,6 @@
 # Sublime-text files
 *.sublime-project
 *.sublime-workspace
+
+# PHPStorm files
+/.idea

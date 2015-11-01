@@ -16,7 +16,7 @@ abstract class Constraint implements NormalizableInterface
     /**
      * @var string
      */
-    protected $message = 'Invalid.';
+    private $message = 'Invalid.';
 
     /**
      * @param array $options
@@ -46,13 +46,6 @@ abstract class Constraint implements NormalizableInterface
     }
 
     /**
-     * @param OptionsResolver $resolver
-     */
-    protected function configureOptions(OptionsResolver $resolver)
-    {
-    }
-
-    /**
      * @return string
      */
     abstract protected function getAttribute();
@@ -61,6 +54,13 @@ abstract class Constraint implements NormalizableInterface
      * @return string
      */
     abstract protected function getValue();
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    protected function configureOptions(OptionsResolver $resolver)
+    {
+    }
 
     /**
      * @param array $options

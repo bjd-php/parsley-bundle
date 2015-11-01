@@ -43,4 +43,20 @@ class MinLengthTest extends \PHPUnit_Framework_TestCase
             'message' => 'Invalid',
         ]);
     }
+
+    /**
+     * @test
+     */
+    public function normalization()
+    {
+        $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\ObjectNormalizer');
+        $constraint = new MinLength([
+            'min' => 5,
+        ]);
+
+        $this->assertEquals([
+            'data-parsley-minlength' => '5',
+            'data-parsley-minlength-message' => 'Invalid.',
+        ], $constraint->normalize($normalizer->reveal(), 'array'));
+    }
 }

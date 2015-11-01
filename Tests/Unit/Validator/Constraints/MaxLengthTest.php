@@ -43,4 +43,20 @@ class MaxLengthTest extends \PHPUnit_Framework_TestCase
             'message' => 'Invalid',
         ]);
     }
+
+    /**
+     * @test
+     */
+    public function normalization()
+    {
+        $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\ObjectNormalizer');
+        $constraint = new MaxLength([
+            'max' => 10,
+        ]);
+
+        $this->assertEquals([
+            'data-parsley-maxlength' => '10',
+            'data-parsley-maxlength-message' => 'Invalid.',
+        ], $constraint->normalize($normalizer->reveal(), 'array'));
+    }
 }

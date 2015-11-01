@@ -72,4 +72,23 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             'maxMessage' => 'Too long',
         ]);
     }
+
+    /**
+     * @test
+     */
+    public function normalization()
+    {
+        $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\ObjectNormalizer');
+        $constraint = new Range([
+            'min' => 5,
+            'max' => 10,
+        ]);
+
+        $this->assertEquals([
+            'data-parsley-min' => '5',
+            'data-parsley-min-message' => 'Invalid.',
+            'data-parsley-max' => '10',
+            'data-parsley-max-message' => 'Invalid.',
+        ], $constraint->normalize($normalizer->reveal(), 'array'));
+    }
 }

@@ -13,7 +13,7 @@ class Min extends Constraint
     /**
      * @var int
      */
-    protected $min;
+    private $min;
 
     /**
      * {@inheritdoc}
@@ -23,16 +23,6 @@ class Min extends Constraint
         parent::__construct($options);
 
         $this->min = $options['min'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver
-            ->setRequired('min')
-            ->setAllowedTypes('min', 'int');
     }
 
     /**
@@ -49,5 +39,15 @@ class Min extends Constraint
     protected function getValue()
     {
         return $this->min;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver
+            ->setRequired('min')
+            ->setAllowedTypes('min', 'int');
     }
 }

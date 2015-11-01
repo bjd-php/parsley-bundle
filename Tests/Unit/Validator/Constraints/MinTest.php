@@ -43,4 +43,20 @@ class MinTest extends \PHPUnit_Framework_TestCase
             'message' => 'Invalid',
         ]);
     }
+
+    /**
+     * @test
+     */
+    public function normalization()
+    {
+        $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\ObjectNormalizer');
+        $constraint = new Min([
+            'min' => 5,
+        ]);
+
+        $this->assertEquals([
+            'data-parsley-min' => '5',
+            'data-parsley-min-message' => 'Invalid.',
+        ], $constraint->normalize($normalizer->reveal(), 'array'));
+    }
 }

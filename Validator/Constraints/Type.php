@@ -13,7 +13,7 @@ class Type extends Constraint
     /**
      * @var string
      */
-    protected $type;
+    private $type;
 
     /**
      * {@inheritdoc}
@@ -23,17 +23,6 @@ class Type extends Constraint
         parent::__construct($options);
 
         $this->type = $options['type'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver
-            ->setRequired('type')
-            ->setAllowedTypes('type', 'string')
-            ->setAllowedValues('type', ['email', 'number', 'integer', 'digits', 'alphanum', 'url']);
     }
 
     /**
@@ -50,5 +39,16 @@ class Type extends Constraint
     protected function getValue()
     {
         return $this->type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver
+            ->setRequired('type')
+            ->setAllowedTypes('type', 'string')
+            ->setAllowedValues('type', ['email', 'number', 'integer', 'digits', 'alphanum', 'url']);
     }
 }

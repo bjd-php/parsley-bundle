@@ -13,7 +13,7 @@ class Max extends Constraint
     /**
      * @var int
      */
-    protected $max;
+    private $max;
 
     /**
      * {@inheritdoc}
@@ -23,16 +23,6 @@ class Max extends Constraint
         parent::__construct($options);
 
         $this->max = $options['max'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver
-            ->setRequired('max')
-            ->setAllowedTypes('max', 'int');
     }
 
     /**
@@ -49,5 +39,15 @@ class Max extends Constraint
     protected function getValue()
     {
         return $this->max;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver
+            ->setRequired('max')
+            ->setAllowedTypes('max', 'int');
     }
 }

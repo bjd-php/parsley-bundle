@@ -32,6 +32,31 @@ class Range extends Constraint
     /**
      * {@inheritdoc}
      */
+    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = [])
+    {
+        return array_merge(
+            $this->constraints['min']->normalize($normalizer, 'array'),
+            $this->constraints['max']->normalize($normalizer, 'array')
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAttribute()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getValue()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function configureOptions(OptionsResolver $resolver)
     {
         $resolver
@@ -45,22 +70,11 @@ class Range extends Constraint
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = [])
-    {
-        return array_merge(
-            $this->constraints['min']->normalize(null, 'array'),
-            $this->constraints['max']->normalize(null, 'array')
-        );
-    }
-
-    /**
      * @param array $defaults
      *
      * @return Min
      */
-    protected function createMin(array $defaults)
+    private function createMin(array $defaults)
     {
         $options = ['min' => $defaults['min']];
 
@@ -76,7 +90,7 @@ class Range extends Constraint
      *
      * @return Max
      */
-    protected function createMax(array $defaults)
+    private function createMax(array $defaults)
     {
         $options = ['max' => $defaults['max']];
 
@@ -85,19 +99,5 @@ class Range extends Constraint
         }
 
         return new Max($options);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getAttribute()
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getValue()
-    {
     }
 }

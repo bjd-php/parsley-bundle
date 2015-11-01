@@ -2,11 +2,12 @@
 
 namespace JBen87\ParsleyBundle\Form\Type;
 
-use JBen87\ParsleyBundle\Form\Adapter\ConstraintsAdapter;
-use JBen87\ParsleyBundle\Validator\ParsleyConstraint;
+use JBen87\ParsleyBundle\Builder\ConstraintBuilder;
+use JBen87\ParsleyBundle\Validator\Constraint;
 use Symfony\Component\Form\AbstractType as BaseType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
@@ -14,16 +15,23 @@ use Symfony\Component\Form\FormView;
 abstract class AbstractType extends BaseType
 {
     /**
-     * @var ConstraintsAdapter
+     * @var ConstraintBuilder
      */
-    private $constraintsAdapter;
+    private $constraintBuilder;
 
     /**
-     * @param ConstraintsAdapter $constraintsAdapter
+     * @var SerializerInterface
      */
-    public function __construct(ConstraintsAdapter $constraintsAdapter)
+    private $serializer;
+
+    /**
+     * @param ConstraintBuilder $constraintBuilder
+     * @param SerializerInterface $serializer
+     */
+    public function __construct(ConstraintBuilder $constraintBuilder, SerializerInterface $serializer)
     {
-        $this->constraintsAdapter = $constraintsAdapter;
+        $this->constraintBuilder = $constraintBuilder;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -44,13 +52,14 @@ abstract class AbstractType extends BaseType
             $attributes = $child->getConfig()->getAttribute('data_collector/passed_options');
 
             if (isset($attributes['constraints'])) {
-                $constraints = $this->constraintsAdapter->generateConstraints($attributes['constraints']);
-                $currentView = $view->offsetGet($child->getName());
+                $this->constraintBuilder->configure([
+                    'constraints' => $attributes['constraints'],
+                ]);
 
-                foreach ($constraints as $constraint) {
-                    /** @var ParsleyConstraint $constraint */
+                foreach ($this->constraintBuilder->build() as $constraint) {
+                    /** @var Constraint $constraint */
 
-                    $currentView->vars['attr'] += $constraint->toArray();
+                    $view[$child->getName()]->vars['attr'] += $this->serializer->serialize($constraint, 'array');
                 }
             }
         }

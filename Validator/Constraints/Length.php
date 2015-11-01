@@ -13,12 +13,12 @@ class Length extends Constraint
     /**
      * @var int
      */
-    protected $min;
+    private $min;
 
     /**
      * @var int
      */
-    protected $max;
+    private $max;
 
     /**
      * {@inheritdoc}
@@ -29,19 +29,6 @@ class Length extends Constraint
 
         $this->min = $options['min'];
         $this->max = $options['max'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver
-            ->setRequired(['min', 'max'])
-            ->setAllowedTypes([
-                'min' => 'int',
-                'max' => 'int',
-            ]);
     }
 
     /**
@@ -58,5 +45,18 @@ class Length extends Constraint
     protected function getValue()
     {
         return sprintf('[%d, %d]', $this->min, $this->max);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver
+            ->setRequired(['min', 'max'])
+            ->setAllowedTypes([
+                'min' => 'int',
+                'max' => 'int',
+            ]);
     }
 }

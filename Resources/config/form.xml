@@ -9,11 +9,6 @@
     </parameters>
 
     <services>
-        <!-- ADAPTERS -->
-        <service id="jben87_parsley.form.adapter.constraints" class="JBen87\ParsleyBundle\Form\Adapter\ConstraintsAdapter">
-            <argument type="service" id="translator" />
-        </service>
-
         <!-- EXTENSIONS -->
         <service id="jben87_parsley.form.extension.parsley_constraints_type" class="JBen87\ParsleyBundle\Form\Extension\ParsleyTypeExtension">
             <argument>%jben87_parsley.trigger_event%</argument>
@@ -23,7 +18,7 @@
 
         <!-- TYPES -->
         <service id="jben87_parsley.form.type.abstract" class="JBen87\ParsleyBundle\Form\Type\AbstractType" abstract="true">
-            <argument type="service" id="jben87_parsley.form.adapter.constraints" />
+            <argument type="service" id="jben87_parsley.builder.constraint" />
         </service>
     </services>
 

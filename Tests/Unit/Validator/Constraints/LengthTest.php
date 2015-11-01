@@ -57,4 +57,21 @@ class LengthTest extends \PHPUnit_Framework_TestCase
             'message' => 'Invalid',
         ]);
     }
+
+    /**
+     * @test
+     */
+    public function normalization()
+    {
+        $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\ObjectNormalizer');
+        $constraint = new Length([
+            'min' => 5,
+            'max' => 10,
+        ]);
+
+        $this->assertEquals([
+            'data-parsley-length' => '[5, 10]',
+            'data-parsley-length-message' => 'Invalid.',
+        ], $constraint->normalize($normalizer->reveal(), 'array'));
+    }
 }

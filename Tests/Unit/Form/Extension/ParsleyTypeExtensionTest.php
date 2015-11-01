@@ -18,14 +18,6 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
     private $extension;
 
     /**
-     * {@inheritdoc}
-     */
-    protected function setUp()
-    {
-        $this->extension = new ParsleyTypeExtension('blur');
-    }
-
-    /**
      * @test
      */
     public function configuration()
@@ -68,6 +60,14 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertEquals('click', $formView->vars['attr']['data-parsley-trigger']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->extension = new ParsleyTypeExtension('blur');
     }
 
     /**

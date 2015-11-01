@@ -15,8 +15,9 @@
         </service>
 
         <!-- EXTENSIONS -->
-        <service id="jben87_parsley.form.extension.parsley_constraints_type" class="JBen87\ParsleyBundle\Form\Extension\ParsleyConstraintsTypeExtension">
+        <service id="jben87_parsley.form.extension.parsley_constraints_type" class="JBen87\ParsleyBundle\Form\Extension\ParsleyTypeExtension">
             <argument>%jben87_parsley.trigger_event%</argument>
+
             <tag name="form.type_extension" alias="form" />
         </service>
 

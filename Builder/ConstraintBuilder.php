@@ -50,8 +50,10 @@ class ConstraintBuilder
     public function configure(array $options)
     {
         $options = (new OptionsResolver)
-            ->setRequired('constraints')
-            ->setAllowedTypes('constraints', 'array')
+            ->setRequired(['constraints'])
+            ->setAllowedTypes([
+                'constraints' => 'array',
+            ])
             ->resolve($options);
 
         $this->constraints = $options['constraints'];

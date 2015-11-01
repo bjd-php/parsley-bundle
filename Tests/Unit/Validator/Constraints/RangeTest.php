@@ -3,6 +3,7 @@
 namespace JBen87\ParsleyBundle\Tests\Unit\Validator\ParsleyConstraints;
 
 use JBen87\ParsleyBundle\Validator\Constraints\Range;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
@@ -44,10 +45,14 @@ class RangeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException
      */
     public function extraConfiguration()
     {
+        // handle symfony version <= 2.5
+        if (method_exists(new OptionsResolver, 'remove')) {
+            $this->setExpectedException('Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException');
+        }
+
         new Range([
             'min' => 5,
             'max' => 10,

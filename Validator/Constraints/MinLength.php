@@ -47,7 +47,9 @@ class MinLength extends Constraint
     protected function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setRequired('min')
-            ->setAllowedTypes('min', 'int');
+            ->setRequired(['min'])
+            ->setAllowedTypes([
+                'min' => 'int',
+            ]);
     }
 }

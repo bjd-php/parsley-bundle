@@ -60,13 +60,23 @@ class Range extends Constraint
     protected function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->remove('message')
             ->setRequired(['min', 'max'])
-            ->setDefined(['minMessage', 'maxMessage'])
             ->setAllowedTypes([
                 'min' => 'int',
                 'max' => 'int',
             ]);
+
+        // handle symfony version <= 2.5
+        if (method_exists($resolver, 'remove')) {
+            $resolver->remove('message');
+        }
+
+        // handle symfony version <= 2.5
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setDefined(['minMessage', 'maxMessage']);
+        } else {
+            $resolver->setOptional(['minMessage', 'maxMessage']);
+        }
     }
 
     /**

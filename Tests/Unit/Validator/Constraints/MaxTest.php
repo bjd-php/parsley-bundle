@@ -20,7 +20,7 @@ class MaxTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
     public function invalidConfiguration()
     {

@@ -72,7 +72,13 @@ abstract class Constraint implements NormalizableInterface
     private function configure(array $options)
     {
         $resolver = new OptionsResolver();
-        $resolver->setDefined('message');
+
+        // handle symfony version <= 2.5
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setDefined('message');
+        } else {
+            $resolver->setOptional(['message']);
+        }
 
         $this->configureOptions($resolver);
 

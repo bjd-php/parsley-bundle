@@ -3,11 +3,9 @@
 namespace JBen87\ParsleyBundle\Tests\Unit\Form\Extension;
 
 use JBen87\ParsleyBundle\Form\Extension\ParsleyTypeExtension;
-use JBen87\ParsleyBundle\Validator\ParsleyConstraints;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>

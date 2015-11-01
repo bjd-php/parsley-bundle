@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @author Benoit Jouhaud <bjouhaud@gmail.com>
  */
-class ConstraintBuilder
+class ConstraintBuilder implements BuilderInterface
 {
     /**
      * @var Constraint[]

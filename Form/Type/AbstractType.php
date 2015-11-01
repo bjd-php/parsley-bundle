@@ -2,7 +2,7 @@
 
 namespace JBen87\ParsleyBundle\Form\Type;
 
-use JBen87\ParsleyBundle\Builder\ConstraintBuilder;
+use JBen87\ParsleyBundle\Builder\BuilderInterface;
 use JBen87\ParsleyBundle\Validator\Constraint;
 use Symfony\Component\Form\AbstractType as BaseType;
 use Symfony\Component\Form\FormInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 abstract class AbstractType extends BaseType
 {
     /**
-     * @var ConstraintBuilder
+     * @var BuilderInterface
      */
     private $constraintBuilder;
 
@@ -25,10 +25,10 @@ abstract class AbstractType extends BaseType
     private $serializer;
 
     /**
-     * @param ConstraintBuilder $constraintBuilder
+     * @param BuilderInterface $constraintBuilder
      * @param SerializerInterface $serializer
      */
-    public function __construct(ConstraintBuilder $constraintBuilder, SerializerInterface $serializer)
+    public function __construct(BuilderInterface $constraintBuilder, SerializerInterface $serializer)
     {
         $this->constraintBuilder = $constraintBuilder;
         $this->serializer = $serializer;

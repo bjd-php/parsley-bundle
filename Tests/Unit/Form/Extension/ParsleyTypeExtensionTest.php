@@ -37,8 +37,8 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
         $this->extension->setDefaultOptions($resolver);
 
         // handle symfony version <= 2.6
-        if (method_exists($resolver, 'getDefinedOptions')) {
-            $this->assertContains('parsley_trigger_event', $resolver->getDefinedOptions());
+        if (method_exists($resolver, 'isKnown')) {
+            $this->assertTrue($resolver->isKnown('parsley_trigger_event'));
         } else {
             $this->assertTrue($resolver->isDefined('parsley_trigger_event'));
         }

@@ -18,6 +18,35 @@ class ConstraintBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
+     */
+    public function emptyConfiguration()
+    {
+        $this->builder->configure([]);
+    }
+
+    /**
+     * @test
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     */
+    public function invalidConfiguration()
+    {
+        $this->builder->configure([
+            'constraints' => new Assert\NotBlank(),
+        ]);
+    }
+
+    /**
+     * @test
+     * @expectedException \JBen87\ParsleyBundle\Exception\Builder\InvalidConfigurationException
+     */
+    public function invalidCreation()
+    {
+        $this->builder->build();
+    }
+
+    /**
+     * @test
      */
     public function validCreation()
     {

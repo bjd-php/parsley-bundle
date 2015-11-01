@@ -49,7 +49,12 @@ class MaxTest extends \PHPUnit_Framework_TestCase
      */
     public function normalization()
     {
-        $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\ObjectNormalizer');
+        if (class_exists('Symfony\Component\Serializer\Normalizer\ObjectNormalizer')) {
+            $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\ObjectNormalizer');
+        } else {
+            $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer');
+        }
+
         $constraint = new Max([
             'max' => 10,
         ]);

@@ -77,6 +77,6 @@ class LengthTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             'data-parsley-length' => '[5, 10]',
             'data-parsley-length-message' => 'Invalid.',
-        ], $constraint->normalize($normalizer->reveal(), 'array'));
+        ], $constraint->normalize($normalizer->reveal()));
     }
 }

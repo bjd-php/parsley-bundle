@@ -62,6 +62,6 @@ class MaxLengthTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             'data-parsley-maxlength' => '10',
             'data-parsley-maxlength-message' => 'Invalid.',
-        ], $constraint->normalize($normalizer->reveal(), 'array'));
+        ], $constraint->normalize($normalizer->reveal()));
     }
 }

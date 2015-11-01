@@ -37,6 +37,6 @@ class RequiredTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             'data-parsley-required' => 'true',
             'data-parsley-required-message' => 'Invalid.',
-        ], $constraint->normalize($normalizer->reveal(), 'array'));
+        ], $constraint->normalize($normalizer->reveal()));
     }
 }

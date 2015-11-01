@@ -62,6 +62,6 @@ class MinLengthTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             'data-parsley-minlength' => '5',
             'data-parsley-minlength-message' => 'Invalid.',
-        ], $constraint->normalize($normalizer->reveal(), 'array'));
+        ], $constraint->normalize($normalizer->reveal()));
     }
 }

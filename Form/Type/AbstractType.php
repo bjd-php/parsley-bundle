@@ -3,11 +3,10 @@
 namespace JBen87\ParsleyBundle\Form\Type;
 
 use JBen87\ParsleyBundle\Builder\BuilderInterface;
-use JBen87\ParsleyBundle\Validator\Constraint;
 use Symfony\Component\Form\AbstractType as BaseType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
@@ -20,18 +19,18 @@ abstract class AbstractType extends BaseType
     private $constraintBuilder;
 
     /**
-     * @var SerializerInterface
+     * @var NormalizerInterface
      */
-    private $serializer;
+    private $normalizer;
 
     /**
      * @param BuilderInterface $constraintBuilder
-     * @param SerializerInterface $serializer
+     * @param NormalizerInterface $normalizer
      */
-    public function __construct(BuilderInterface $constraintBuilder, SerializerInterface $serializer)
+    public function __construct(BuilderInterface $constraintBuilder, NormalizerInterface $normalizer)
     {
         $this->constraintBuilder = $constraintBuilder;
-        $this->serializer = $serializer;
+        $this->normalizer = $normalizer;
     }
 
     /**
@@ -45,7 +44,7 @@ abstract class AbstractType extends BaseType
             'data-parsley-validate' => true,
         ];
 
-        // generate parsley constraints for children and map them
+        // generate parsley constraints for children and map them as attributes
         foreach ($form as $child) {
             /** @var FormInterface $child */
 
@@ -57,9 +56,7 @@ abstract class AbstractType extends BaseType
                 ]);
 
                 foreach ($this->constraintBuilder->build() as $constraint) {
-                    /** @var Constraint $constraint */
-
-                    $view[$child->getName()]->vars['attr'] += $this->serializer->serialize($constraint, 'array');
+                    $view[$child->getName()]->vars['attr'] += $this->normalizer->normalize($constraint);
                 }
             }
         }

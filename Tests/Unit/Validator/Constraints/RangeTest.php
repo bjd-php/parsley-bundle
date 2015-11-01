@@ -99,6 +99,6 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             'data-parsley-min-message' => 'Invalid.',
             'data-parsley-max' => '10',
             'data-parsley-max-message' => 'Invalid.',
-        ], $constraint->normalize($normalizer->reveal(), 'array'));
+        ], $constraint->normalize($normalizer->reveal()));
     }
 }

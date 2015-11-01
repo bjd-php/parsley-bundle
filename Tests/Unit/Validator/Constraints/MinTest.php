@@ -62,6 +62,6 @@ class MinTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             'data-parsley-min' => '5',
             'data-parsley-min-message' => 'Invalid.',
-        ], $constraint->normalize($normalizer->reveal(), 'array'));
+        ], $constraint->normalize($normalizer->reveal()));
     }
 }

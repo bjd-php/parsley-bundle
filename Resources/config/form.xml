@@ -4,10 +4,6 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="jben87_parsley.trigger_event">blur</parameter>
-    </parameters>
-
     <services>
         <!-- EXTENSIONS -->
         <service id="jben87_parsley.form.extension.parsley_constraints_type"
@@ -21,7 +17,7 @@
         <service id="jben87_parsley.form.type.abstract" class="JBen87\ParsleyBundle\Form\Type\AbstractType"
                  abstract="true">
             <argument type="service" id="jben87_parsley.builder.constraint"/>
-            <argument type="service" id="serializer"/>
+            <argument type="service" id="jben87_parsley.normalizer.custom"/>
         </service>
     </services>
 

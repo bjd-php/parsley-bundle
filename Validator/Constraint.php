@@ -4,7 +4,6 @@ namespace JBen87\ParsleyBundle\Validator;
 
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Serializer\Exception\UnsupportedException;
 use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -35,10 +34,6 @@ abstract class Constraint implements NormalizableInterface
      */
     public function normalize(NormalizerInterface $normalizer, $format = null, array $context = [])
     {
-        if ('array' !== $format) {
-            throw new UnsupportedException();
-        }
-
         return [
             $this->getAttribute() => $this->getValue(),
             sprintf('%s-message', $this->getAttribute()) => $this->message,

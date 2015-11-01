@@ -62,6 +62,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             'data-parsley-type' => 'email',
             'data-parsley-type-message' => 'Invalid.',
-        ], $constraint->normalize($normalizer->reveal(), 'array'));
+        ], $constraint->normalize($normalizer->reveal()));
     }
 }

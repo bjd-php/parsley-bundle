@@ -2,6 +2,8 @@
 
 namespace JBen87\ParsleyBundle;
 
+use JBen87\ParsleyBundle\DependencyInjection\Compiler\FormTypeCompilerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -9,4 +11,11 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class ParsleyBundle extends Bundle
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new FormTypeCompilerPass());
+    }
 }

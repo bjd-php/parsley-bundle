@@ -8,6 +8,32 @@
 Convert Symfony constraints into data-attributes for client-side validation with Parsley.
 
 
+## Installation
+
+
+Classic but always useful.
+
+First install the bundle with composer:
+
+```bash
+composer require j-ben87/parsley-bundle
+```
+
+And finally, don't forget to register the bundle in your `app/AppKernel.php`:
+
+```php
+public function registerBundles()
+{
+    $bundles = [
+        // ...
+        new JBen87\ParsleyBundle\ParsleyBundle()
+    ];
+    
+    // ...
+}
+```
+
+
 ## Configuration
 
 

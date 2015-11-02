@@ -52,7 +52,7 @@ parsley:
 ### Form Types
 
 
-By extending `JBen87\ParsleyBundle\Form\Type\AbstractType`, the constraints you have defined for each child will automatically be turned into Parsley data-attributes.
+By extending `JBen87\ParsleyBundle\Form\Type\AbstractType` and defining your form as a service, the constraints you have defined for each child of your `FormType` will automatically be turned into Parsley data-attributes.
 
 **Nothing else.** 
 
@@ -99,6 +99,10 @@ class ContactType extends AbstractType
 }
 ```
 
+
+Results in:
+
+
 ```html
 {% {{ form_widget(form.title) }} %}
 <input type="text" id="contact_title" name="contact[title]" required="required" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-length="[30, 30]" data-parsley-length-message="This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters." data-parsley-id="4" class="parsley-error">
@@ -137,7 +141,7 @@ $constraints = [
 
 /** @var ConstraintBuilder $builder */
 $builder = $container->get('jben87_parsley.builder.constraint');
-$builder->configure($constraints);
+$builder->configure(['constraints' => $constraints]);
 
 /** @var ParsleyConstraint[] $parsleyConstraints */
 $parsleyConstraints = $builder->build();
@@ -149,7 +153,7 @@ $parsleyConstraints = $builder->build();
 
 Internally, the builder uses the `ConstraintFactory` service, registered as `jben87_parsley.validator.constraint_factory`.
 
-It can be used to create a suitable Parsley constraint for a given Symfony constraint.
+It can be used to create the suitable Parsley constraint for a given Symfony constraint.
 
 
 ```php

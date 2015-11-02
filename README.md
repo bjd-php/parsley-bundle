@@ -8,56 +8,141 @@
 Convert Symfony constraints into data-attributes for client-side validation with Parsley.
 
 
+## Configuration
+
+
+The bundle exposes a basic configuration:
+
+
+```yml
+parsley:
+    trigger_event: blur             # the JavaScript event for which the validation is to be triggered relative to the selected input
+```
+
+
 ## Basic usage
 
 
-The `AbstractType` provides a helper method that generate the Parsley constraints for each field you have defined Symfony constraints for.
+### Form Types
 
-The `ParsleyConstraintsTypeExtension` allows you to use the `'parsley_constraints'` option in your form type. That option is required as it holds the Parsley constraints that will be used to generate the data attributes Parsley uses to process the client-side validation.
+
+By extending `JBen87\ParsleyBundle\Form\Type\AbstractType`, the constraints you have defined for each child will automatically be turned into Parsley data-attributes.
+
+**Nothing else.** 
+
+> Yes, it's that simple!
 
 
 ```php
-$symfonyConstraints = [
-    'login' => [
-        new NotBlank()
-    ],
-    'email' => [
-        new NotBlank(),
-        new Email()
-    ]
-];
+<?php
 
-$parsleyConstraints = $this->generateConstraints($symfonyConstraints);
+namespace AppBundle\Form\Type;
 
-$builder
-    ->add('login', 'text', [
-        'constraints'           => $symfonyConstraints['login'],
-        'parsley_constraints'   => $parsleyConstraints['login']
-    ])
-    ->add('email', 'email' [
-        'constraints'           => $symfonyConstraints['email'],
-        'parsley_constraints'   => $parsleyConstraints['email']
-    ]);
+use JBen87\ParsleyBundle\Form\Type\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
+class ContactType extends AbstractType
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('title', 'text', [
+                'constraints' => [
+                    new Assert\NotBlank(),
+                    new Assert\Length(30),
+                ],
+            ])
+            ->add('content', 'textarea', [
+                'constraints' => [
+                    new Assert\NotBlank(),
+                ],
+            ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'contact';
+    }
+}
+```
+
+```html
+{% {{ form_widget(form.title) }} %}
+<input type="text" id="contact_title" name="contact[title]" required="required" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-length="[30, 30]" data-parsley-length-message="This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters." data-parsley-id="4" class="parsley-error">
+
+{% {{ form_widget(form.content }} %}
+<textarea id="contact_content" name="contact[content]" required="required" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-id="6" class="parsley-error"></textarea>
 ```
 
 
 ## Advanced usage
 
 
-The `ConstraintsAdapter` is a service that generates Parsley constraints from an array of Symfony constraints.
+The bundle comes with 2 services to generate the constraints:
+
+
+### Builder
+
+
+The `ConstraintBuilder` is a service registered as `jben87_parsley.builder.constraint`.
+
+It can be used to turn Symfony constraints into Parsley constraints.
+
+- First `configure` the `ConstraintBuilder` with an array of Symfony `Constraint`.
+- Then `build` an array of Parsley `Constraint`.
 
 
 ```php
-$symfonyConstraints = [
+use JBen87\ParsleyBundle\Validator\Constraint as ParsleyConstraint;
+use Symfony\Component\Validator\Constraint;
+
+/** @var Constraint[] $constraints */
+$constraints = [
     new NotBlank(),
-    new Email()
+    new Email(),
 ];
 
-$parsleyConstraints = $constraintsAdapter->generateConstraints($symfonyConstraints);
+/** @var ConstraintBuilder $builder */
+$builder = $container->get('jben87_parsley.builder.constraint');
+$builder->configure($constraints);
+
+/** @var ParsleyConstraint[] $parsleyConstraints */
+$parsleyConstraints = $builder->build();
+```
+
+
+### Factory
+
+
+Internally, the builder uses the `ConstraintFactory` service, registered as `jben87_parsley.validator.constraint_factory`.
+
+It can be used to create a suitable Parsley constraint for a given Symfony constraint.
+
+
+```php
+use JBen87\ParsleyBundle\Validator\Constraint as ParsleyConstraint;
+use Symfony\Component\Validator\Constraint;
+
+/** @var Constraint $constraint */
+$constraint = new NotBlank();
+
+/** @var ConstraintFactory $factory */
+$factory = $container->get('jben87_parsley.validator.constraint_factory');
+
+/** @var ParsleyConstraint $parsleyConstraint */
+$parsleyConstraint = $factory->create($constraint);
 ```
 
 
 ## What's next
 
 
-Handling entities based validation (annotations, validation.yml file...).
+- Handling entities based validation (annotations, validation file...)
+- Support more constraints

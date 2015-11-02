@@ -30,7 +30,11 @@ class ParsleyTypeExtension extends AbstractTypeExtension
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setOptional(['parsley_trigger_event']);
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setDefined(['parsley_trigger_event']);
+        } else {
+            $resolver->setOptional(['parsley_trigger_event']);
+        }
     }
 
     /**

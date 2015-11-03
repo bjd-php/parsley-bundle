@@ -25,17 +25,11 @@ abstract class AbstractType extends BaseType
 
     /**
      * @param BuilderInterface $constraintBuilder
-     */
-    public function setConstraintBuilder($constraintBuilder)
-    {
-        $this->constraintBuilder = $constraintBuilder;
-    }
-
-    /**
      * @param NormalizerInterface $normalizer
      */
-    public function setNormalizer($normalizer)
+    public function __construct(BuilderInterface $constraintBuilder, NormalizerInterface $normalizer)
     {
+        $this->constraintBuilder = $constraintBuilder;
         $this->normalizer = $normalizer;
     }
 

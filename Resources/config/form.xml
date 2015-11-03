@@ -17,7 +17,7 @@
         <service id="jben87_parsley.form.type.abstract" class="JBen87\ParsleyBundle\Form\Type\AbstractType"
                  abstract="true">
             <argument type="service" id="jben87_parsley.builder.constraint"/>
-            <argument type="service" id="jben87_parsley.normalizer.custom"/>
+            <argument type="service" id="serializer.normalizer.object"/>
         </service>
     </services>
 

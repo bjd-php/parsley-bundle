@@ -42,7 +42,7 @@ The bundle exposes a basic configuration:
 
 ```yml
 parsley:
-    trigger_event: blur             # the JavaScript event for which the validation is to be triggered relative to the selected input
+    trigger_event: blur     # the JavaScript event for which the validation is to be triggered relative to the selected input
 ```
 
 
@@ -52,7 +52,11 @@ parsley:
 ### Form Types
 
 
-By extending `JBen87\ParsleyBundle\Form\Type\AbstractType` and defining your form as a service, the constraints you have defined for each child of your `FormType` will automatically be turned into Parsley data-attributes.
+- create a `FormType` that extends `JBen87\ParsleyBundle\Form\Type\AbstractType`
+- define it as a service that extends `jben87_parsley.form.type.abstract`
+
+ 
+The constraints you have defined for each child of your `FormType` will automatically be turned into Parsley data-attributes.
 
 **Nothing else.** 
 
@@ -97,6 +101,19 @@ class ContactType extends AbstractType
         return 'contact';
     }
 }
+```
+
+
+And
+
+
+```yml
+services:
+    acme.form.type.custom:
+        class: AcmeBundle\Form\Type\CustomType
+        parent: jben87_parsley.form.type.abstract
+        tags:
+            -  { name: form.type, alias: custom }
 ```
 
 

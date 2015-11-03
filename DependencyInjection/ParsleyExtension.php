@@ -27,7 +27,6 @@ class ParsleyExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(sprintf('%s/../Resources/config', __DIR__)));
         $loader->load('builder.xml');
         $loader->load('form.xml');
-        $loader->load('serializer.xml');
         $loader->load('validator.xml');
     }
 }

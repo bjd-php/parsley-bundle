@@ -11,13 +11,26 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @param string $name
+     */
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
 
-        $rootNode = $treeBuilder->root('jben87_parsley');
+        $rootNode = $treeBuilder->root($this->name);
         $rootNode
             ->children()
                 ->scalarNode('trigger_event')

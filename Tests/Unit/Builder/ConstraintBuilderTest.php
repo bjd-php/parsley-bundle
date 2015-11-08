@@ -3,7 +3,9 @@
 namespace JBen87\ParsleyBundle\Tests\Builder;
 
 use JBen87\ParsleyBundle\Builder\ConstraintBuilder;
+use JBen87\ParsleyBundle\Factory\ConstraintFactory;
 use JBen87\ParsleyBundle\Validator\Constraints as ParsleyAssert;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -12,9 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ConstraintBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ConstraintBuilder
+     * @var ObjectProphecy|ConstraintFactory
      */
-    private $builder;
+    private $factory;
 
     /**
      * @test
@@ -22,7 +24,7 @@ class ConstraintBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function emptyConfiguration()
     {
-        $this->builder->configure([]);
+        $this->createBuilder()->configure([]);
     }
 
     /**
@@ -31,7 +33,7 @@ class ConstraintBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function invalidConfiguration()
     {
-        $this->builder->configure([
+        $this->createBuilder()->configure([
             'constraints' => new Assert\NotBlank(),
         ]);
     }
@@ -42,25 +44,52 @@ class ConstraintBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function invalidCreation()
     {
-        $this->builder->build();
+        $this->createBuilder()->build();
     }
 
     /**
+     * @param array $symfonyConstraints
+     * @param array $expected
+     *
      * @test
+     * @dataProvider validProvider
      */
-    public function validCreation()
+    public function valid(array $symfonyConstraints, array $expected)
     {
-        $this->builder->configure([
-            'constraints' => [
-                new Assert\NotBlank(),
-                new Assert\Email(),
-            ],
-        ]);
+        foreach ($symfonyConstraints as $key => $constraint) {
+            $this->factory->create($constraint)->shouldBeCalled()->willReturn($expected[$key]);
+        }
 
-        $this->assertEquals([
-            new ParsleyAssert\Required(),
-            new ParsleyAssert\Type(['type' => 'email']),
-        ], $this->builder->build());
+        $builder = $this->createBuilder();
+
+        $builder->configure(['constraints' => $symfonyConstraints]);
+        $parsleyConstraints = $builder->build();
+
+        $this->assertInternalType('array', $parsleyConstraints);
+        $this->assertCount(count($expected), $parsleyConstraints);
+
+        foreach ($parsleyConstraints as $key => $constraint) {
+            $this->assertSame($expected[$key], $constraint);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function validProvider()
+    {
+        return [
+            [
+                [
+                    new Assert\NotBlank(),
+                    new Assert\Email(),
+                ],
+                [
+                    new ParsleyAssert\Required(),
+                    new ParsleyAssert\Type(['type' => 'email']),
+                ],
+            ],
+        ];
     }
 
     /**
@@ -68,10 +97,14 @@ class ConstraintBuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $factory = $this->prophesize('JBen87\ParsleyBundle\Validator\ConstraintFactory');
-        $factory->create(new Assert\NotBlank())->willReturn(new ParsleyAssert\Required());
-        $factory->create(new Assert\Email())->willReturn(new ParsleyAssert\Type(['type' => 'email']));
+        $this->factory = $this->prophesize('JBen87\ParsleyBundle\Factory\ConstraintFactory');
+    }
 
-        $this->builder = new ConstraintBuilder($factory->reveal());
+    /**
+     * @return ConstraintBuilder
+     */
+    private function createBuilder()
+    {
+        return new ConstraintBuilder($this->factory->reveal());
     }
 }

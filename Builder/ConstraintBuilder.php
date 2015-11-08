@@ -3,7 +3,7 @@
 namespace JBen87\ParsleyBundle\Builder;
 
 use JBen87\ParsleyBundle\Exception\Builder\InvalidConfigurationException;
-use JBen87\ParsleyBundle\Validator\ConstraintFactory;
+use JBen87\ParsleyBundle\Factory\ConstraintFactory;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
 

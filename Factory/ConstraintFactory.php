@@ -1,6 +1,6 @@
 <?php
 
-namespace JBen87\ParsleyBundle\Validator;
+namespace JBen87\ParsleyBundle\Factory;
 
 use JBen87\ParsleyBundle\Exception\Validator\UnsupportedConstraintException;
 use JBen87\ParsleyBundle\Validator\Constraint as ParsleyConstraint;

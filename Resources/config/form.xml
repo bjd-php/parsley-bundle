@@ -5,19 +5,13 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <!-- EXTENSIONS -->
-        <service id="jben87_parsley.form.extension.parsley_constraints_type"
+        <service id="jben87_parsley.form.extension.parsley_type"
                  class="JBen87\ParsleyBundle\Form\Extension\ParsleyTypeExtension">
+            <argument type="service" id="jben87_parsley.builder.constraint"/>
+            <argument type="service" id="serializer.normalizer.object"/>
             <argument>%jben87_parsley.trigger_event%</argument>
 
             <tag name="form.type_extension" alias="form"/>
-        </service>
-
-        <!-- TYPES -->
-        <service id="jben87_parsley.form.type.abstract" class="JBen87\ParsleyBundle\Form\Type\AbstractType"
-                 abstract="true">
-            <argument type="service" id="jben87_parsley.builder.constraint"/>
-            <argument type="service" id="serializer.normalizer.object"/>
         </service>
     </services>
 

@@ -5,6 +5,7 @@ namespace JBen87\ParsleyBundle\Tests\Unit\Factory;
 use JBen87\ParsleyBundle\Factory\ConstraintFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -27,14 +28,15 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $data
+     * @param string $class
+     * @param Constraint $constraint
      *
      * @test
      * @dataProvider validProvider
      */
-    public function validConstraintCreation(array $data)
+    public function validConstraintCreation($class, Constraint $constraint)
     {
-        $this->assertInstanceOf($data['class'], $this->createFactory()->create($data['constraint']));
+        $this->assertInstanceOf($class, $this->createFactory()->create($constraint));
     }
 
     /**
@@ -44,46 +46,32 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                [
-                    'class' => 'JBen87\ParsleyBundle\Validator\Constraints\Type',
-                    'constraint' => new Assert\Email(),
-                ],
+                'JBen87\ParsleyBundle\Validator\Constraints\Type',
+                new Assert\Email()
             ],
             [
-                [
-                    'class' => 'JBen87\ParsleyBundle\Validator\Constraints\Length',
-                    'constraint' => new Assert\Length(5),
-                ],
+                'JBen87\ParsleyBundle\Validator\Constraints\Length',
+                new Assert\Length(5)
             ],
             [
-                [
-                    'class' => 'JBen87\ParsleyBundle\Validator\Constraints\Length',
-                    'constraint' => new Assert\Length(['min' => 5, 'max' => 10]),
-                ],
+                'JBen87\ParsleyBundle\Validator\Constraints\Length',
+                new Assert\Length(['min' => 5, 'max' => 10])
             ],
             [
-                [
-                    'class' => 'JBen87\ParsleyBundle\Validator\Constraints\MinLength',
-                    'constraint' => new Assert\Length(['min' => 5]),
-                ],
+                'JBen87\ParsleyBundle\Validator\Constraints\MinLength',
+                new Assert\Length(['min' => 5])
             ],
             [
-                [
-                    'class' => 'JBen87\ParsleyBundle\Validator\Constraints\MaxLength',
-                    'constraint' => new Assert\Length(['max' => 10]),
-                ],
+                'JBen87\ParsleyBundle\Validator\Constraints\MaxLength',
+                new Assert\Length(['max' => 10])
             ],
             [
-                [
-                    'class' => 'JBen87\ParsleyBundle\Validator\Constraints\Required',
-                    'constraint' => new Assert\NotBlank(),
-                ],
+                'JBen87\ParsleyBundle\Validator\Constraints\Required',
+                new Assert\NotBlank()
             ],
             [
-                [
-                    'class' => 'JBen87\ParsleyBundle\Validator\Constraints\Range',
-                    'constraint' => new Assert\Range(['min' => 5, 'max' => 10]),
-                ],
+                'JBen87\ParsleyBundle\Validator\Constraints\Range',
+                new Assert\Range(['min' => 5, 'max' => 10])
             ],
         ];
     }

@@ -15,18 +15,27 @@ First install the bundle with composer:
 composer require j-ben87/parsley-bundle
 ```
 
-And finally, don't forget to register the bundle in your `app/AppKernel.php`:
+Don't forget to register the bundle in your `app/AppKernel.php`:
 
 ```php
 public function registerBundles()
 {
     $bundles = [
         // ...
-        new JBen87\ParsleyBundle\ParsleyBundle()
+        new JBen87\ParsleyBundle\ParsleyBundle(),
     ];
     
     // ...
 }
+```
+
+And finally, you'll need to enable the `serializer` component by exposing the following in your `config.yml` (commented by default):
+
+```
+framework:
+    # ...
+    serializer:      { enable_annotations: true }
+    # ...
 ```
 
 ## Configuration

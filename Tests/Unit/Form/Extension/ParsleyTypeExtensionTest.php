@@ -47,8 +47,6 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
         $extension = $this->createExtension();
         $extension->setDefaultOptions($resolver);
 
-        $this->assertTrue($resolver->hasDefault('parsley_enabled'));
-
         // handle symfony version <= 2.6
         if (method_exists($resolver, 'isDefined')) {
             $this->assertTrue($resolver->isDefined('parsley_enabled'));
@@ -141,8 +139,13 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        if (class_exists('Symfony\Component\Serializer\Normalizer\ObjectNormalizer')) {
+            $this->normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\ObjectNormalizer');
+        } else {
+            $this->normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer');
+        }
+
         $this->builder = $this->prophesize('JBen87\ParsleyBundle\Builder\ConstraintBuilder');
-        $this->normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\ObjectNormalizer');
         $this->view = $this->prophesize('Symfony\Component\Form\FormView');
         $this->form = $this->prophesize('Symfony\Component\Form\Form');
     }

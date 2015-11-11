@@ -3,6 +3,7 @@
 namespace JBen87\ParsleyBundle\Form\Extension;
 
 use JBen87\ParsleyBundle\Builder\BuilderInterface;
+use JBen87\ParsleyBundle\Validator\Constraint;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -109,7 +110,8 @@ class ParsleyTypeExtension extends AbstractTypeExtension
                 ]);
 
                 foreach ($this->constraintBuilder->build() as $constraint) {
-                    $view[$child->getName()]->vars['attr'] += $this->normalizer->normalize($constraint);
+                    /** @var Constraint $constraint */
+                    $view[$child->getName()]->vars['attr'] += $constraint->normalize($this->normalizer);
                 }
             }
         }

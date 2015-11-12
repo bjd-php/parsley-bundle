@@ -83,7 +83,18 @@ class ConstraintFactory
         ];
 
         if ($constraint->min === $constraint->max) {
-            $options['message'] = $this->translator->trans($constraint->exactMessage, [], 'validators');
+            $options['message'] = $this->translator->transChoice(
+                $constraint->exactMessage,
+                $constraint->min,
+                ['{{ limit }}' => $constraint->min],
+                'validators'
+            );
+        } else {
+            $options['message'] = $this->translator->trans(
+                'This value should have {{ min }} to {{ max }} characters.',
+                ['{{ min }}' => $constraint->min, '{{ max }}' => $constraint->max],
+                'validators'
+            );
         }
 
         return new ParsleyAssert\Length($options);
@@ -98,7 +109,12 @@ class ConstraintFactory
     {
         $options = [
             'max' => $constraint->max,
-            'message' => $this->translator->trans($constraint->maxMessage, [], 'validators'),
+            'message' => $this->translator->transChoice(
+                $constraint->maxMessage,
+                $constraint->max,
+                ['{{ limit }}' => $constraint->max],
+                'validators'
+            ),
         ];
 
         return new ParsleyAssert\MaxLength($options);
@@ -113,7 +129,12 @@ class ConstraintFactory
     {
         $options = [
             'min' => $constraint->min,
-            'message' => $this->translator->trans($constraint->minMessage, [], 'validators'),
+            'message' => $this->translator->transChoice(
+                $constraint->minMessage,
+                $constraint->min,
+                ['{{ limit }}' => $constraint->min],
+                'validators'
+            ),
         ];
 
         return new ParsleyAssert\MinLength($options);
@@ -130,12 +151,20 @@ class ConstraintFactory
 
         if (isset($constraint->min)) {
             $options['min'] = $constraint->min;
-            $options['minMessage'] = $this->translator->trans($constraint->minMessage, [], 'validators');
+            $options['minMessage'] = $this->translator->trans(
+                $constraint->minMessage,
+                ['{{ limit }}' => $constraint->min],
+                'validators'
+            );
         }
 
         if (isset($constraint->max)) {
             $options['max'] = $constraint->max;
-            $options['maxMessage'] = $this->translator->trans($constraint->maxMessage, [], 'validators');
+            $options['maxMessage'] = $this->translator->trans(
+                $constraint->maxMessage,
+                ['{{ limit }}' => $constraint->max],
+                'validators'
+            );
         }
 
         return new ParsleyAssert\Range($options);

@@ -1,15 +1,18 @@
 <?php
 
-namespace JBen87\ParsleyBundle\Tests\Unit\Validator\ParsleyConstraints;
+namespace JBen87\ParsleyBundle\Tests\Unit\Validator\Constraints;
 
+use JBen87\ParsleyBundle\Tests\Unit\Validator\Constraint;
 use JBen87\ParsleyBundle\Validator\Constraints\Length;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
  */
-class LengthTest extends \PHPUnit_Framework_TestCase
+class LengthTest extends Constraint
 {
     /**
+     * {@inheritdoc}
+     *
      * @test
      * @expectedException \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
      */
@@ -30,6 +33,8 @@ class LengthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @test
      * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
@@ -42,6 +47,8 @@ class LengthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @test
      */
     public function validConfiguration()
@@ -59,24 +66,20 @@ class LengthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @test
      */
     public function normalization()
     {
-        if (class_exists('Symfony\Component\Serializer\Normalizer\ObjectNormalizer')) {
-            $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\ObjectNormalizer');
-        } else {
-            $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer');
-        }
-
         $constraint = new Length([
             'min' => 5,
             'max' => 10,
         ]);
 
-        $this->assertEquals([
+        $this->assertSame([
             'data-parsley-length' => '[5, 10]',
             'data-parsley-length-message' => 'Invalid.',
-        ], $constraint->normalize($normalizer->reveal()));
+        ], $constraint->normalize($this->normalizer->reveal()));
     }
 }

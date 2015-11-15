@@ -4,6 +4,7 @@ namespace JBen87\ParsleyBundle\Validator\Constraints;
 
 use JBen87\ParsleyBundle\Validator\Constraint;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
@@ -23,6 +24,14 @@ class MaxLength extends Constraint
         parent::__construct($options);
 
         $this->max = $options['max'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = [])
+    {
+        return parent::normalize($normalizer, $format, $context) + ['maxlength' => $this->getValue()];
     }
 
     /**

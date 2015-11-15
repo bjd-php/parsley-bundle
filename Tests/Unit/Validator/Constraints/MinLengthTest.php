@@ -1,15 +1,18 @@
 <?php
 
-namespace JBen87\ParsleyBundle\Tests\Unit\Validator\ParsleyConstraints;
+namespace JBen87\ParsleyBundle\Tests\Unit\Validator\Constraints;
 
+use JBen87\ParsleyBundle\Tests\Unit\Validator\Constraint;
 use JBen87\ParsleyBundle\Validator\Constraints\MinLength;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
  */
-class MinLengthTest extends \PHPUnit_Framework_TestCase
+class MinLengthTest extends Constraint
 {
     /**
+     * {@inheritdoc}
+     *
      * @test
      * @expectedException \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
      */
@@ -19,6 +22,8 @@ class MinLengthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @test
      * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
@@ -30,6 +35,8 @@ class MinLengthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @test
      */
     public function validConfiguration()
@@ -45,23 +52,19 @@ class MinLengthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @test
      */
     public function normalization()
     {
-        if (class_exists('Symfony\Component\Serializer\Normalizer\ObjectNormalizer')) {
-            $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\ObjectNormalizer');
-        } else {
-            $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer');
-        }
-
         $constraint = new MinLength([
             'min' => 5,
         ]);
 
-        $this->assertEquals([
-            'data-parsley-minlength' => '5',
+        $this->assertSame([
+            'data-parsley-minlength' => 5,
             'data-parsley-minlength-message' => 'Invalid.',
-        ], $constraint->normalize($normalizer->reveal()));
+        ], $constraint->normalize($this->normalizer->reveal()));
     }
 }

@@ -83,12 +83,7 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->translator = $this->prophesize('Symfony\Component\Translation\Translator');
-
-        if (class_exists('Symfony\Component\Serializer\Normalizer\ObjectNormalizer')) {
-            $this->normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\ObjectNormalizer');
-        } else {
-            $this->normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer');
-        }
+        $this->normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\NormalizerInterface');
     }
 
     /**

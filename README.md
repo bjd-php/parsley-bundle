@@ -49,10 +49,9 @@ jben87_parsley:
 
 ## Basic usage
 
-### Form Types
+### Form constraints
 
-- create a `FormType` that extends `Symfony\Component\Form\AbstractType`
-- define it as a tagged service with tag `form.type`
+Create a `FormType` that extends `Symfony\Component\Form\AbstractType`.
 
 The constraints you have defined for each child of your `FormType` will automatically be turned into Parsley data-attributes.
 
@@ -100,25 +99,125 @@ class CustomType extends AbstractType
 }
 ```
 
+Results in:
+
+```html
+{% {{ form_widget(form.title) }} %}
+<input type="text" id="custom_title" name="custom[title]" required="required" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-length="[30, 30]" data-parsley-length-message="This value should have exactly 30 characters." data-parsley-id="4">
+
+{% {{ form_widget(form.content }} %}
+<textarea id="custom_content" name="custom[content]" required="required" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-id="6"></textarea>
+```
+
+### Entity constraints
+
+Create a `FormType` that extends `Symfony\Component\Form\AbstractType` and configure it to use one of your entities.
+
+The constraints you have defined for any properties of the entity will automatically be turned into Parsley data-attributes.
+
+**Nothing else.** 
+
+> Here again, it's incredibly simple!
+
+```php
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity
+ */
+class User
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(max=255)
+     */
+    private $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(max=255)
+     * @Assert\Email
+     */
+    private $email;
+}
+```
+
 And
 
-```yml
-services:
-    app.form.type.custom:
-        class: AppBundle\Form\Type\CustomType
-        tags:
-            -  { name: form.type, alias: custom }
+```php
+<?php
+
+namespace AppBundle\Form\Type;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class CustomType extends AbstractType
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('username')
+            ->add('email');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => 'AppBundle\Entity\User',
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'user';
+    }
+}
 ```
 
 Results in:
 
 ```html
-{% {{ form_widget(form.title) }} %}
-<input type="text" id="contact_title" name="contact[title]" required="required" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-length="[30, 30]" data-parsley-length-message="This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters." data-parsley-id="4" class="parsley-error">
+{% {{ form_widget(form.username) }} %}
+<input type="text" id="user_username" name="user[username]" required="required" maxlength="255" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-maxlength="255" data-parsley-maxlength-message="This value is too long. It should have 255 characters or less." data-parsley-id="4">
 
-{% {{ form_widget(form.content }} %}
-<textarea id="contact_content" name="contact[content]" required="required" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-id="6" class="parsley-error"></textarea>
+{% {{ form_widget(form.email }} %}
+<input type="email" id="user_email" name="user[email]" required="required" maxlength="255" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-maxlength="255" data-parsley-maxlength-message="This value is too long. It should have 255 characters or less." data-parsley-type="email" data-parsley-type-message="This value is not a valid email address." data-parsley-id="8">
 ```
+
+**Notice:** if you define the same constraint on both `FormType` and entity side, `FormType` constraint will override the entity one.
 
 ## Advanced usage
 
@@ -134,6 +233,8 @@ It can be used to turn Symfony constraints into Parsley constraints.
 - Then `build` an array of Parsley `Constraint`.
 
 ```php
+<?php
+
 use JBen87\ParsleyBundle\Validator\Constraint as ParsleyConstraint;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -159,6 +260,8 @@ Internally, the builder uses the `ConstraintFactory` service, registered as `jbe
 It can be used to create the suitable Parsley constraint for a given Symfony constraint.
 
 ```php
+<?php
+
 use JBen87\ParsleyBundle\Validator\Constraint as ParsleyConstraint;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -184,5 +287,5 @@ The following `Constraint` are currently supported:
 
 ## What's next
 
-- Handling entities based validation (annotations, validation file...)
 - Support more constraints
+- Support group validation

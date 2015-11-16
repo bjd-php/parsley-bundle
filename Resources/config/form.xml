@@ -9,6 +9,7 @@
                  class="JBen87\ParsleyBundle\Form\Extension\ParsleyTypeExtension">
             <argument type="service" id="jben87_parsley.builder.constraint"/>
             <argument type="service" id="serializer.normalizer.object"/>
+            <argument type="service" id="validator"/>
             <argument>%jben87_parsley.trigger_event%</argument>
 
             <tag name="form.type_extension" alias="form"/>

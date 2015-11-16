@@ -13,6 +13,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Mapping\PropertyMetadata;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\ValidatorInterface as DeprecatedValidatorInterface;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
@@ -30,7 +31,7 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     private $normalizer;
 
     /**
-     * @var ValidatorInterface
+     * @var ValidatorInterface|DeprecatedValidatorInterface
      */
     private $validator;
 
@@ -42,13 +43,13 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     /**
      * @param BuilderInterface $constraintBuilder
      * @param NormalizerInterface $normalizer
-     * @param ValidatorInterface $validator
+     * @param ValidatorInterface|DeprecatedValidatorInterface $validator
      * @param string $triggerEvent
      */
     public function __construct(
         BuilderInterface $constraintBuilder,
         NormalizerInterface $normalizer,
-        ValidatorInterface $validator,
+        $validator,
         $triggerEvent
     ) {
         $this->constraintBuilder = $constraintBuilder;

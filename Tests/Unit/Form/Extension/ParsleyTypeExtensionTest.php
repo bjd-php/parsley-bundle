@@ -5,9 +5,7 @@ namespace JBen87\ParsleyBundle\Tests\Unit\Form\Extension;
 use JBen87\ParsleyBundle\Builder\BuilderInterface;
 use JBen87\ParsleyBundle\Form\Extension\ParsleyTypeExtension;
 use Prophecy\Prophecy\ObjectProphecy;
-use SplStack;
 use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -206,7 +204,14 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\NormalizerInterface');
         $this->builder = $this->prophesize('JBen87\ParsleyBundle\Builder\ConstraintBuilder');
-        $this->validator = $this->prophesize('Symfony\Component\Validator\Validator\ValidatorInterface');
+
+        // handle symfony version <= 2.5
+        if (interface_exists('Symfony\Component\Validator\Validator\ValidatorInterface')) {
+            $this->validator = $this->prophesize('Symfony\Component\Validator\Validator\ValidatorInterface');
+        } else {
+            $this->validator = $this->prophesize('Symfony\Component\Validator\ValidatorInterface');
+        }
+
         $this->view = $this->prophesize('Symfony\Component\Form\FormView');
         $this->form = $this->prophesize('Symfony\Component\Form\Form');
     }

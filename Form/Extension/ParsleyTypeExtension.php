@@ -10,6 +10,10 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Mapping\PropertyMetadata;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\ValidatorInterface as DeprecatedValidatorInterface;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
@@ -27,6 +31,11 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     private $normalizer;
 
     /**
+     * @var ValidatorInterface|DeprecatedValidatorInterface
+     */
+    private $validator;
+
+    /**
      * @var string
      */
     private $triggerEvent;
@@ -34,12 +43,18 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     /**
      * @param BuilderInterface $constraintBuilder
      * @param NormalizerInterface $normalizer
+     * @param ValidatorInterface|DeprecatedValidatorInterface $validator
      * @param string $triggerEvent
      */
-    public function __construct(BuilderInterface $constraintBuilder, NormalizerInterface $normalizer, $triggerEvent)
-    {
+    public function __construct(
+        BuilderInterface $constraintBuilder,
+        NormalizerInterface $normalizer,
+        $validator,
+        $triggerEvent
+    ) {
         $this->constraintBuilder = $constraintBuilder;
         $this->normalizer = $normalizer;
+        $this->validator = $validator;
         $this->triggerEvent = $triggerEvent;
     }
 
@@ -74,6 +89,17 @@ class ParsleyTypeExtension extends AbstractTypeExtension
             return;
         }
 
+        // enable parsley validation on root form
+        if (null === $form->getParent() && count($form) > 0) {
+            $view->vars['attr'] += [
+                'novalidate' => true,
+                'data-parsley-validate' => true,
+            ];
+
+            return;
+        }
+
+        // set attributes on form children
         $triggerEvent = $this->triggerEvent;
 
         if (isset($options['parsley_trigger_event'])) {
@@ -92,28 +118,22 @@ class ParsleyTypeExtension extends AbstractTypeExtension
             return;
         }
 
-        // enable parsley validation
-        $view->vars['attr'] += [
-            'novalidate' => true,
-            'data-parsley-validate' => true,
-        ];
+        // do nothing with root form
+        if (null === $form->getParent()) {
+            return;
+        }
 
-        // generate parsley constraints for children and map them as attributes
-        foreach ($form as $child) {
-            /** @var FormInterface $child */
+        // build constraints and map them as data attributes
+        // form's constraints should override entity's constraints.
+        $this->constraintBuilder->configure([
+            'constraints' => array_merge($this->getEntityConstraints($form), $this->getFormTypeConstraints($form)),
+        ]);
 
-            $attributes = $child->getConfig()->getAttribute('data_collector/passed_options');
+        /** @var Constraint[] $constraints */
+        $constraints = $this->constraintBuilder->build();
 
-            if (isset($attributes['constraints'])) {
-                $this->constraintBuilder->configure([
-                    'constraints' => $attributes['constraints'],
-                ]);
-
-                foreach ($this->constraintBuilder->build() as $constraint) {
-                    /** @var Constraint $constraint */
-                    $view[$child->getName()]->vars['attr'] += $constraint->normalize($this->normalizer);
-                }
-            }
+        foreach ($constraints as $constraint) {
+            $view->vars['attr'] = array_merge($view->vars['attr'], $constraint->normalize($this->normalizer));
         }
     }
 
@@ -123,5 +143,49 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     public function getExtendedType()
     {
         return 'form';
+    }
+
+    /**
+     * @param FormInterface $form
+     *
+     * @return array
+     */
+    private function getEntityConstraints(FormInterface $form)
+    {
+        $config = $form->getParent()->getConfig();
+
+        if (!$config->hasOption('data_class') || !class_exists($config->getOption('data_class'))) {
+            return [];
+        }
+
+        $constraints = [];
+
+        /** @var ClassMetadata $metadata */
+        $metadata = $this->validator->getMetadataFor($config->getDataClass());
+
+        /** @var PropertyMetadata[] $properties */
+        $properties = $metadata->getPropertyMetadata($form->getName());
+
+        foreach ($properties as $property) {
+            $constraints = array_merge($constraints, $property->findConstraints($metadata->getDefaultGroup()));
+        }
+
+        return $constraints;
+    }
+
+    /**
+     * @param FormInterface $form
+     *
+     * @return array
+     */
+    private function getFormTypeConstraints(FormInterface $form)
+    {
+        $config = $form->getConfig();
+
+        if (!$config->hasOption('constraints')) {
+            return [];
+        }
+
+        return $config->getOption('constraints');
     }
 }

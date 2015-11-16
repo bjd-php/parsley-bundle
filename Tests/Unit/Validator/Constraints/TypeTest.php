@@ -1,15 +1,18 @@
 <?php
 
-namespace JBen87\ParsleyBundle\Tests\Unit\Validator\ParsleyConstraints;
+namespace JBen87\ParsleyBundle\Tests\Unit\Validator\Constraints;
 
+use JBen87\ParsleyBundle\Tests\Unit\Validator\Constraint;
 use JBen87\ParsleyBundle\Validator\Constraints\Type;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
  */
-class TypeTest extends \PHPUnit_Framework_TestCase
+class TypeTest extends Constraint
 {
     /**
+     * {@inheritdoc}
+     *
      * @test
      * @expectedException \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
      */
@@ -19,6 +22,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @test
      * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
@@ -30,6 +35,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @test
      */
     public function validConfiguration()
@@ -45,23 +52,19 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @test
      */
     public function normalization()
     {
-        if (class_exists('Symfony\Component\Serializer\Normalizer\ObjectNormalizer')) {
-            $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\ObjectNormalizer');
-        } else {
-            $normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer');
-        }
-
         $constraint = new Type([
             'type' => 'email',
         ]);
 
-        $this->assertEquals([
+        $this->assertSame([
             'data-parsley-type' => 'email',
             'data-parsley-type-message' => 'Invalid.',
-        ], $constraint->normalize($normalizer->reveal()));
+        ], $constraint->normalize($this->normalizer->reveal()));
     }
 }

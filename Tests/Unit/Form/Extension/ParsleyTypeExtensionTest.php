@@ -218,15 +218,17 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $triggerEvent
+     * @param bool $global
      *
      * @return ParsleyTypeExtension
      */
-    private function createExtension($triggerEvent = 'blur')
+    private function createExtension($triggerEvent = 'blur', $global = true)
     {
         return new ParsleyTypeExtension(
             $this->builder->reveal(),
             $this->normalizer->reveal(),
             $this->validator->reveal(),
+            $global,
             $triggerEvent
         );
     }

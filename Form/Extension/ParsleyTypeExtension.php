@@ -79,7 +79,7 @@ class ParsleyTypeExtension extends AbstractTypeExtension
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(['parsley_enabled' => true]);
+        $resolver->setDefaults(['parsley_enabled' => $this->global]);
 
         if (method_exists($resolver, 'setDefined')) {
             $resolver->setDefined(['parsley_trigger_event']);
@@ -93,7 +93,7 @@ class ParsleyTypeExtension extends AbstractTypeExtension
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        if (false === $this->global || false === $options['parsley_enabled']) {
+        if (false === $options['parsley_enabled']) {
             return;
         }
 
@@ -122,7 +122,7 @@ class ParsleyTypeExtension extends AbstractTypeExtension
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        if (false === $this->global || false === $options['parsley_enabled']) {
+        if (false === $options['parsley_enabled']) {
             return;
         }
 

@@ -33,6 +33,9 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root($this->name);
         $rootNode
             ->children()
+                ->booleanNode('global')
+                    ->defaultTrue()
+                ->end()
                 ->scalarNode('trigger_event')
                     ->defaultValue('blur')
                 ->end()

@@ -36,6 +36,11 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     private $validator;
 
     /**
+     * @var bool
+     */
+    private $global;
+
+    /**
      * @var string
      */
     private $triggerEvent;
@@ -44,17 +49,20 @@ class ParsleyTypeExtension extends AbstractTypeExtension
      * @param BuilderInterface $constraintBuilder
      * @param NormalizerInterface $normalizer
      * @param ValidatorInterface|DeprecatedValidatorInterface $validator
+     * @param bool $global
      * @param string $triggerEvent
      */
     public function __construct(
         BuilderInterface $constraintBuilder,
         NormalizerInterface $normalizer,
         $validator,
+        $global,
         $triggerEvent
     ) {
         $this->constraintBuilder = $constraintBuilder;
         $this->normalizer = $normalizer;
         $this->validator = $validator;
+        $this->global = $global;
         $this->triggerEvent = $triggerEvent;
     }
 
@@ -85,7 +93,7 @@ class ParsleyTypeExtension extends AbstractTypeExtension
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        if (!$options['parsley_enabled']) {
+        if (false === $this->global || false === $options['parsley_enabled']) {
             return;
         }
 
@@ -114,7 +122,7 @@ class ParsleyTypeExtension extends AbstractTypeExtension
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        if (!$options['parsley_enabled']) {
+        if (false === $this->global || false === $options['parsley_enabled']) {
             return;
         }
 

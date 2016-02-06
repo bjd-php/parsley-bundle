@@ -7,6 +7,8 @@ use JBen87\ParsleyBundle\Validator\Constraint as ParsleyConstraint;
 use JBen87\ParsleyBundle\Validator\Constraints as ParsleyAssert;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\Time;
 
 /**
  * @author Benoit Jouhaud <bjouhaud@gmail.com>
@@ -36,6 +38,11 @@ class ConstraintFactory
     public function create(Constraint $constraint)
     {
         switch (get_class($constraint)) {
+            case 'Symfony\Component\Validator\Constraints\DateTime':
+            case 'Symfony\Component\Validator\Constraints\Date':
+            case 'Symfony\Component\Validator\Constraints\Time':
+                return $this->createDateTimeConstraint($constraint);
+
             case 'Symfony\Component\Validator\Constraints\Email':
                 return $this->createType($constraint, 'email');
 
@@ -50,6 +57,31 @@ class ConstraintFactory
         }
 
         throw new UnsupportedConstraintException($constraint);
+    }
+
+    /**
+     * @param Constraint $constraint
+     *
+     * @return ParsleyAssert\Pattern
+     */
+    private function createDateTimeConstraint(Constraint $constraint)
+    {
+        $pattern = '\d{4}-\d{2}-\d{2} \d{2}:\d{2}';
+
+        if ($constraint instanceof Date) {
+            $pattern = '\d{4}-\d{2}-\d{2}';
+        }
+
+        if ($constraint instanceof Time) {
+            $pattern = '\d{2}:\d{2}';
+        }
+
+        $options = [
+            'pattern' => $pattern,
+            'message' => $this->translator->trans($constraint->message, [], 'validators'),
+        ];
+
+        return new ParsleyAssert\Pattern($options);
     }
 
     /**

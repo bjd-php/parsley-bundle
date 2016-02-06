@@ -70,6 +70,7 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     public function validProvider()
     {
         return array_merge(
+            $this->patternProvider(),
             $this->typeProvider(),
             $this->lengthProvider(),
             $this->requiredProvider(),
@@ -84,6 +85,29 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->translator = $this->prophesize('Symfony\Component\Translation\Translator');
         $this->normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\NormalizerInterface');
+    }
+
+    /**
+     * @return array
+     */
+    private function patternProvider()
+    {
+        return [
+            [
+                'JBen87\ParsleyBundle\Validator\Constraints\Pattern',
+                new Assert\DateTime(),
+                [
+                    'data-parsley-pattern' => [
+                        'message' => 'This value is not a valid datetime.',
+                        'config' => [
+                            'method' => self::TRANSLATOR_METHOD_TRANS,
+                            'id' => 'This value is not a valid datetime.',
+                            'params' => [],
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**

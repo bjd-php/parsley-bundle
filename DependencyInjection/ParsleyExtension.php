@@ -35,6 +35,7 @@ class ParsleyExtension extends Extension
         $configuration = new Configuration($this->name);
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('jben87_parsley.global', $config['global']);
         $container->setParameter('jben87_parsley.trigger_event', $config['trigger_event']);
 
         $loader = new XmlFileLoader($container, new FileLocator(sprintf('%s/../Resources/config', __DIR__)));

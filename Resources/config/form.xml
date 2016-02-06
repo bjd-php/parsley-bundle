@@ -10,6 +10,7 @@
             <argument type="service" id="jben87_parsley.builder.constraint"/>
             <argument type="service" id="serializer.normalizer.object"/>
             <argument type="service" id="validator"/>
+            <argument>%jben87_parsley.global%</argument>
             <argument>%jben87_parsley.trigger_event%</argument>
 
             <tag name="form.type_extension" alias="form"/>

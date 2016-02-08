@@ -21,11 +21,18 @@ class ConstraintFactory
     private $translator;
 
     /**
-     * @param TranslatorInterface $translator
+     * @var array
      */
-    public function __construct(TranslatorInterface $translator)
+    private $patterns;
+
+    /**
+     * @param TranslatorInterface $translator
+     * @param array $patterns
+     */
+    public function __construct(TranslatorInterface $translator, array $patterns)
     {
         $this->translator = $translator;
+        $this->patterns = $patterns;
     }
 
     /**
@@ -66,14 +73,14 @@ class ConstraintFactory
      */
     private function createDateTimeConstraint(Constraint $constraint)
     {
-        $pattern = '\d{4}-\d{2}-\d{2} \d{2}:\d{2}';
+        $pattern = $this->patterns['date_time'];
 
         if ($constraint instanceof Date) {
-            $pattern = '\d{4}-\d{2}-\d{2}';
+            $pattern = $this->patterns['date'];
         }
 
         if ($constraint instanceof Time) {
-            $pattern = '\d{2}:\d{2}';
+            $pattern = $this->patterns['time'];
         }
 
         $options = [

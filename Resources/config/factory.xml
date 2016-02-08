@@ -8,6 +8,11 @@
         <service id="jben87_parsley.validator.constraint_factory"
                  class="JBen87\ParsleyBundle\Factory\ConstraintFactory">
             <argument type="service" id="translator"/>
+            <argument type="collection">
+                <argument key="date_time">%jben87_parsley.date_time_pattern%</argument>
+                <argument key="date">%jben87_parsley.date_pattern%</argument>
+                <argument key="time">%jben87_parsley.time_pattern%</argument>
+            </argument>
         </service>
     </services>
 

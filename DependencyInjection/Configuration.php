@@ -39,6 +39,18 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('trigger_event')
                     ->defaultValue('blur')
                 ->end()
+                ->arrayNode('date_time_pattern')
+                    ->useAttributeAsKey('name')
+                    ->prototype('scalar')->end()
+                ->end()
+                ->arrayNode('date_pattern')
+                    ->useAttributeAsKey('name')
+                    ->prototype('scalar')->end()
+                ->end()
+                ->arrayNode('time_pattern')
+                    ->useAttributeAsKey('name')
+                    ->prototype('scalar')->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

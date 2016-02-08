@@ -28,6 +28,11 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     private $normalizer;
 
     /**
+     * @var array
+     */
+    private $patterns;
+
+    /**
      * @test
      * @expectedException \JBen87\ParsleyBundle\Exception\Validator\UnsupportedConstraintException
      */
@@ -85,6 +90,11 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->translator = $this->prophesize('Symfony\Component\Translation\Translator');
         $this->normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\NormalizerInterface');
+        $this->patterns = [
+            'date_time' => '\d{4}-\d{2}-\d{2} \d{2}:\d{2}',
+            'date' => '\d{4}-\d{2}-\d{2}',
+            'time' => '\d{2}:\d{2}',
+        ];
     }
 
     /**
@@ -294,6 +304,6 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private function createFactory()
     {
-        return new ConstraintFactory($this->translator->reveal());
+        return new ConstraintFactory($this->translator->reveal(), $this->patterns);
     }
 }

@@ -46,10 +46,14 @@ class Min extends Constraint
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
-        $resolver
-            ->setRequired(['min'])
-            ->setAllowedTypes([
+        $resolver->setRequired(['min']);
+
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setAllowedTypes('min', ['int']);
+        } else {
+            $resolver->setAllowedTypes([
                 'min' => 'int',
             ]);
+        }
     }
 }

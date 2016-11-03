@@ -49,12 +49,16 @@ class ConstraintBuilder implements BuilderInterface
      */
     public function configure(array $options)
     {
-        $options = (new OptionsResolver)
-            ->setRequired(['constraints'])
-            ->setAllowedTypes([
-                'constraints' => 'array',
-            ])
-            ->resolve($options);
+        $optionsResolver = new OptionsResolver();
+        $optionsResolver->setRequired(['constraints']);
+
+        if (method_exists($optionsResolver, 'setDefined')) {
+            $optionsResolver->setAllowedTypes('constraints', ['array']);
+        } else {
+            $optionsResolver->setAllowedTypes(['constraints' => 'array']);
+        }
+
+        $options = $optionsResolver->resolve($options);
 
         $this->constraints = $options['constraints'];
     }

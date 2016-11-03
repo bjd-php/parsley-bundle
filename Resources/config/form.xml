@@ -13,7 +13,7 @@
             <argument>%jben87_parsley.global%</argument>
             <argument>%jben87_parsley.trigger_event%</argument>
 
-            <tag name="form.type_extension" alias="form"/>
+            <tag name="form.type_extension" alias="form" extended-type="Symfony\Component\Form\Extension\Core\Type\FormType" />
         </service>
     </services>
 

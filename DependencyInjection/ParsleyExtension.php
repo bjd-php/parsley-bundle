@@ -77,8 +77,8 @@ class ParsleyExtension extends Extension
             $timePattern = $config['time_pattern'][$locale];
         }
 
-        $container->setParameter('jben87_parsley.date_time_format', $dateTimePattern);
-        $container->setParameter('jben87_parsley.date_format', $datePattern);
-        $container->setParameter('jben87_parsley.time_format', $timePattern);
+        $container->setParameter('jben87_parsley.date_time_pattern', $dateTimePattern);
+        $container->setParameter('jben87_parsley.date_pattern', $datePattern);
+        $container->setParameter('jben87_parsley.time_pattern', $timePattern);
     }
 }

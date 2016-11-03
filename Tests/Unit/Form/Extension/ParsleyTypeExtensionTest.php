@@ -61,7 +61,11 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue($resolver->isKnown('parsley_trigger_event'));
         }
 
-        $this->assertEquals('form', $extension->getExtendedType());
+        if (!method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
+            $this->assertEquals('form', $extension->getExtendedType());
+        } else {
+            $this->assertEquals('Symfony\Component\Form\Extension\Core\Type\FormType', $extension->getExtendedType());
+        }
     }
 
     /**

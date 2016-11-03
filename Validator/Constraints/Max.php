@@ -46,10 +46,14 @@ class Max extends Constraint
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
-        $resolver
-            ->setRequired(['max'])
-            ->setAllowedTypes([
+        $resolver->setRequired(['max']);
+
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setAllowedTypes('max', ['int']);
+        } else {
+            $resolver->setAllowedTypes([
                 'max' => 'int',
             ]);
+        }
     }
 }

@@ -50,7 +50,7 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
         $resolver = new OptionsResolver();
 
         $extension = $this->createExtension();
-        $extension->setDefaultOptions($resolver);
+        $extension->configureOptions($resolver);
 
         // handle symfony version <= 2.6
         if (method_exists($resolver, 'isDefined')) {

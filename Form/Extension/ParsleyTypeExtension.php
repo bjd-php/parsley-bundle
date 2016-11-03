@@ -71,14 +71,6 @@ class ParsleyTypeExtension extends AbstractTypeExtension
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $this->setDefaultOptions($resolver);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
         $resolver->setDefaults(['parsley_enabled' => $this->global]);
 
         if (method_exists($resolver, 'setDefined')) {
@@ -86,6 +78,14 @@ class ParsleyTypeExtension extends AbstractTypeExtension
         } else {
             $resolver->setOptional(['parsley_trigger_event']);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
     }
 
     /**

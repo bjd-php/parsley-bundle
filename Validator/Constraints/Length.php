@@ -52,11 +52,17 @@ class Length extends Constraint
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
-        $resolver
-            ->setRequired(['min', 'max'])
-            ->setAllowedTypes([
+        $resolver->setRequired(['min', 'max']);
+
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver
+                ->setAllowedTypes('min', ['int'])
+                ->setAllowedTypes('max', ['int']);
+        } else {
+            $resolver->setAllowedTypes([
                 'min' => 'int',
                 'max' => 'int',
             ]);
+        }
     }
 }

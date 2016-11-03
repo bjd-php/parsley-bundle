@@ -46,13 +46,22 @@ class Type extends Constraint
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
-        $resolver
-            ->setRequired(['type'])
-            ->setAllowedTypes([
+        $resolver->setRequired(['type']);
+
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setAllowedTypes('type', ['string']);
+        } else {
+            $resolver->setAllowedTypes([
                 'type' => 'string',
-            ])
-            ->setAllowedValues([
+            ]);
+        }
+
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setAllowedValues('type', ['email', 'number', 'integer', 'digits', 'alphanum', 'url']);
+        } else {
+            $resolver->setAllowedValues([
                 'type' => ['email', 'number', 'integer', 'digits', 'alphanum', 'url'],
             ]);
+        }
     }
 }

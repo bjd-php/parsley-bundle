@@ -46,10 +46,14 @@ class Pattern extends Constraint
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
-        $resolver
-            ->setRequired(['pattern'])
-            ->setAllowedTypes([
+        $resolver->setRequired(['pattern']);
+
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setAllowedTypes('pattern', ['string']);
+        } else {
+            $resolver->setAllowedTypes([
                 'pattern' => 'string',
             ]);
+        }
     }
 }

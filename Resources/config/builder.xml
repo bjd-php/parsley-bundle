@@ -7,6 +7,7 @@
     <services>
         <service id="jben87_parsley.builder.constraint" class="JBen87\ParsleyBundle\Builder\ConstraintBuilder">
             <argument type="service" id="jben87_parsley.validator.constraint_factory"/>
+            <argument type="service" id="logger" />
         </service>
     </services>
 

@@ -3,7 +3,10 @@
 namespace JBen87\ParsleyBundle\Builder;
 
 use JBen87\ParsleyBundle\Exception\Builder\InvalidConfigurationException;
+use JBen87\ParsleyBundle\Exception\Validator\UnsupportedConstraintException;
 use JBen87\ParsleyBundle\Factory\ConstraintFactory;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
 
@@ -23,11 +26,17 @@ class ConstraintBuilder implements BuilderInterface
     private $factory;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ConstraintFactory $factory
      */
-    public function __construct(ConstraintFactory $factory)
+    public function __construct(ConstraintFactory $factory, LoggerInterface $logger = null)
     {
         $this->factory = $factory;
+        $this->logger = $logger ?: new NullLogger();
     }
 
     /**
@@ -39,9 +48,17 @@ class ConstraintBuilder implements BuilderInterface
             throw new InvalidConfigurationException();
         }
 
-        return array_map(function (Constraint $constraint) {
-            return $this->factory->create($constraint);
-        }, $this->constraints);
+        $constraints = [];
+
+        foreach ($this->constraints as $constraint) {
+            try {
+                $constraints[] = $this->factory->create($constraint);
+            } catch (UnsupportedConstraintException $e) {
+                $this->logger->debug('Unsupported Constraint', ['constraint' => $constraint]);
+            }
+        }
+
+        return $constraints;
     }
 
     /**

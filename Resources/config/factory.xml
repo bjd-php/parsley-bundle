@@ -13,6 +13,7 @@
                 <argument key="date">%jben87_parsley.date_pattern%</argument>
                 <argument key="time">%jben87_parsley.time_pattern%</argument>
             </argument>
+            <argument>%jben87_parsley.debug%</argument>
         </service>
     </services>
 

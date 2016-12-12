@@ -26,13 +26,20 @@ class ConstraintFactory
     private $patterns;
 
     /**
+     * @var bool
+     */
+    private $debug;
+
+    /**
      * @param TranslatorInterface $translator
      * @param array $patterns
+     * @param bool $debug
      */
-    public function __construct(TranslatorInterface $translator, array $patterns)
+    public function __construct(TranslatorInterface $translator, array $patterns, $debug)
     {
         $this->translator = $translator;
         $this->patterns = $patterns;
+        $this->debug = $debug;
     }
 
     /**
@@ -63,7 +70,11 @@ class ConstraintFactory
                 return $this->createRange($constraint);
         }
 
-        throw new UnsupportedConstraintException($constraint);
+        if ($this->debug) {
+            throw new UnsupportedConstraintException($constraint);
+        }
+
+        return null;
     }
 
     /**

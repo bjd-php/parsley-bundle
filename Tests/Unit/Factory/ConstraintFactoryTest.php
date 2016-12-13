@@ -38,7 +38,7 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function invalidConstraintCreation()
     {
-        $this->createFactory()->create(new Assert\Iban());
+        $this->createFactory(true)->create(new Assert\Iban());
     }
 
     /**
@@ -300,10 +300,11 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param bool|true $debug
      * @return ConstraintFactory
      */
-    private function createFactory()
+    private function createFactory($debug = false)
     {
-        return new ConstraintFactory($this->translator->reveal(), $this->patterns);
+        return new ConstraintFactory($this->translator->reveal(), $this->patterns, $debug);
     }
 }

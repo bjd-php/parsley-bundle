@@ -36,6 +36,7 @@ class ParsleyExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('jben87_parsley.global', $config['global']);
+        $container->setParameter('jben87_parsley.debug', $config['debug']);
         $container->setParameter('jben87_parsley.trigger_event', $config['trigger_event']);
 
         $this->setDateTimePatternParameters($config, $container);

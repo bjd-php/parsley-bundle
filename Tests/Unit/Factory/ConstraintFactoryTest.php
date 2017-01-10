@@ -4,6 +4,7 @@ namespace JBen87\ParsleyBundle\Tests\Unit\Factory;
 
 use JBen87\ParsleyBundle\Factory\ConstraintFactory;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
@@ -23,6 +24,11 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     private $translator;
 
     /**
+     * @var ObjectProphecy|LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var ObjectProphecy|NormalizerInterface
      */
     private $normalizer;
@@ -31,15 +37,6 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     private $patterns;
-
-    /**
-     * @test
-     * @expectedException \JBen87\ParsleyBundle\Exception\Validator\UnsupportedConstraintException
-     */
-    public function invalidConstraintCreation()
-    {
-        $this->createFactory()->create(new Assert\Iban());
-    }
 
     /**
      * @param string $class
@@ -89,6 +86,7 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->translator = $this->prophesize('Symfony\Component\Translation\Translator');
+        $this->logger = $this->prophesize('Psr\Log\LoggerInterface');
         $this->normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\NormalizerInterface');
         $this->patterns = [
             'date_time' => '\d{4}-\d{2}-\d{2} \d{2}:\d{2}',
@@ -304,6 +302,6 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private function createFactory()
     {
-        return new ConstraintFactory($this->translator->reveal(), $this->patterns);
+        return new ConstraintFactory($this->translator->reveal(), $this->logger->reveal(), $this->patterns);
     }
 }

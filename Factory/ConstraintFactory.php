@@ -2,9 +2,10 @@
 
 namespace JBen87\ParsleyBundle\Factory;
 
-use JBen87\ParsleyBundle\Exception\Validator\UnsupportedConstraintException;
 use JBen87\ParsleyBundle\Validator\Constraint as ParsleyConstraint;
 use JBen87\ParsleyBundle\Validator\Constraints as ParsleyAssert;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Date;
@@ -21,26 +22,31 @@ class ConstraintFactory
     private $translator;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var array
      */
     private $patterns;
 
     /**
      * @param TranslatorInterface $translator
+     * @param LoggerInterface $logger
      * @param array $patterns
      */
-    public function __construct(TranslatorInterface $translator, array $patterns)
+    public function __construct(TranslatorInterface $translator, LoggerInterface $logger, array $patterns)
     {
         $this->translator = $translator;
+        $this->logger = $logger;
         $this->patterns = $patterns;
     }
 
     /**
      * @param Constraint $constraint
      *
-     * @return ParsleyConstraint
-     *
-     * @throws UnsupportedConstraintException
+     * @return ParsleyConstraint|null
      */
     public function create(Constraint $constraint)
     {
@@ -63,7 +69,15 @@ class ConstraintFactory
                 return $this->createRange($constraint);
         }
 
-        throw new UnsupportedConstraintException($constraint);
+        $this->logger->log(
+            Logger::NOTICE,
+            'A constraint has been found that is not supported by Parsley.',
+            [
+                'constraint' => get_class($constraint),
+            ]
+        );
+
+        return null;
     }
 
     /**

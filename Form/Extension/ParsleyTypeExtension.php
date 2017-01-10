@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Mapping\PropertyMetadata;
@@ -141,6 +142,10 @@ class ParsleyTypeExtension extends AbstractTypeExtension
         $constraints = $this->constraintBuilder->build();
 
         foreach ($constraints as $constraint) {
+            if (!$constraint instanceof NormalizableInterface) {
+                continue;
+            }
+
             $view->vars['attr'] = array_merge($view->vars['attr'], $constraint->normalize($this->normalizer));
         }
     }

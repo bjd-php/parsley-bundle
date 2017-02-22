@@ -77,7 +77,8 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
             $this->lengthProvider(),
             $this->requiredProvider(),
             $this->rangeProvider(),
-            $this->greaterThanProvider()
+            $this->greaterThanProvider(),
+            $this->lessThanProvider()
         );
     }
 
@@ -292,6 +293,29 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
                             'method' => self::TRANSLATOR_METHOD_TRANS,
                             'id' => 'This value should be greater than {{ compared_value }}.',
                             'params' => ['{{ compared_value }}' => 5],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function lessThanProvider()
+    {
+        return [
+            [
+                'JBen87\ParsleyBundle\Validator\Constraints\LessThan',
+                new Assert\LessThan(['value' => 10]),
+                [
+                    'data-parsley-lt' => [
+                        'message' => 'This value should be less than 10.',
+                        'config' => [
+                            'method' => self::TRANSLATOR_METHOD_TRANS,
+                            'id' => 'This value should be less than {{ compared_value }}.',
+                            'params' => ['{{ compared_value }}' => 10],
                         ],
                     ],
                 ],

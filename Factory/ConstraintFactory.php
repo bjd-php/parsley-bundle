@@ -67,6 +67,9 @@ class ConstraintFactory
 
             case 'Symfony\Component\Validator\Constraints\Range':
                 return $this->createRange($constraint);
+
+            case 'Symfony\Component\Validator\Constraints\GreaterThan':
+                return $this->createGreaterThan($constraint);
         }
 
         $this->logger->log(
@@ -249,5 +252,20 @@ class ConstraintFactory
         ];
 
         return new ParsleyAssert\Type($options);
+    }
+
+    /**
+     * @param Constraint $constraint
+     *
+     * @return ParsleyAssert|GreaterThan
+     */
+    private function createGreaterThan(Constraint $constraint)
+    {
+        $options = [
+            'greater_than' => $constraint->value,
+            'message' => $this->translator->trans($constraint->message, [], 'validators'),
+        ];
+
+        return new ParsleyAssert\GreaterThan($options);
     }
 }

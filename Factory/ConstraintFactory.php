@@ -257,13 +257,17 @@ class ConstraintFactory
     /**
      * @param Constraint $constraint
      *
-     * @return ParsleyAssert|GreaterThan
+     * @return ParsleyAssert\GreaterThan
      */
     private function createGreaterThan(Constraint $constraint)
     {
         $options = [
-            'greater_than' => $constraint->value,
-            'message' => $this->translator->trans($constraint->message, [], 'validators'),
+            'value' => $constraint->value,
+            'message' => $this->translator->trans(
+                $constraint->message,
+                ['{{ compared_value }}' => $constraint->value],
+                'validators'
+            ),
         ];
 
         return new ParsleyAssert\GreaterThan($options);

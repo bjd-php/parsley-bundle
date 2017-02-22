@@ -13,7 +13,7 @@ class GreaterThan extends Constraint
     /**
      * @var int
      */
-    private $greater_than;
+    private $value;
 
     /**
      * {@inheritdoc}
@@ -22,7 +22,7 @@ class GreaterThan extends Constraint
     {
         parent::__construct($options);
 
-        $this->greater_than = $options['greater_than'];
+        $this->value = $options['value'];
     }
 
     /**
@@ -38,7 +38,7 @@ class GreaterThan extends Constraint
      */
     protected function getValue()
     {
-        return $this->greater_than;
+        return $this->value;
     }
 
     /**
@@ -46,13 +46,13 @@ class GreaterThan extends Constraint
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['greater_than']);
+        $resolver->setRequired(['value']);
 
         if (method_exists($resolver, 'setDefined')) {
-            $resolver->setAllowedTypes('greater_than', ['int']);
+            $resolver->setAllowedTypes('value', ['int']);
         } else {
             $resolver->setAllowedTypes([
-                'greater_than' => 'int',
+                'value' => 'int',
             ]);
         }
     }

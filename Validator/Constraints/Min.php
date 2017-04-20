@@ -49,7 +49,7 @@ class Min extends Constraint
         $resolver->setRequired(['min']);
 
         if (method_exists($resolver, 'setDefined')) {
-            $resolver->setAllowedTypes('min', ['int']);
+            $resolver->setAllowedTypes('min', ['int', 'string']);
         } else {
             $resolver->setAllowedTypes([
                 'min' => 'int',

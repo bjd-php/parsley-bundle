@@ -49,6 +49,11 @@ class MaxTest extends Constraint
             'max' => 10,
             'message' => 'Invalid',
         ]);
+
+        new Max([
+            'max' => '2017-04-20 00:30',
+            'message' => 'Invalid datetime',
+        ]);
     }
 
     /**

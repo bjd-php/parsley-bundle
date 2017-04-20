@@ -49,6 +49,11 @@ class MinTest extends Constraint
             'min' => 5,
             'message' => 'Invalid',
         ]);
+
+        new Min([
+            'min' => '2017-04-20 00:01',
+            'message' => 'Invalid datetime',
+        ]);
     }
 
     /**

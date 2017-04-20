@@ -63,8 +63,8 @@ class Range extends Constraint
 
         if (method_exists($resolver, 'setDefined')) {
             $resolver
-                ->setAllowedTypes('min', ['int'])
-                ->setAllowedTypes('max', ['int']);
+                ->setAllowedTypes('min', ['int', 'string'])
+                ->setAllowedTypes('max', ['int', 'string']);
         } else {
             $resolver->setAllowedTypes([
                 'min' => 'int',

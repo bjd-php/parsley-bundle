@@ -49,7 +49,7 @@ class Max extends Constraint
         $resolver->setRequired(['max']);
 
         if (method_exists($resolver, 'setDefined')) {
-            $resolver->setAllowedTypes('max', ['int']);
+            $resolver->setAllowedTypes('max', ['int', 'string']);
         } else {
             $resolver->setAllowedTypes([
                 'max' => 'int',

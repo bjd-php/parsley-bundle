@@ -83,6 +83,13 @@ class RangeTest extends Constraint
             'minMessage' => 'Too short',
             'maxMessage' => 'Too long',
         ]);
+
+        new Range([
+            'min' => '2017-04-20 00:01',
+            'max' => '2017-04-20 00:30',
+            'minMessage' => 'Not a valid datetime',
+            'maxMessage' => 'Not a valid datetime',
+        ]);
     }
 
     /**

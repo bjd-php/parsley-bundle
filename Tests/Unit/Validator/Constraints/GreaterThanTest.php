@@ -4,66 +4,44 @@ namespace Tests\Unit\Validator\Constraints;
 
 use JBen87\ParsleyBundle\Tests\Unit\Validator\Constraint;
 use JBen87\ParsleyBundle\Validator\Constraints\GreaterThan;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@gmail.com>
- */
 class GreaterThanTest extends Constraint
 {
     /**
-     * {@inheritdoc}
-     *
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
+     * @inheritdoc
      */
-    public function emptyConfiguration()
+    public function testEmptyConfiguration(): void
     {
+        $this->expectException(MissingOptionsException::class);
+
         new GreaterThan();
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @inheritdoc
      */
-    public function invalidConfiguration()
+    public function testInvalidConfiguration(): void
     {
+        $this->expectException(InvalidOptionsException::class);
+
         new GreaterThan([
             'value' => '5',
         ]);
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @test
+     * @inheritdoc
      */
-    public function validConfiguration()
-    {
-        new GreaterThan([
-            'value' => 5,
-        ]);
-
-        new GreaterThan([
-            'value' => 5,
-            'message' => 'Invalid',
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @test
-     */
-    public function normalization()
+    public function testNormalization(): void
     {
         $constraint = new GreaterThan([
             'value' => 5,
         ]);
 
         $this->assertSame([
-            'data-parsley-gt' => 5,
+            'data-parsley-gt' => '5',
             'data-parsley-gt-message' => 'Invalid.',
         ], $constraint->normalize($this->normalizer->reveal()));
     }

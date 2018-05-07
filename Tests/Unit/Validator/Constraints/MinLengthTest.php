@@ -4,66 +4,44 @@ namespace JBen87\ParsleyBundle\Tests\Unit\Validator\Constraints;
 
 use JBen87\ParsleyBundle\Tests\Unit\Validator\Constraint;
 use JBen87\ParsleyBundle\Validator\Constraints\MinLength;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
 class MinLengthTest extends Constraint
 {
     /**
-     * {@inheritdoc}
-     *
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
+     * @inheritdoc
      */
-    public function emptyConfiguration()
+    public function testEmptyConfiguration(): void
     {
+        $this->expectException(MissingOptionsException::class);
+
         new MinLength();
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @inheritdoc
      */
-    public function invalidConfiguration()
+    public function testInvalidConfiguration(): void
     {
+        $this->expectException(InvalidOptionsException::class);
+
         new MinLength([
             'min' => '5',
         ]);
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @test
+     * @inheritdoc
      */
-    public function validConfiguration()
-    {
-        new MinLength([
-            'min' => 5,
-        ]);
-
-        new MinLength([
-            'min' => 5,
-            'message' => 'Invalid',
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @test
-     */
-    public function normalization()
+    public function testNormalization(): void
     {
         $constraint = new MinLength([
             'min' => 5,
         ]);
 
         $this->assertSame([
-            'data-parsley-minlength' => 5,
+            'data-parsley-minlength' => '5',
             'data-parsley-minlength-message' => 'Invalid.',
         ], $constraint->normalize($this->normalizer->reveal()));
     }

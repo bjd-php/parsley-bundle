@@ -6,9 +6,6 @@ use JBen87\ParsleyBundle\Validator\Constraint;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
 class Range extends Constraint
 {
     /**
@@ -30,9 +27,9 @@ class Range extends Constraint
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = [])
+    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = []): array
     {
         return array_merge(
             $this->constraints['min']->normalize($normalizer, 'array'),
@@ -41,48 +38,32 @@ class Range extends Constraint
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getAttribute()
+    protected function getAttribute(): string
     {
+        throw new \RuntimeException('Should not be called.');
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getValue()
+    protected function getValue(): string
     {
+        throw new \RuntimeException('Should not be called.');
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired(['min', 'max']);
-
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver
-                ->setAllowedTypes('min', ['int'])
-                ->setAllowedTypes('max', ['int']);
-        } else {
-            $resolver->setAllowedTypes([
-                'min' => 'int',
-                'max' => 'int',
-            ]);
-        }
-
-        // handle symfony version <= 2.5
-        if (method_exists($resolver, 'remove')) {
-            $resolver->remove('message');
-        }
-
-        // handle symfony version <= 2.5
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver->setDefined(['minMessage', 'maxMessage']);
-        } else {
-            $resolver->setOptional(['minMessage', 'maxMessage']);
-        }
+        $resolver
+            ->setRequired(['min', 'max'])
+            ->setAllowedTypes('min', ['int'])
+            ->setAllowedTypes('max', ['int'])
+            ->setDefined(['minMessage', 'maxMessage'])
+        ;
     }
 
     /**
@@ -90,7 +71,7 @@ class Range extends Constraint
      *
      * @return Min
      */
-    private function createMin(array $defaults)
+    private function createMin(array $defaults): Min
     {
         $options = ['min' => $defaults['min']];
 
@@ -106,7 +87,7 @@ class Range extends Constraint
      *
      * @return Max
      */
-    private function createMax(array $defaults)
+    private function createMax(array $defaults): Max
     {
         $options = ['max' => $defaults['max']];
 

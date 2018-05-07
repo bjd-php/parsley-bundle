@@ -5,20 +5,17 @@ namespace JBen87\ParsleyBundle\Form\Extension;
 use JBen87\ParsleyBundle\Builder\BuilderInterface;
 use JBen87\ParsleyBundle\Validator\Constraint;
 use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Mapping\PropertyMetadata;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Validator\ValidatorInterface as DeprecatedValidatorInterface;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
 class ParsleyTypeExtension extends AbstractTypeExtension
 {
     /**
@@ -32,7 +29,7 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     private $normalizer;
 
     /**
-     * @var ValidatorInterface|DeprecatedValidatorInterface
+     * @var ValidatorInterface
      */
     private $validator;
 
@@ -49,16 +46,16 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     /**
      * @param BuilderInterface $constraintBuilder
      * @param NormalizerInterface $normalizer
-     * @param ValidatorInterface|DeprecatedValidatorInterface $validator
+     * @param ValidatorInterface $validator
      * @param bool $global
      * @param string $triggerEvent
      */
     public function __construct(
         BuilderInterface $constraintBuilder,
         NormalizerInterface $normalizer,
-        $validator,
-        $global,
-        $triggerEvent
+        ValidatorInterface $validator,
+        bool $global,
+        string $triggerEvent
     ) {
         $this->constraintBuilder = $constraintBuilder;
         $this->normalizer = $normalizer;
@@ -68,31 +65,20 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['parsley_enabled' => $this->global]);
-
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver->setDefined(['parsley_trigger_event']);
-        } else {
-            $resolver->setOptional(['parsley_trigger_event']);
-        }
+        $resolver
+            ->setDefaults(['parsley_enabled' => $this->global])
+            ->setDefined(['parsley_trigger_event'])
+        ;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         if (false === $options['parsley_enabled']) {
             return;
@@ -119,9 +105,9 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         if (false === $options['parsley_enabled']) {
             return;
@@ -151,24 +137,21 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function getExtendedType()
+    public function getExtendedType(): string
     {
-        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ?
-            'Symfony\Component\Form\Extension\Core\Type\FormType' :
-            'form';
+        return FormType::class;
     }
 
     /**
      * @param FormInterface $form
      *
-     * @return array
+     * @return SymfonyConstraint[]
      */
-    private function getEntityConstraints(FormInterface $form)
+    private function getEntityConstraints(FormInterface $form): array
     {
         $config = $form->getParent()->getConfig();
-
         if (!$config->hasOption('data_class') || !class_exists($config->getOption('data_class'))) {
             return [];
         }
@@ -191,12 +174,11 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     /**
      * @param FormInterface $form
      *
-     * @return array
+     * @return SymfonyConstraint[]
      */
-    private function getFormTypeConstraints(FormInterface $form)
+    private function getFormTypeConstraints(FormInterface $form): array
     {
         $config = $form->getConfig();
-
         if (!$config->hasOption('constraints')) {
             return [];
         }

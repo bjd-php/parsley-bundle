@@ -2,18 +2,19 @@
 
 namespace JBen87\ParsleyBundle\Builder;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@gmail.com>
- */
+use JBen87\ParsleyBundle\Exception\Builder\InvalidConfigurationException;
+use JBen87\ParsleyBundle\Validator\Constraint;
+
 interface BuilderInterface
 {
     /**
-     * @return mixed
+     * @return Constraint[]
+     * @throws InvalidConfigurationException
      */
-    public function build();
+    public function build(): array;
 
     /**
      * @param array $options
      */
-    public function configure(array $options);
+    public function configure(array $options): void;
 }

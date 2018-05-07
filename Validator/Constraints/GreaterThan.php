@@ -5,9 +5,6 @@ namespace JBen87\ParsleyBundle\Validator\Constraints;
 use JBen87\ParsleyBundle\Validator\Constraint;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @author VKost <viktor.kostadinov@gmail.com>
- */
 class GreaterThan extends Constraint
 {
     /**
@@ -16,7 +13,7 @@ class GreaterThan extends Constraint
     private $value;
 
     /**
-     * {@inheritdoc}
+     * @param array $options
      */
     public function __construct(array $options = [])
     {
@@ -26,34 +23,29 @@ class GreaterThan extends Constraint
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getAttribute()
+    protected function getAttribute(): string
     {
         return 'data-parsley-gt';
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getValue()
+    protected function getValue(): string
     {
-        return $this->value;
+        return (string) $this->value;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired(['value']);
-
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver->setAllowedTypes('value', ['int']);
-        } else {
-            $resolver->setAllowedTypes([
-                'value' => 'int',
-            ]);
-        }
+        $resolver
+            ->setRequired(['value'])
+            ->setAllowedTypes('value', ['int'])
+        ;
     }
 }

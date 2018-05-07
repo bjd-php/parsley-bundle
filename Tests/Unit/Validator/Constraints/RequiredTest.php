@@ -5,44 +5,28 @@ namespace JBen87\ParsleyBundle\Tests\Unit\Validator\Constraints;
 use JBen87\ParsleyBundle\Tests\Unit\Validator\Constraint;
 use JBen87\ParsleyBundle\Validator\Constraints\Required;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@gmail.com>
- */
 class RequiredTest extends Constraint
 {
     /**
-     * {@inheritdoc}
-     *
-     * @test
+     * @inheritdoc
      */
-    public function emptyConfiguration()
+    public function testEmptyConfiguration(): void
     {
-        new Required();
+        $this->markTestSkipped();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function invalidConfiguration()
+    public function testInvalidConfiguration(): void
     {
+        $this->markTestSkipped();
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @test
+     * @inheritdoc
      */
-    public function validConfiguration()
-    {
-        new Required([
-            'message' => 'Invalid',
-        ]);
-    }
-
-    /**
-     * @test
-     */
-    public function normalization()
+    public function testNormalization(): void
     {
         $constraint = new Required();
 

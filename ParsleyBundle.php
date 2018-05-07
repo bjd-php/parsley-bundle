@@ -3,17 +3,15 @@
 namespace JBen87\ParsleyBundle;
 
 use JBen87\ParsleyBundle\DependencyInjection\ParsleyExtension;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
 class ParsleyBundle extends Bundle
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function getContainerExtension()
+    public function getContainerExtension(): ?ExtensionInterface
     {
         return new ParsleyExtension('jben87_parsley');
     }

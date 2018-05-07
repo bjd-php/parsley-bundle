@@ -2,14 +2,10 @@
 
 namespace JBen87\ParsleyBundle\Validator;
 
-use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
 abstract class Constraint implements NormalizableInterface
 {
     /**
@@ -30,9 +26,9 @@ abstract class Constraint implements NormalizableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = [])
+    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = []): array
     {
         return [
             $this->getAttribute() => $this->getValue(),
@@ -43,17 +39,17 @@ abstract class Constraint implements NormalizableInterface
     /**
      * @return string
      */
-    abstract protected function getAttribute();
+    abstract protected function getAttribute(): string;
 
     /**
      * @return string
      */
-    abstract protected function getValue();
+    abstract protected function getValue(): string;
 
     /**
      * @param OptionsResolver $resolver
      */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
     }
 
@@ -61,19 +57,11 @@ abstract class Constraint implements NormalizableInterface
      * @param array $options
      *
      * @return array
-     *
-     * @throws MissingOptionsException
      */
-    private function configure(array $options)
+    private function configure(array $options): array
     {
         $resolver = new OptionsResolver();
-
-        // handle symfony version <= 2.5
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver->setDefined('message');
-        } else {
-            $resolver->setOptional(['message']);
-        }
+        $resolver->setDefined('message');
 
         $this->configureOptions($resolver);
 

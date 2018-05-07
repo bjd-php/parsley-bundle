@@ -3,66 +3,65 @@
 namespace JBen87\ParsleyBundle\Tests\Builder;
 
 use JBen87\ParsleyBundle\Builder\ConstraintBuilder;
+use JBen87\ParsleyBundle\Exception\Builder\InvalidConfigurationException;
 use JBen87\ParsleyBundle\Factory\ConstraintFactory;
+use JBen87\ParsleyBundle\Validator\Constraint as ParsleyConstraint;
 use JBen87\ParsleyBundle\Validator\Constraints as ParsleyAssert;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@gmail.com>
- */
-class ConstraintBuilderTest extends \PHPUnit_Framework_TestCase
+class ConstraintBuilderTest extends TestCase
 {
     /**
      * @var ObjectProphecy|ConstraintFactory
      */
     private $factory;
 
-    /**
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
-     */
-    public function emptyConfiguration()
+    public function testEmptyConfiguration(): void
     {
+        $this->expectException(MissingOptionsException::class);
+
         $this->createBuilder()->configure([]);
     }
 
-    /**
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     */
-    public function invalidConfiguration()
+    public function testInvalidConfiguration(): void
     {
+        $this->expectException(InvalidOptionsException::class);
+
         $this->createBuilder()->configure([
             'constraints' => new Assert\NotBlank(),
         ]);
     }
 
-    /**
-     * @test
-     * @expectedException \JBen87\ParsleyBundle\Exception\Builder\InvalidConfigurationException
-     */
-    public function invalidCreation()
+    public function testInvalidCreation(): void
     {
+        $this->expectException(InvalidConfigurationException::class);
+
         $this->createBuilder()->build();
     }
 
     /**
-     * @param array $symfonyConstraints
-     * @param array $expected
+     * @param ParsleyConstraint[] $expected
+     * @param SymfonyConstraint[] $constraints
      *
-     * @test
      * @dataProvider validProvider
      */
-    public function valid(array $symfonyConstraints, array $expected)
+    public function testValid(array $expected, array $constraints): void
     {
-        foreach ($symfonyConstraints as $key => $constraint) {
-            $this->factory->create($constraint)->shouldBeCalled()->willReturn($expected[$key]);
+        foreach ($constraints as $key => $constraint) {
+            $this->factory->create($constraint)
+                ->shouldBeCalled()
+                ->willReturn($expected[$key])
+            ;
         }
 
         $builder = $this->createBuilder();
+        $builder->configure(['constraints' => $constraints]);
 
-        $builder->configure(['constraints' => $symfonyConstraints]);
         $parsleyConstraints = $builder->build();
 
         $this->assertInternalType('array', $parsleyConstraints);
@@ -76,35 +75,38 @@ class ConstraintBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function validProvider()
+    public function validProvider(): array
     {
         return [
             [
                 [
-                    new Assert\NotBlank(),
-                    new Assert\Email(),
-                ],
-                [
                     new ParsleyAssert\Required(),
                     new ParsleyAssert\Type(['type' => 'email']),
+                ],
+                [
+                    new Assert\NotBlank(),
+                    new Assert\Email(),
                 ],
             ],
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->factory = $this->prophesize('JBen87\ParsleyBundle\Factory\ConstraintFactory');
+        $this->factory = $this->prophesize(ConstraintFactory::class);
     }
 
     /**
      * @return ConstraintBuilder
      */
-    private function createBuilder()
+    private function createBuilder(): ConstraintBuilder
     {
-        return new ConstraintBuilder($this->factory->reveal());
+        /** @var ConstraintFactory $factory */
+        $factory = $this->factory->reveal();
+
+        return new ConstraintBuilder($factory);
     }
 }

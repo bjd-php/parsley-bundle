@@ -4,23 +4,20 @@ namespace JBen87\ParsleyBundle\Validator\Constraints;
 
 use JBen87\ParsleyBundle\Validator\Constraint;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
 class Required extends Constraint
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getAttribute()
+    protected function getAttribute(): string
     {
         return 'data-parsley-required';
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getValue()
+    protected function getValue(): string
     {
         return 'true';
     }

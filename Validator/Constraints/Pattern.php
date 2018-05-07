@@ -5,9 +5,6 @@ namespace JBen87\ParsleyBundle\Validator\Constraints;
 use JBen87\ParsleyBundle\Validator\Constraint;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@gmail.com>
- */
 class Pattern extends Constraint
 {
     /**
@@ -16,7 +13,7 @@ class Pattern extends Constraint
     private $pattern;
 
     /**
-     * {@inheritdoc}
+     * @param array $options
      */
     public function __construct(array $options = [])
     {
@@ -26,34 +23,29 @@ class Pattern extends Constraint
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getAttribute()
+    protected function getAttribute(): string
     {
         return 'data-parsley-pattern';
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getValue()
+    protected function getValue(): string
     {
         return $this->pattern;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired(['pattern']);
-
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver->setAllowedTypes('pattern', ['string']);
-        } else {
-            $resolver->setAllowedTypes([
-                'pattern' => 'string',
-            ]);
-        }
+        $resolver
+            ->setRequired(['pattern'])
+            ->setAllowedTypes('pattern', ['string'])
+        ;
     }
 }

@@ -2,9 +2,6 @@
 
 namespace JBen87\ParsleyBundle\Exception\Builder;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@gmail.com>
- */
 class InvalidConfigurationException extends \Exception
 {
     /**

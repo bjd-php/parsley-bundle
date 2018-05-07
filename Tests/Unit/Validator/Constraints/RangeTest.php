@@ -4,30 +4,25 @@ namespace JBen87\ParsleyBundle\Tests\Unit\Validator\Constraints;
 
 use JBen87\ParsleyBundle\Tests\Unit\Validator\Constraint;
 use JBen87\ParsleyBundle\Validator\Constraints\Range;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
 class RangeTest extends Constraint
 {
     /**
-     * {@inheritdoc}
-     *
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
+     * @inheritdoc
      */
-    public function emptyConfiguration()
+    public function testEmptyConfiguration(): void
     {
+        $this->expectException(MissingOptionsException::class);
+
         new Range();
     }
 
-    /**
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
-     */
-    public function incompleteConfiguration()
+    public function testIncompleteConfiguration(): void
     {
+        $this->expectException(MissingOptionsException::class);
+
         new Range([
             'min' => 5,
             'maxMessage' => 'Too long',
@@ -35,13 +30,12 @@ class RangeTest extends Constraint
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @inheritdoc
      */
-    public function invalidConfiguration()
+    public function testInvalidConfiguration(): void
     {
+        $this->expectException(InvalidOptionsException::class);
+
         new Range([
             'min' => '5',
             'max' => '10',
@@ -49,48 +43,9 @@ class RangeTest extends Constraint
     }
 
     /**
-     * @test
+     * @inheritdoc
      */
-    public function extraConfiguration()
-    {
-        // handle symfony version <= 2.5
-        if (method_exists(new OptionsResolver, 'remove')) {
-            $this->setExpectedException('Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException');
-        }
-
-        new Range([
-            'min' => 5,
-            'max' => 10,
-            'message' => 'Invalid',
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @test
-     */
-    public function validConfiguration()
-    {
-        new Range([
-            'min' => 5,
-            'max' => 10,
-        ]);
-
-        new Range([
-            'min' => 5,
-            'max' => 10,
-            'minMessage' => 'Too short',
-            'maxMessage' => 'Too long',
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @test
-     */
-    public function normalization()
+    public function testNormalization(): void
     {
         $constraint = new Range([
             'min' => 5,
@@ -98,9 +53,9 @@ class RangeTest extends Constraint
         ]);
 
         $this->assertSame([
-            'data-parsley-min' => 5,
+            'data-parsley-min' => '5',
             'data-parsley-min-message' => 'Invalid.',
-            'data-parsley-max' => 10,
+            'data-parsley-max' => '10',
             'data-parsley-max-message' => 'Invalid.',
         ], $constraint->normalize($this->normalizer->reveal()));
     }

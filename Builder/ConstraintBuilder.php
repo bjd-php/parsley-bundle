@@ -7,9 +7,6 @@ use JBen87\ParsleyBundle\Factory\ConstraintFactory;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@gmail.com>
- */
 class ConstraintBuilder implements BuilderInterface
 {
     /**
@@ -31,9 +28,9 @@ class ConstraintBuilder implements BuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function build()
+    public function build(): array
     {
         if (null === $this->constraints) {
             throw new InvalidConfigurationException();
@@ -45,18 +42,15 @@ class ConstraintBuilder implements BuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function configure(array $options)
+    public function configure(array $options): void
     {
         $optionsResolver = new OptionsResolver();
-        $optionsResolver->setRequired(['constraints']);
-
-        if (method_exists($optionsResolver, 'setDefined')) {
-            $optionsResolver->setAllowedTypes('constraints', ['array']);
-        } else {
-            $optionsResolver->setAllowedTypes(['constraints' => 'array']);
-        }
+        $optionsResolver
+            ->setRequired(['constraints'])
+            ->setAllowedTypes('constraints', ['array'])
+        ;
 
         $options = $optionsResolver->resolve($options);
 

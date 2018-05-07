@@ -7,9 +7,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
 class ParsleyExtension extends Extension
 {
     /**
@@ -26,11 +23,9 @@ class ParsleyExtension extends Extension
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
+     * @inheritdoc
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration($this->name);
         $config = $this->processConfiguration($configuration, $configs);
@@ -47,9 +42,9 @@ class ParsleyExtension extends Extension
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function getAlias()
+    public function getAlias(): string
     {
         return $this->name;
     }
@@ -58,7 +53,7 @@ class ParsleyExtension extends Extension
      * @param array $config
      * @param ContainerBuilder $container
      */
-    private function setDateTimePatternParameters(array $config, ContainerBuilder $container)
+    private function setDateTimePatternParameters(array $config, ContainerBuilder $container): void
     {
         $locale = $container->getParameter('locale');
         $datePattern = '\d{4}-\d{2}-\d{2}';

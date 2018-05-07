@@ -5,9 +5,6 @@ namespace JBen87\ParsleyBundle\Validator\Constraints;
 use JBen87\ParsleyBundle\Validator\Constraint;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
 class Length extends Constraint
 {
     /**
@@ -21,7 +18,7 @@ class Length extends Constraint
     private $max;
 
     /**
-     * {@inheritdoc}
+     * @param array $options
      */
     public function __construct(array $options = [])
     {
@@ -32,37 +29,30 @@ class Length extends Constraint
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getAttribute()
+    protected function getAttribute(): string
     {
         return 'data-parsley-length';
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getValue()
+    protected function getValue(): string
     {
         return sprintf('[%d, %d]', $this->min, $this->max);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired(['min', 'max']);
-
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver
-                ->setAllowedTypes('min', ['int'])
-                ->setAllowedTypes('max', ['int']);
-        } else {
-            $resolver->setAllowedTypes([
-                'min' => 'int',
-                'max' => 'int',
-            ]);
-        }
+        $resolver
+            ->setRequired(['min', 'max'])
+            ->setAllowedTypes('min', ['int'])
+            ->setAllowedTypes('max', ['int'])
+        ;
     }
 }

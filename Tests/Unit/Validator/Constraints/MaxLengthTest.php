@@ -4,68 +4,46 @@ namespace JBen87\ParsleyBundle\Tests\Unit\Validator\Constraints;
 
 use JBen87\ParsleyBundle\Tests\Unit\Validator\Constraint;
 use JBen87\ParsleyBundle\Validator\Constraints\MaxLength;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
 class MaxLengthTest extends Constraint
 {
     /**
-     * {@inheritdoc}
-     *
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
+     * @inheritdoc
      */
-    public function emptyConfiguration()
+    public function testEmptyConfiguration(): void
     {
+        $this->expectException(MissingOptionsException::class);
+
         new MaxLength();
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @inheritdoc
      */
-    public function invalidConfiguration()
+    public function testInvalidConfiguration(): void
     {
+        $this->expectException(InvalidOptionsException::class);
+
         new MaxLength([
             'max' => '10',
         ]);
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @test
+     * @inheritdoc
      */
-    public function validConfiguration()
-    {
-        new MaxLength([
-            'max' => 10,
-        ]);
-
-        new MaxLength([
-            'max' => 10,
-            'message' => 'Invalid',
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @test
-     */
-    public function normalization()
+    public function testNormalization(): void
     {
         $constraint = new MaxLength([
             'max' => 10,
         ]);
 
         $this->assertSame([
-            'data-parsley-maxlength' => 10,
+            'data-parsley-maxlength' => '10',
             'data-parsley-maxlength-message' => 'Invalid.',
-            'maxlength' => 10,
+            'maxlength' => '10',
         ], $constraint->normalize($this->normalizer->reveal()));
     }
 }

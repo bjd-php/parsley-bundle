@@ -5,9 +5,6 @@ namespace JBen87\ParsleyBundle\Validator\Constraints;
 use JBen87\ParsleyBundle\Validator\Constraint;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
 class Max extends Constraint
 {
     /**
@@ -16,7 +13,7 @@ class Max extends Constraint
     private $max;
 
     /**
-     * {@inheritdoc}
+     * @param array $options
      */
     public function __construct(array $options = [])
     {
@@ -26,34 +23,29 @@ class Max extends Constraint
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getAttribute()
+    protected function getAttribute(): string
     {
         return 'data-parsley-max';
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getValue()
+    protected function getValue(): string
     {
-        return $this->max;
+        return (string) $this->max;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired(['max']);
-
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver->setAllowedTypes('max', ['int']);
-        } else {
-            $resolver->setAllowedTypes([
-                'max' => 'int',
-            ]);
-        }
+        $resolver
+            ->setRequired(['max'])
+            ->setAllowedTypes('max', ['int'])
+        ;
     }
 }

@@ -11,9 +11,6 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\Time;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@gmail.com>
- */
 class ConstraintFactory
 {
     /**

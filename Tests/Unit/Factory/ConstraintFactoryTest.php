@@ -3,6 +3,8 @@
 namespace JBen87\ParsleyBundle\Tests\Unit\Factory;
 
 use JBen87\ParsleyBundle\Factory\ConstraintFactory;
+use JBen87\ParsleyBundle\Validator\Constraints as ParsleyAssert;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -10,10 +12,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@gmail.com>
- */
-class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
+class ConstraintFactoryTest extends TestCase
 {
     const TRANSLATOR_METHOD_TRANS = 'trans';
     const TRANSLATOR_METHOD_TRANSCHOICE = 'transChoice';
@@ -24,29 +23,28 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     private $translator;
 
     /**
-     * @var ObjectProphecy|LoggerInterface
+     * @var LoggerInterface|ObjectProphecy
      */
     private $logger;
 
     /**
-     * @var ObjectProphecy|NormalizerInterface
+     * @var NormalizerInterface|ObjectProphecy
      */
     private $normalizer;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $patterns;
 
     /**
      * @param string $class
      * @param Constraint $constraint
-     * @param array $translations
+     * @param string[] $translations
      *
-     * @test
      * @dataProvider validProvider
      */
-    public function validConstraintCreation($class, Constraint $constraint, array $translations)
+    public function testValidConstraintCreation(string $class, Constraint $constraint, array $translations)
     {
         foreach ($translations as $translation) {
             if (count($translation['config']) <= 0) {
@@ -69,7 +67,7 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function validProvider()
+    public function validProvider(): array
     {
         return array_merge(
             $this->patternProvider(),
@@ -83,9 +81,9 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->translator = $this->prophesize('Symfony\Component\Translation\Translator');
         $this->logger = $this->prophesize('Psr\Log\LoggerInterface');
@@ -100,11 +98,11 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    private function patternProvider()
+    private function patternProvider(): array
     {
         return [
             [
-                'JBen87\ParsleyBundle\Validator\Constraints\Pattern',
+                ParsleyAssert\Pattern::class,
                 new Assert\DateTime(),
                 [
                     'data-parsley-pattern' => [
@@ -123,11 +121,11 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    private function typeProvider()
+    private function typeProvider(): array
     {
         return [
             [
-                'JBen87\ParsleyBundle\Validator\Constraints\Type',
+                ParsleyAssert\Type::class,
                 new Assert\Email(),
                 [
                     'data-parsley-type' => [
@@ -146,11 +144,11 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    private function lengthProvider()
+    private function lengthProvider(): array
     {
         return [
             [
-                'JBen87\ParsleyBundle\Validator\Constraints\Length',
+                ParsleyAssert\Length::class,
                 new Assert\Length(5),
                 [
                     'data-parsley-length' => [
@@ -169,7 +167,7 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                'JBen87\ParsleyBundle\Validator\Constraints\Length',
+                ParsleyAssert\Length::class,
                 new Assert\Length(['min' => 5, 'max' => 10]),
                 [
                     'data-parsley-length' => [
@@ -183,7 +181,7 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                'JBen87\ParsleyBundle\Validator\Constraints\MinLength',
+                ParsleyAssert\MinLength::class,
                 new Assert\Length(['min' => 5]),
                 [
                     'data-parsley-minlength' => [
@@ -202,7 +200,7 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                'JBen87\ParsleyBundle\Validator\Constraints\MaxLength',
+                ParsleyAssert\MaxLength::class,
                 new Assert\Length(['max' => 10]),
                 [
                     'data-parsley-maxlength' => [
@@ -226,11 +224,11 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    private function requiredProvider()
+    private function requiredProvider(): array
     {
         return [
             [
-                'JBen87\ParsleyBundle\Validator\Constraints\Required',
+                ParsleyAssert\Required::class,
                 new Assert\NotBlank(),
                 [
                     'data-parsley-required' => [
@@ -249,11 +247,11 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    private function rangeProvider()
+    private function rangeProvider(): array
     {
         return [
             [
-                'JBen87\ParsleyBundle\Validator\Constraints\Range',
+                ParsleyAssert\Range::class,
                 new Assert\Range(['min' => 5, 'max' => 10]),
                 [
                     'data-parsley-min' => [
@@ -280,11 +278,11 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    private function greaterThanProvider()
+    private function greaterThanProvider(): array
     {
         return [
             [
-                'JBen87\ParsleyBundle\Validator\Constraints\GreaterThan',
+                ParsleyAssert\GreaterThan::class,
                 new Assert\GreaterThan(['value' => 5]),
                 [
                     'data-parsley-gt' => [
@@ -303,11 +301,11 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    private function lessThanProvider()
+    private function lessThanProvider(): array
     {
         return [
             [
-                'JBen87\ParsleyBundle\Validator\Constraints\LessThan',
+                ParsleyAssert\LessThan::class,
                 new Assert\LessThan(['value' => 10]),
                 [
                     'data-parsley-lt' => [
@@ -327,7 +325,7 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
      * @param string $expected
      * @param array $config
      */
-    private function configureTranslator($expected, array $config)
+    private function configureTranslator(string $expected, array $config): void
     {
         switch ($config['method']) {
             case self::TRANSLATOR_METHOD_TRANSCHOICE:
@@ -348,7 +346,7 @@ class ConstraintFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ConstraintFactory
      */
-    private function createFactory()
+    private function createFactory(): ConstraintFactory
     {
         return new ConstraintFactory($this->translator->reveal(), $this->logger->reveal(), $this->patterns);
     }

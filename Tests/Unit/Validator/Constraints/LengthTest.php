@@ -4,42 +4,37 @@ namespace JBen87\ParsleyBundle\Tests\Unit\Validator\Constraints;
 
 use JBen87\ParsleyBundle\Tests\Unit\Validator\Constraint;
 use JBen87\ParsleyBundle\Validator\Constraints\Length;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
 class LengthTest extends Constraint
 {
     /**
-     * {@inheritdoc}
-     *
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
+     * @inheritdoc
      */
-    public function emptyConfiguration()
+    public function testEmptyConfiguration(): void
     {
+        $this->expectException(MissingOptionsException::class);
+
         new Length();
     }
 
-    /**
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
-     */
-    public function incompleteConfiguration()
+    public function testIncompleteConfiguration(): void
     {
+        $this->expectException(MissingOptionsException::class);
+
         new Length([
             'min' => 5,
         ]);
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @test
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @inheritdoc
      */
-    public function invalidConfiguration()
+    public function testInvalidConfiguration(): void
     {
+        $this->expectException(InvalidOptionsException::class);
+
         new Length([
             'min' => '5',
             'max' => '10',
@@ -47,30 +42,9 @@ class LengthTest extends Constraint
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @test
+     * @inheritdoc
      */
-    public function validConfiguration()
-    {
-        new Length([
-            'min' => 5,
-            'max' => 10,
-        ]);
-
-        new Length([
-            'min' => 5,
-            'max' => 10,
-            'message' => 'Invalid',
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @test
-     */
-    public function normalization()
+    public function testNormalization(): void
     {
         $constraint = new Length([
             'min' => 5,

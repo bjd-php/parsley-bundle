@@ -2,13 +2,11 @@
 
 namespace JBen87\ParsleyBundle\Tests\Unit\Validator;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@gmail.com>
- */
-abstract class Constraint extends \PHPUnit_Framework_TestCase
+abstract class Constraint extends TestCase
 {
     /**
      * @var ObjectProphecy|NormalizerInterface
@@ -18,28 +16,23 @@ abstract class Constraint extends \PHPUnit_Framework_TestCase
     /**
      * Test creating the constraint without options.
      */
-    abstract public function emptyConfiguration();
+    abstract public function testEmptyConfiguration(): void;
 
     /**
      * Test creating the constraint with invalid options.
      */
-    abstract public function invalidConfiguration();
-
-    /**
-     * Test creating the constraint with valid options.
-     */
-    abstract public function validConfiguration();
+    abstract public function testInvalidConfiguration(): void;
 
     /**
      * Test normalizing the constraint.
      */
-    abstract public function normalization();
+    abstract public function testNormalization(): void;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\NormalizerInterface');
+        $this->normalizer = $this->prophesize(NormalizerInterface::class);
     }
 }

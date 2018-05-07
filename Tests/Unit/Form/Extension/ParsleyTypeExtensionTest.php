@@ -4,18 +4,17 @@ namespace JBen87\ParsleyBundle\Tests\Unit\Form\Extension;
 
 use JBen87\ParsleyBundle\Builder\BuilderInterface;
 use JBen87\ParsleyBundle\Form\Extension\ParsleyTypeExtension;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
-class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
+class ParsleyTypeExtensionTest extends TestCase
 {
     /**
      * @var ObjectProphecy|NormalizerInterface
@@ -42,36 +41,19 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
      */
     private $form;
 
-    /**
-     * @test
-     */
-    public function configuration()
+    public function testConfiguration(): void
     {
         $resolver = new OptionsResolver();
 
         $extension = $this->createExtension();
         $extension->configureOptions($resolver);
 
-        // handle symfony version <= 2.6
-        if (method_exists($resolver, 'isDefined')) {
-            $this->assertTrue($resolver->isDefined('parsley_enabled'));
-            $this->assertTrue($resolver->isDefined('parsley_trigger_event'));
-        } else {
-            $this->assertTrue($resolver->isKnown('parsley_enabled'));
-            $this->assertTrue($resolver->isKnown('parsley_trigger_event'));
-        }
-
-        if (!method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
-            $this->assertEquals('form', $extension->getExtendedType());
-        } else {
-            $this->assertEquals('Symfony\Component\Form\Extension\Core\Type\FormType', $extension->getExtendedType());
-        }
+        $this->assertTrue($resolver->isDefined('parsley_enabled'));
+        $this->assertTrue($resolver->isDefined('parsley_trigger_event'));
+        $this->assertEquals(FormType::class, $extension->getExtendedType());
     }
 
-    /**
-     * @test
-     */
-    public function buildViewDisabled()
+    public function testBuildViewDisabled(): void
     {
         $attributes = $this->view->vars['attr'];
 
@@ -83,10 +65,7 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('data-parsley-trigger', $attributes);
     }
 
-    /**
-     * @test
-     */
-    public function buildViewRootForm()
+    public function testBuildViewRootForm(): void
     {
         $this->configureFormRoot();
         $this->form->count()->shouldBeCalled()->willReturn(2);
@@ -103,10 +82,7 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('data-parsley-trigger', $attributes);
     }
 
-    /**
-     * @test
-     */
-    public function buildViewChildFormDefaultTriggerEvent()
+    public function testBuildViewChildFormDefaultTriggerEvent(): void
     {
         $this->configureFormChild();
 
@@ -121,10 +97,7 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('blur', $attributes['data-parsley-trigger']);
     }
 
-    /**
-     * @test
-     */
-    public function buildViewChildFormCustomTriggerEvent()
+    public function testBuildViewChildFormCustomTriggerEvent(): void
     {
         $this->configureFormChild();
 
@@ -162,10 +135,7 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('mouseout', $attributes['data-parsley-trigger']);
     }
 
-    /**
-     * @test
-     */
-    public function finishViewDisabled()
+    public function testFinishViewDisabled(): void
     {
         $extension = $this->createExtension();
         $this->finishView($extension, ['parsley_enabled' => false]);
@@ -173,10 +143,7 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $this->view->vars['attr']);
     }
 
-    /**
-     * @test
-     */
-    public function finishViewRootForm()
+    public function testFinishViewRootForm(): void
     {
         $this->configureFormRoot();
 
@@ -189,7 +156,7 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * todo write test
      */
-    public function finishViewChild()
+    public function finishViewChild(): void
     {
         $this->configureFormChild();
 
@@ -202,9 +169,9 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\NormalizerInterface');
         $this->builder = $this->prophesize('JBen87\ParsleyBundle\Builder\ConstraintBuilder');
@@ -226,7 +193,7 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
      *
      * @return ParsleyTypeExtension
      */
-    private function createExtension($triggerEvent = 'blur', $global = true)
+    private function createExtension(string $triggerEvent = 'blur', bool $global = true): ParsleyTypeExtension
     {
         return new ParsleyTypeExtension(
             $this->builder->reveal(),
@@ -240,28 +207,32 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * Configure form to behave like the root.
      */
-    private function configureFormRoot()
+    private function configureFormRoot(): void
     {
-        $this->form->getParent()
+        $this->form
+            ->getParent()
             ->shouldBeCalled()
-            ->willReturn(null);
+            ->willReturn(null)
+        ;
     }
 
     /**
      * Configure form to behave like a child.
      */
-    private function configureFormChild()
+    private function configureFormChild(): void
     {
-        $this->form->getParent()
+        $this->form
+            ->getParent()
             ->shouldBeCalled()
-            ->willReturn($this->prophesize('Symfony\Component\Form\Form')->reveal());
+            ->willReturn($this->prophesize('Symfony\Component\Form\Form')->reveal())
+        ;
     }
 
     /**
      * @param AbstractTypeExtension $extension
      * @param array $options
      */
-    private function buildView(AbstractTypeExtension $extension, array $options = [])
+    private function buildView(AbstractTypeExtension $extension, array $options = []): void
     {
         $resolver = new OptionsResolver();
         $extension->configureOptions($resolver);
@@ -273,7 +244,7 @@ class ParsleyTypeExtensionTest extends \PHPUnit_Framework_TestCase
      * @param AbstractTypeExtension $extension
      * @param array $options
      */
-    private function finishView(AbstractTypeExtension $extension, array $options = [])
+    private function finishView(AbstractTypeExtension $extension, array $options = []): void
     {
         $resolver = new OptionsResolver();
         $extension->configureOptions($resolver);

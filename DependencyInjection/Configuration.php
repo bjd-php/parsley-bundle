@@ -5,9 +5,6 @@ namespace JBen87\ParsleyBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@gmail.com>
- */
 class Configuration implements ConfigurationInterface
 {
     /**
@@ -24,9 +21,9 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder();
 

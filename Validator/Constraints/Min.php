@@ -5,9 +5,6 @@ namespace JBen87\ParsleyBundle\Validator\Constraints;
 use JBen87\ParsleyBundle\Validator\Constraint;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @author Benoit Jouhaud <bjouhaud@prestaconcept.net>
- */
 class Min extends Constraint
 {
     /**
@@ -16,7 +13,7 @@ class Min extends Constraint
     private $min;
 
     /**
-     * {@inheritdoc}
+     * @param array $options
      */
     public function __construct(array $options = [])
     {
@@ -26,34 +23,29 @@ class Min extends Constraint
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getAttribute()
+    protected function getAttribute(): string
     {
         return 'data-parsley-min';
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function getValue()
+    protected function getValue(): string
     {
-        return $this->min;
+        return (string) $this->min;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired(['min']);
-
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver->setAllowedTypes('min', ['int']);
-        } else {
-            $resolver->setAllowedTypes([
-                'min' => 'int',
-            ]);
-        }
+        $resolver
+            ->setRequired(['min'])
+            ->setAllowedTypes('min', ['int'])
+        ;
     }
 }

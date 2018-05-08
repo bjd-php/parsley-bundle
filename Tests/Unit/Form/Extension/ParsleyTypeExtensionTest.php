@@ -2,170 +2,222 @@
 
 namespace JBen87\ParsleyBundle\Tests\Unit\Form\Extension;
 
-use JBen87\ParsleyBundle\Builder\BuilderInterface;
+use JBen87\ParsleyBundle\Exception\Validator\ConstraintException;
+use JBen87\ParsleyBundle\Factory\ChainFactory;
 use JBen87\ParsleyBundle\Form\Extension\ParsleyTypeExtension;
+use JBen87\ParsleyBundle\Validator\Constraints as ParsleyAssert;
+use JBen87\ParsleyBundle\Validator\ConstraintsReader\ConstraintsReaderInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ParsleyTypeExtensionTest extends TestCase
 {
     /**
-     * @var ObjectProphecy|NormalizerInterface
+     * @var ChainFactory|MockObject
+     */
+    private $factory;
+
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    private $logger;
+
+    /**
+     * @var MockObject|NormalizerInterface
      */
     private $normalizer;
 
     /**
-     * @var ObjectProphecy|BuilderInterface
-     */
-    private $builder;
-
-    /**
-     * @var ObjectProphecy|ValidatorInterface
+     * @var MockObject|ValidatorInterface
      */
     private $validator;
 
-    /**
-     * @var ObjectProphecy|FormView
-     */
-    private $view;
-
-    /**
-     * @var ObjectProphecy|FormInterface
-     */
-    private $form;
-
     public function testConfiguration(): void
     {
+        $extension = $this->createExtension();
+        $this->assertSame(FormType::class, $extension->getExtendedType());
+
         $resolver = new OptionsResolver();
-
-        $extension = $this->createExtension();
         $extension->configureOptions($resolver);
+        $options = $resolver->resolve([]);
 
-        $this->assertTrue($resolver->isDefined('parsley_enabled'));
-        $this->assertTrue($resolver->isDefined('parsley_trigger_event'));
-        $this->assertEquals(FormType::class, $extension->getExtendedType());
+        $this->assertTrue($options['parsley_enabled']);
+        $this->assertSame('blur', $options['parsley_trigger_event']);
     }
 
-    public function testBuildViewDisabled(): void
+    /**
+     * @param bool $enabled
+     * @param bool $parsleyEnabled
+     *
+     * @dataProvider provideFinishViewDisabled
+     */
+    public function testFinishViewDisabled(bool $enabled, bool $parsleyEnabled): void
     {
-        $attributes = $this->view->vars['attr'];
+        $form = $this->createMock(FormInterface::class);
+        $view = $this->createMock(FormView::class);
 
-        $extension = $this->createExtension();
-        $this->buildView($extension, ['parsley_enabled' => false]);
+        $extension = $this->createExtension([], $enabled);
+        $this->finishView($extension, $view, $form, ['parsley_enabled' => $parsleyEnabled]);
 
-        $this->assertArrayNotHasKey('novalidate', $attributes);
-        $this->assertArrayNotHasKey('data-parsley-validate', $attributes);
-        $this->assertArrayNotHasKey('data-parsley-trigger', $attributes);
+        $this->assertEmpty($view->vars['attr']);
     }
 
-    public function testBuildViewRootForm(): void
+    /**
+     * @return array
+     */
+    public function provideFinishViewDisabled(): array
     {
-        $this->configureFormRoot();
-        $this->form->count()->shouldBeCalled()->willReturn(2);
-
-        $extension = $this->createExtension();
-        $this->buildView($extension);
-
-        $attributes = $this->view->vars['attr'];
-
-        $this->assertArrayHasKey('novalidate', $attributes);
-        $this->assertTrue($attributes['novalidate']);
-        $this->assertArrayHasKey('data-parsley-validate', $attributes);
-        $this->assertTrue($attributes['data-parsley-validate']);
-        $this->assertArrayNotHasKey('data-parsley-trigger', $attributes);
-    }
-
-    public function testBuildViewChildFormDefaultTriggerEvent(): void
-    {
-        $this->configureFormChild();
-
-        $extension = $this->createExtension();
-        $this->buildView($extension);
-
-        $attributes = $this->view->vars['attr'];
-
-        $this->assertArrayNotHasKey('novalidate', $attributes);
-        $this->assertArrayNotHasKey('data-parsley-validate', $attributes);
-        $this->assertArrayHasKey('data-parsley-trigger', $attributes);
-        $this->assertSame('blur', $attributes['data-parsley-trigger']);
-    }
-
-    public function testBuildViewChildFormCustomTriggerEvent(): void
-    {
-        $this->configureFormChild();
-
-        // override through configuration
-        $extension = $this->createExtension('hover');
-        $this->buildView($extension);
-
-        $attributes = $this->view->vars['attr'];
-
-        $this->assertArrayNotHasKey('novalidate', $attributes);
-        $this->assertArrayNotHasKey('data-parsley-validate', $attributes);
-        $this->assertArrayHasKey('data-parsley-trigger', $attributes);
-        $this->assertSame('hover', $attributes['data-parsley-trigger']);
-
-        // override through options
-        $extension = $this->createExtension();
-        $this->buildView($extension, ['parsley_trigger_event' => 'click']);
-
-        $attributes = $this->view->vars['attr'];
-
-        $this->assertArrayNotHasKey('novalidate', $attributes);
-        $this->assertArrayNotHasKey('data-parsley-validate', $attributes);
-        $this->assertArrayHasKey('data-parsley-trigger', $attributes);
-        $this->assertSame('click', $attributes['data-parsley-trigger']);
-
-        // overriding through options should take over on overriding through configuration
-        $extension = $this->createExtension('mousein');
-        $this->buildView($extension, ['parsley_trigger_event' => 'mouseout']);
-
-        $attributes = $this->view->vars['attr'];
-
-        $this->assertArrayNotHasKey('novalidate', $attributes);
-        $this->assertArrayNotHasKey('data-parsley-validate', $attributes);
-        $this->assertArrayHasKey('data-parsley-trigger', $attributes);
-        $this->assertSame('mouseout', $attributes['data-parsley-trigger']);
-    }
-
-    public function testFinishViewDisabled(): void
-    {
-        $extension = $this->createExtension();
-        $this->finishView($extension, ['parsley_enabled' => false]);
-
-        $this->assertCount(0, $this->view->vars['attr']);
+        return [
+            [false, false],
+            [true, false],
+        ];
     }
 
     public function testFinishViewRootForm(): void
     {
-        $this->configureFormRoot();
+        $form = $this->createMock(FormInterface::class);
+        $view = $this->createMock(FormView::class);
+
+        $this->setUpForm($form, true);
 
         $extension = $this->createExtension();
-        $this->finishView($extension);
+        $this->finishView($extension, $view, $form);
 
-        $this->assertCount(0, $this->view->vars['attr']);
+        $this->assertSame(
+            [
+                'novalidate' => true,
+                'data-parsley-validate' => true,
+            ],
+            $view->vars['attr']
+        );
     }
 
-    /**
-     * todo write test
-     */
-    public function finishViewChild(): void
+    public function testFinishViewWithoutReaders(): void
     {
-        $this->configureFormChild();
+        $form = $this->createMock(FormInterface::class);
+        $view = $this->createMock(FormView::class);
+
+        $this->setUpForm($form);
 
         $extension = $this->createExtension();
-        $this->finishView($extension);
+        $this->finishView($extension, $view, $form);
 
-        $attributes = $this->view->vars['attr'];
+        $this->assertSame(['data-parsley-trigger' => 'blur'], $view->vars['attr']);
+    }
 
-        $this->assertArrayHasKey('data-parsley-trigger', $attributes);
+    public function testFinishViewWithoutConstraints(): void
+    {
+        $form = $this->createMock(FormInterface::class);
+        $view = $this->createMock(FormView::class);
+
+        $this->setUpForm($form);
+
+        $reader = $this->createMock(ConstraintsReaderInterface::class);
+        $reader
+            ->expects($this->once())
+            ->method('read')
+            ->with($this->isInstanceOf(FormInterface::class))
+            ->willReturn([])
+        ;
+
+        $extension = $this->createExtension([$reader]);
+        $this->finishView($extension, $view, $form);
+
+        $this->assertSame(['data-parsley-trigger' => 'blur'], $view->vars['attr']);
+    }
+
+    public function testFinishViewWithUnsupportedConstraints(): void
+    {
+        $unsupportedConstraint = new Assert\Valid();
+
+        $form = $this->createMock(FormInterface::class);
+        $view = $this->createMock(FormView::class);
+
+        $this->setUpForm($form);
+
+        $reader = $this->createMock(ConstraintsReaderInterface::class);
+        $reader
+            ->expects($this->once())
+            ->method('read')
+            ->with($this->isInstanceOf(FormInterface::class))
+            ->willReturn([$unsupportedConstraint])
+        ;
+
+        $this->factory
+            ->expects($this->once())
+            ->method('create')
+            ->with($unsupportedConstraint)
+            ->willThrowException(ConstraintException::createUnsupportedException())
+        ;
+
+        $this->logger
+            ->expects($this->once())
+            ->method('warning')
+            ->with($this->isType('string'), ['constraint' => $unsupportedConstraint])
+        ;
+
+        $extension = $this->createExtension([$reader]);
+        $this->finishView($extension, $view, $form);
+
+        $this->assertSame(['data-parsley-trigger' => 'blur'], $view->vars['attr']);
+    }
+
+    public function testFinishViewWithConstraints(): void
+    {
+        $form = $this->createMock(FormInterface::class);
+        $view = $this->createMock(FormView::class);
+
+        $this->setUpForm($form);
+
+        $reader1 = $this->createMock(ConstraintsReaderInterface::class);
+        $reader1
+            ->expects($this->once())
+            ->method('read')
+            ->with($this->isInstanceOf(FormInterface::class))
+            ->willReturn([new Assert\NotBlank()])
+        ;
+
+        $reader2 = $this->createMock(ConstraintsReaderInterface::class);
+        $reader2
+            ->expects($this->once())
+            ->method('read')
+            ->with($this->isInstanceOf(FormInterface::class))
+            ->willReturn([new Assert\Email()])
+        ;
+
+        $this->factory
+            ->expects($this->exactly(2))
+            ->method('create')
+            ->with($this->isInstanceOf(SymfonyConstraint::class))
+            ->willReturnOnConsecutiveCalls(
+                new ParsleyAssert\Required(),
+                new ParsleyAssert\Pattern(['pattern' => 'foo'])
+            )
+        ;
+
+        $extension = $this->createExtension([$reader1, $reader2]);
+        $this->finishView($extension, $view, $form);
+
+        $this->assertSame(
+            [
+                'data-parsley-trigger' => 'blur',
+                'data-parsley-required' => 'true',
+                'data-parsley-required-message' => 'Invalid.',
+                'data-parsley-pattern' => 'foo',
+                'data-parsley-pattern-message' => 'Invalid.',
+            ],
+            $view->vars['attr']
+        );
     }
 
     /**
@@ -173,82 +225,62 @@ class ParsleyTypeExtensionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->normalizer = $this->prophesize('Symfony\Component\Serializer\Normalizer\NormalizerInterface');
-        $this->builder = $this->prophesize('JBen87\ParsleyBundle\Builder\ConstraintBuilder');
-
-        // handle symfony version <= 2.5
-        if (interface_exists('Symfony\Component\Validator\Validator\ValidatorInterface')) {
-            $this->validator = $this->prophesize('Symfony\Component\Validator\Validator\ValidatorInterface');
-        } else {
-            $this->validator = $this->prophesize('Symfony\Component\Validator\ValidatorInterface');
-        }
-
-        $this->view = $this->prophesize('Symfony\Component\Form\FormView');
-        $this->form = $this->prophesize('Symfony\Component\Form\Form');
+        $this->factory = $this->createMock(ChainFactory::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->normalizer = $this->createMock(NormalizerInterface::class);
+        $this->validator = $this->createMock(ValidatorInterface::class);
     }
 
     /**
+     * @param MockObject $form
+     * @param bool $root
+     */
+    private function setUpForm(MockObject $form, bool $root = false): void
+    {
+        $form
+            ->expects($this->once())
+            ->method('isRoot')
+            ->willReturn($root)
+        ;
+    }
+
+    /**
+     * @param AbstractTypeExtension $extension
+     * @param MockObject|FormView $view
+     * @param FormInterface|MockObject $form
+     * @param array $options
+     */
+    private function finishView(
+        AbstractTypeExtension $extension,
+        MockObject $view,
+        MockObject $form,
+        array $options = []
+    ): void {
+        $resolver = new OptionsResolver();
+        $extension->configureOptions($resolver);
+
+        $extension->finishView($view, $form, $resolver->resolve($options));
+    }
+
+    /**
+     * @param ConstraintsReaderInterface[] $readers
+     * @param bool $enabled
      * @param string $triggerEvent
-     * @param bool $global
      *
      * @return ParsleyTypeExtension
      */
-    private function createExtension(string $triggerEvent = 'blur', bool $global = true): ParsleyTypeExtension
-    {
+    private function createExtension(
+        array $readers = [],
+        bool $enabled = true,
+        string $triggerEvent = 'blur'
+    ): ParsleyTypeExtension {
         return new ParsleyTypeExtension(
-            $this->builder->reveal(),
-            $this->normalizer->reveal(),
-            $this->validator->reveal(),
-            $global,
+            $this->factory,
+            $this->logger,
+            $this->normalizer,
+            $readers,
+            $enabled,
             $triggerEvent
         );
-    }
-
-    /**
-     * Configure form to behave like the root.
-     */
-    private function configureFormRoot(): void
-    {
-        $this->form
-            ->getParent()
-            ->shouldBeCalled()
-            ->willReturn(null)
-        ;
-    }
-
-    /**
-     * Configure form to behave like a child.
-     */
-    private function configureFormChild(): void
-    {
-        $this->form
-            ->getParent()
-            ->shouldBeCalled()
-            ->willReturn($this->prophesize('Symfony\Component\Form\Form')->reveal())
-        ;
-    }
-
-    /**
-     * @param AbstractTypeExtension $extension
-     * @param array $options
-     */
-    private function buildView(AbstractTypeExtension $extension, array $options = []): void
-    {
-        $resolver = new OptionsResolver();
-        $extension->configureOptions($resolver);
-
-        $extension->buildView($this->view->reveal(), $this->form->reveal(), $resolver->resolve($options));
-    }
-
-    /**
-     * @param AbstractTypeExtension $extension
-     * @param array $options
-     */
-    private function finishView(AbstractTypeExtension $extension, array $options = []): void
-    {
-        $resolver = new OptionsResolver();
-        $extension->configureOptions($resolver);
-
-        $extension->finishView($this->view->reveal(), $this->form->reveal(), $resolver->resolve($options));
     }
 }

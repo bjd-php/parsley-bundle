@@ -3,15 +3,11 @@
 namespace JBen87\ParsleyBundle\Tests\Constraint\Constraints;
 
 use JBen87\ParsleyBundle\Constraint\Constraints as ParsleyAssert;
-use JBen87\ParsleyBundle\Tests\Constraint\ConstraintTestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-class LengthTest extends ConstraintTestCase
+class LengthTest extends ConfiguredConstraintTestCase
 {
-    /**
-     * @inheritdoc
-     */
     public function testEmptyConfiguration(): void
     {
         $this->expectException(MissingOptionsException::class);
@@ -19,18 +15,6 @@ class LengthTest extends ConstraintTestCase
         new ParsleyAssert\Length();
     }
 
-    public function testIncompleteConfiguration(): void
-    {
-        $this->expectException(MissingOptionsException::class);
-
-        new ParsleyAssert\Length([
-            'min' => 5,
-        ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function testInvalidConfiguration(): void
     {
         $this->expectException(InvalidOptionsException::class);
@@ -41,9 +25,6 @@ class LengthTest extends ConstraintTestCase
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function testNormalization(): void
     {
         $constraint = new ParsleyAssert\Length([

@@ -3,15 +3,11 @@
 namespace JBen87\ParsleyBundle\Tests\Constraint\Constraints;
 
 use JBen87\ParsleyBundle\Constraint\Constraints as ParsleyAssert;
-use JBen87\ParsleyBundle\Tests\Constraint\ConstraintTestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-class MaxLengthTest extends ConstraintTestCase
+class MaxLengthTest extends ConfiguredConstraintTestCase
 {
-    /**
-     * @inheritdoc
-     */
     public function testEmptyConfiguration(): void
     {
         $this->expectException(MissingOptionsException::class);
@@ -19,9 +15,6 @@ class MaxLengthTest extends ConstraintTestCase
         new ParsleyAssert\MaxLength();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function testInvalidConfiguration(): void
     {
         $this->expectException(InvalidOptionsException::class);
@@ -31,9 +24,6 @@ class MaxLengthTest extends ConstraintTestCase
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function testNormalization(): void
     {
         $constraint = new ParsleyAssert\MaxLength([

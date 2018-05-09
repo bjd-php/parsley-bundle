@@ -39,6 +39,8 @@ class Range extends Constraint
 
     /**
      * @inheritdoc
+     *
+     * @codeCoverageIgnore
      */
     protected function getAttribute(): string
     {
@@ -47,6 +49,8 @@ class Range extends Constraint
 
     /**
      * @inheritdoc
+     *
+     * @codeCoverageIgnore
      */
     protected function getValue(): string
     {

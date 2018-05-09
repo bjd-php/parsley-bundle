@@ -8,47 +8,35 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @param string $name
-     */
-    public function __construct($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
      * @inheritdoc
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder();
 
-        $rootNode = $treeBuilder->root($this->name);
+        $rootNode = $treeBuilder->root('jben87_parsley');
         $rootNode
             ->children()
-                ->booleanNode('global')
+                ->booleanNode('enabled')
                     ->defaultTrue()
                 ->end()
                 ->scalarNode('trigger_event')
                     ->defaultValue('blur')
                 ->end()
-                ->arrayNode('date_time_pattern')
-                    ->useAttributeAsKey('name')
-                    ->prototype('scalar')->end()
-                ->end()
                 ->arrayNode('date_pattern')
-                    ->useAttributeAsKey('name')
-                    ->prototype('scalar')->end()
+                    ->useAttributeAsKey('locale')
+                    ->scalarPrototype()->end()
                 ->end()
                 ->arrayNode('time_pattern')
-                    ->useAttributeAsKey('name')
-                    ->prototype('scalar')->end()
+                    ->useAttributeAsKey('locale')
+                    ->scalarPrototype()->end()
                 ->end()
-            ->end();
+                ->arrayNode('datetime_pattern')
+                    ->useAttributeAsKey('locale')
+                    ->scalarPrototype()->end()
+                ->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }

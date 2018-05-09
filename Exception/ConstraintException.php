@@ -11,4 +11,12 @@ class ConstraintException extends \Exception
     {
         return new self('Constraint not supported.');
     }
+
+    /**
+     * @return ConstraintException
+     */
+    public static function createInvalidValueException(): ConstraintException
+    {
+        return new self('Invalid value.');
+    }
 }

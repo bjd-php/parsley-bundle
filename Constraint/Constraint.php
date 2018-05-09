@@ -2,6 +2,7 @@
 
 namespace JBen87\ParsleyBundle\Constraint;
 
+use JBen87\ParsleyBundle\Exception\ConstraintException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -43,6 +44,7 @@ abstract class Constraint implements NormalizableInterface
 
     /**
      * @return string
+     * @throws ConstraintException
      */
     abstract protected function getValue(): string;
 

@@ -9,6 +9,6 @@ class Email extends Type
      */
     protected function getType(): string
     {
-        return 'email';
+        return static::TYPES['email'];
     }
 }

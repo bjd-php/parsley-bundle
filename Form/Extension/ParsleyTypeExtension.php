@@ -2,9 +2,9 @@
 
 namespace JBen87\ParsleyBundle\Form\Extension;
 
-use JBen87\ParsleyBundle\Exception\Validator\ConstraintException;
-use JBen87\ParsleyBundle\Factory\ChainFactory;
-use JBen87\ParsleyBundle\Validator\ConstraintsReader\ConstraintsReaderInterface;
+use JBen87\ParsleyBundle\Constraint\Factory\ChainFactory;
+use JBen87\ParsleyBundle\Constraint\Reader\ReaderRegistry;
+use JBen87\ParsleyBundle\Exception\ConstraintException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -32,9 +32,9 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     private $normalizer;
 
     /**
-     * @var ConstraintsReaderInterface[]
+     * @var ReaderRegistry
      */
-    private $readers;
+    private $readerRegistry;
 
     /**
      * @var bool
@@ -50,7 +50,7 @@ class ParsleyTypeExtension extends AbstractTypeExtension
      * @param ChainFactory $factory
      * @param LoggerInterface $logger
      * @param NormalizerInterface $normalizer
-     * @param ConstraintsReaderInterface[] $readers
+     * @param ReaderRegistry $readerRegistry
      * @param bool $enabled
      * @param string $triggerEvent
      */
@@ -58,18 +58,14 @@ class ParsleyTypeExtension extends AbstractTypeExtension
         ChainFactory $factory,
         LoggerInterface $logger,
         NormalizerInterface $normalizer,
-        array $readers,
+        ReaderRegistry $readerRegistry,
         bool $enabled,
         string $triggerEvent
     ) {
-        usort($readers, function (ConstraintsReaderInterface $left, ConstraintsReaderInterface $right) {
-            return $left->getPriority() <=> $right->getPriority();
-        });
-
         $this->factory = $factory;
         $this->logger = $logger;
         $this->normalizer = $normalizer;
-        $this->readers = $readers;
+        $this->readerRegistry = $readerRegistry;
         $this->enabled = $enabled;
         $this->triggerEvent = $triggerEvent;
     }
@@ -99,9 +95,9 @@ class ParsleyTypeExtension extends AbstractTypeExtension
         // build constraints and map them as data attributes
         foreach ($this->getConstraints($form) as $symfonyConstraint) {
             try {
-                $parsleyConstraint = $this->factory->create($symfonyConstraint);
+                $constraint = $this->factory->create($symfonyConstraint);
 
-                $view->vars['attr'] = array_merge($view->vars['attr'], $parsleyConstraint->normalize($this->normalizer));
+                $view->vars['attr'] = array_merge($view->vars['attr'], $constraint->normalize($this->normalizer));
             } catch (ConstraintException $exception) {
                 $this->logger->warning($exception->getMessage(), ['constraint' => $symfonyConstraint]);
             }
@@ -128,8 +124,6 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     }
 
     /**
-     * Form constraints should override entity constraints.
-     *
      * @param FormInterface $form
      *
      * @return SymfonyConstraint[]
@@ -137,7 +131,7 @@ class ParsleyTypeExtension extends AbstractTypeExtension
     private function getConstraints(FormInterface $form): array
     {
         $constraints = [];
-        foreach ($this->readers as $reader) {
+        foreach ($this->readerRegistry->all() as $reader) {
             $constraints = array_merge($constraints, $reader->read($form));
         }
 

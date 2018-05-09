@@ -6,7 +6,7 @@
 
     <services>
         <service id="jben87_parsley.validator.constraint_factory"
-                 class="JBen87\ParsleyBundle\Factory\ConstraintFactory">
+                 class="JBen87\ParsleyBundle\Constraint\Factory\ConstraintFactory">
             <argument type="service" id="translator"/>
             <argument type="service" id="logger"/>
             <argument type="collection">

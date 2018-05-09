@@ -5,7 +5,7 @@ namespace JBen87\ParsleyBundle\Tests\Validator\Constraints;
 use JBen87\ParsleyBundle\Tests\Validator\ConstraintTestCase;
 use JBen87\ParsleyBundle\Validator\Constraints as ParsleyAssert;
 
-class RequiredTest extends ConstraintTestCase
+class EmailTest extends ConstraintTestCase
 {
     /**
      * @inheritdoc
@@ -28,11 +28,11 @@ class RequiredTest extends ConstraintTestCase
      */
     public function testNormalization(): void
     {
-        $constraint = new ParsleyAssert\Required();
+        $constraint = new ParsleyAssert\Email();
 
         $this->assertSame([
-            'data-parsley-required' => 'true',
-            'data-parsley-required-message' => 'Invalid.',
+            'data-parsley-type' => 'email',
+            'data-parsley-type-message' => 'Invalid.',
         ], $constraint->normalize($this->normalizer));
     }
 }

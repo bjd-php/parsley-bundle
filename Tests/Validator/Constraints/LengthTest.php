@@ -2,12 +2,12 @@
 
 namespace JBen87\ParsleyBundle\Tests\Validator\Constraints;
 
-use JBen87\ParsleyBundle\Tests\Validator\Constraint;
-use JBen87\ParsleyBundle\Validator\Constraints\Length;
+use JBen87\ParsleyBundle\Tests\Validator\ConstraintTestCase;
+use JBen87\ParsleyBundle\Validator\Constraints as ParsleyAssert;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-class LengthTest extends Constraint
+class LengthTest extends ConstraintTestCase
 {
     /**
      * @inheritdoc
@@ -16,14 +16,14 @@ class LengthTest extends Constraint
     {
         $this->expectException(MissingOptionsException::class);
 
-        new Length();
+        new ParsleyAssert\Length();
     }
 
     public function testIncompleteConfiguration(): void
     {
         $this->expectException(MissingOptionsException::class);
 
-        new Length([
+        new ParsleyAssert\Length([
             'min' => 5,
         ]);
     }
@@ -35,7 +35,7 @@ class LengthTest extends Constraint
     {
         $this->expectException(InvalidOptionsException::class);
 
-        new Length([
+        new ParsleyAssert\Length([
             'min' => '5',
             'max' => '10',
         ]);
@@ -46,7 +46,7 @@ class LengthTest extends Constraint
      */
     public function testNormalization(): void
     {
-        $constraint = new Length([
+        $constraint = new ParsleyAssert\Length([
             'min' => 5,
             'max' => 10,
         ]);
@@ -54,6 +54,6 @@ class LengthTest extends Constraint
         $this->assertSame([
             'data-parsley-length' => '[5, 10]',
             'data-parsley-length-message' => 'Invalid.',
-        ], $constraint->normalize($this->normalizer->reveal()));
+        ], $constraint->normalize($this->normalizer));
     }
 }

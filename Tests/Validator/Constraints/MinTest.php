@@ -2,12 +2,12 @@
 
 namespace JBen87\ParsleyBundle\Tests\Validator\Constraints;
 
-use JBen87\ParsleyBundle\Tests\Validator\Constraint;
-use JBen87\ParsleyBundle\Validator\Constraints\Min;
+use JBen87\ParsleyBundle\Tests\Validator\ConstraintTestCase;
+use JBen87\ParsleyBundle\Validator\Constraints as ParsleyAssert;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-class MinTest extends Constraint
+class MinTest extends ConstraintTestCase
 {
     /**
      * @inheritdoc
@@ -16,7 +16,7 @@ class MinTest extends Constraint
     {
         $this->expectException(MissingOptionsException::class);
 
-        new Min();
+        new ParsleyAssert\Min();
     }
 
     /**
@@ -26,7 +26,7 @@ class MinTest extends Constraint
     {
         $this->expectException(InvalidOptionsException::class);
 
-        new Min([
+        new ParsleyAssert\Min([
             'min' => '5',
         ]);
     }
@@ -36,13 +36,13 @@ class MinTest extends Constraint
      */
     public function testNormalization(): void
     {
-        $constraint = new Min([
+        $constraint = new ParsleyAssert\Min([
             'min' => 5,
         ]);
 
         $this->assertSame([
             'data-parsley-min' => '5',
             'data-parsley-min-message' => 'Invalid.',
-        ], $constraint->normalize($this->normalizer->reveal()));
+        ], $constraint->normalize($this->normalizer));
     }
 }

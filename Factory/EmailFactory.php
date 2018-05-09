@@ -18,8 +18,7 @@ class EmailFactory implements TranslatableFactoryInterface
     {
         /** @var Assert\Email $constraint */
 
-        return new ParsleyAssert\Type([
-            'type' => 'email',
+        return new ParsleyAssert\Email([
             'message' => $this->translator->trans($constraint->message),
         ]);
     }

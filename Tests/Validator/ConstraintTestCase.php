@@ -2,14 +2,14 @@
 
 namespace JBen87\ParsleyBundle\Tests\Validator;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-abstract class Constraint extends TestCase
+abstract class ConstraintTestCase extends TestCase
 {
     /**
-     * @var ObjectProphecy|NormalizerInterface
+     * @var MockObject|NormalizerInterface
      */
     protected $normalizer;
 
@@ -33,6 +33,6 @@ abstract class Constraint extends TestCase
      */
     protected function setUp(): void
     {
-        $this->normalizer = $this->prophesize(NormalizerInterface::class);
+        $this->normalizer = $this->createMock(NormalizerInterface::class);
     }
 }

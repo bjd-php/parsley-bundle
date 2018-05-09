@@ -2,12 +2,12 @@
 
 namespace Tests\Unit\Validator\Constraints;
 
-use JBen87\ParsleyBundle\Tests\Validator\Constraint;
-use JBen87\ParsleyBundle\Validator\Constraints\LessThan;
+use JBen87\ParsleyBundle\Tests\Validator\ConstraintTestCase;
+use JBen87\ParsleyBundle\Validator\Constraints as ParsleyAssert;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-class LessThanTest extends Constraint
+class LessThanTest extends ConstraintTestCase
 {
     /**
      * @inheritdoc
@@ -16,7 +16,7 @@ class LessThanTest extends Constraint
     {
         $this->expectException(MissingOptionsException::class);
 
-        new LessThan();
+        new ParsleyAssert\LessThan();
     }
 
     /**
@@ -26,7 +26,7 @@ class LessThanTest extends Constraint
     {
         $this->expectException(InvalidOptionsException::class);
 
-        new LessThan([
+        new ParsleyAssert\LessThan([
             'value' => '10',
         ]);
     }
@@ -36,13 +36,13 @@ class LessThanTest extends Constraint
      */
     public function testNormalization(): void
     {
-        $constraint = new LessThan([
+        $constraint = new ParsleyAssert\LessThan([
             'value' => 10,
         ]);
 
         $this->assertSame([
             'data-parsley-lt' => '10',
             'data-parsley-lt-message' => 'Invalid.',
-        ], $constraint->normalize($this->normalizer->reveal()));
+        ], $constraint->normalize($this->normalizer));
     }
 }

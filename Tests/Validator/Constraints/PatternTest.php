@@ -2,12 +2,12 @@
 
 namespace JBen87\ParsleyBundle\Tests\Validator\Constraints;
 
-use JBen87\ParsleyBundle\Tests\Validator\Constraint;
-use JBen87\ParsleyBundle\Validator\Constraints\Pattern;
+use JBen87\ParsleyBundle\Tests\Validator\ConstraintTestCase;
+use JBen87\ParsleyBundle\Validator\Constraints as ParsleyAssert;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-class PatternTest extends Constraint
+class PatternTest extends ConstraintTestCase
 {
     /**
      * @inheritdoc
@@ -16,7 +16,7 @@ class PatternTest extends Constraint
     {
         $this->expectException(MissingOptionsException::class);
 
-        new Pattern();
+        new ParsleyAssert\Pattern();
     }
 
     /**
@@ -26,7 +26,7 @@ class PatternTest extends Constraint
     {
         $this->expectException(InvalidOptionsException::class);
 
-        new Pattern([
+        new ParsleyAssert\Pattern([
             'pattern' => false,
         ]);
     }
@@ -36,13 +36,13 @@ class PatternTest extends Constraint
      */
     public function testNormalization(): void
     {
-        $constraint = new Pattern([
+        $constraint = new ParsleyAssert\Pattern([
             'pattern' => '\w',
         ]);
 
         $this->assertSame([
             'data-parsley-pattern' => '\w',
             'data-parsley-pattern-message' => 'Invalid.',
-        ], $constraint->normalize($this->normalizer->reveal()));
+        ], $constraint->normalize($this->normalizer));
     }
 }

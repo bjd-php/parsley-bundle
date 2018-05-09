@@ -3,24 +3,13 @@
 namespace JBen87\ParsleyBundle\Validator\Constraints;
 
 use JBen87\ParsleyBundle\Validator\Constraint;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class Type extends Constraint
+abstract class Type extends Constraint
 {
     /**
      * @var string
      */
-    private $type;
-
-    /**
-     * @param array $options
-     */
-    public function __construct(array $options = [])
-    {
-        parent::__construct($options);
-
-        $this->type = $options['type'];
-    }
+    protected $type;
 
     /**
      * @inheritdoc
@@ -35,18 +24,11 @@ class Type extends Constraint
      */
     protected function getValue(): string
     {
-        return (string) $this->type;
+        return $this->getType();
     }
 
     /**
-     * @inheritdoc
+     * @return string
      */
-    protected function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver
-            ->setRequired(['type'])
-            ->setAllowedTypes('type', ['string'])
-            ->setAllowedValues('type', ['email', 'number', 'integer', 'digits', 'alphanum', 'url'])
-        ;
-    }
+    abstract protected function getType(): string;
 }

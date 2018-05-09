@@ -2,12 +2,12 @@
 
 namespace JBen87\ParsleyBundle\Tests\Validator\Constraints;
 
-use JBen87\ParsleyBundle\Tests\Validator\Constraint;
-use JBen87\ParsleyBundle\Validator\Constraints\Max;
+use JBen87\ParsleyBundle\Tests\Validator\ConstraintTestCase;
+use JBen87\ParsleyBundle\Validator\Constraints as ParsleyAssert;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-class MaxTest extends Constraint
+class MaxTest extends ConstraintTestCase
 {
     /**
      * @inheritdoc
@@ -16,7 +16,7 @@ class MaxTest extends Constraint
     {
         $this->expectException(MissingOptionsException::class);
 
-        new Max();
+        new ParsleyAssert\Max();
     }
 
     /**
@@ -26,7 +26,7 @@ class MaxTest extends Constraint
     {
         $this->expectException(InvalidOptionsException::class);
 
-        new Max([
+        new ParsleyAssert\Max([
             'max' => '10',
         ]);
     }
@@ -36,13 +36,13 @@ class MaxTest extends Constraint
      */
     public function testNormalization(): void
     {
-        $constraint = new Max([
+        $constraint = new ParsleyAssert\Max([
             'max' => 10,
         ]);
 
         $this->assertSame([
             'data-parsley-max' => '10',
             'data-parsley-max-message' => 'Invalid.',
-        ], $constraint->normalize($this->normalizer->reveal()));
+        ], $constraint->normalize($this->normalizer));
     }
 }

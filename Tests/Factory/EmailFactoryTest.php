@@ -32,7 +32,7 @@ class EmailFactoryTest extends FactoryTestCase
      */
     protected function getExpectedConstraint(): ParsleyConstraint
     {
-        return new ParsleyAssert\Type(['type' => 'email', 'message' => static::TRANSLATED_MESSAGE]);
+        return new ParsleyAssert\Email(['message' => static::TRANSLATED_MESSAGE]);
     }
 
     /**

@@ -1,5 +1,5 @@
 {
-    "name": "bjd-php/parsley-bundle",
+    "name": "j-ben87/parsley-bundle",
     "description": "Convert Symfony constraints into data-attributes for client-side validation with Parsley.",
     "keywords": ["symfony", "bundle", "parsley", "validation", "client-side"],
     "license": "MIT",

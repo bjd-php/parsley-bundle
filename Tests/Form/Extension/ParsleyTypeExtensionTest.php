@@ -45,12 +45,9 @@ class ParsleyTypeExtensionTest extends TestCase
     public function testConfiguration(): void
     {
         $extension = $this->createExtension();
+        $options = $this->resolveExtensionOptions($extension, []);
+
         $this->assertSame(FormType::class, $extension->getExtendedType());
-
-        $resolver = new OptionsResolver();
-        $extension->configureOptions($resolver);
-        $options = $resolver->resolve([]);
-
         $this->assertTrue($options['parsley_enabled']);
         $this->assertSame('blur', $options['parsley_trigger_event']);
     }
@@ -67,7 +64,8 @@ class ParsleyTypeExtensionTest extends TestCase
         $view = $this->createMock(FormView::class);
 
         $extension = $this->createExtension($enabled);
-        $this->finishView($extension, $view, $form, ['parsley_enabled' => $parsleyEnabled]);
+        $options = $this->resolveExtensionOptions($extension, ['parsley_enabled' => $parsleyEnabled]);
+        $extension->finishView($view, $form, $options);
 
         $this->assertEmpty($view->vars['attr']);
     }
@@ -91,7 +89,8 @@ class ParsleyTypeExtensionTest extends TestCase
         $this->setUpForm($form, true);
 
         $extension = $this->createExtension();
-        $this->finishView($extension, $view, $form);
+        $options = $this->resolveExtensionOptions($extension);
+        $extension->finishView($view, $form, $options);
 
         $this->assertSame(
             [
@@ -110,7 +109,8 @@ class ParsleyTypeExtensionTest extends TestCase
         $this->setUpForm($form);
 
         $extension = $this->createExtension();
-        $this->finishView($extension, $view, $form);
+        $options = $this->resolveExtensionOptions($extension);
+        $extension->finishView($view, $form, $options);
 
         $this->assertSame(['data-parsley-trigger' => 'blur'], $view->vars['attr']);
     }
@@ -137,7 +137,8 @@ class ParsleyTypeExtensionTest extends TestCase
         ;
 
         $extension = $this->createExtension();
-        $this->finishView($extension, $view, $form);
+        $options = $this->resolveExtensionOptions($extension);
+        $extension->finishView($view, $form, $options);
 
         $this->assertSame(['data-parsley-trigger' => 'blur'], $view->vars['attr']);
     }
@@ -179,7 +180,8 @@ class ParsleyTypeExtensionTest extends TestCase
         ;
 
         $extension = $this->createExtension();
-        $this->finishView($extension, $view, $form);
+        $options = $this->resolveExtensionOptions($extension);
+        $extension->finishView($view, $form, $options);
 
         $this->assertSame(['data-parsley-trigger' => 'blur'], $view->vars['attr']);
     }
@@ -224,7 +226,8 @@ class ParsleyTypeExtensionTest extends TestCase
         ;
 
         $extension = $this->createExtension();
-        $this->finishView($extension, $view, $form);
+        $options = $this->resolveExtensionOptions($extension);
+        $extension->finishView($view, $form, $options);
 
         $this->assertSame(
             [
@@ -264,20 +267,16 @@ class ParsleyTypeExtensionTest extends TestCase
 
     /**
      * @param AbstractTypeExtension $extension
-     * @param MockObject|FormView $view
-     * @param FormInterface|MockObject $form
      * @param array $options
+     *
+     * @return array
      */
-    private function finishView(
-        AbstractTypeExtension $extension,
-        MockObject $view,
-        MockObject $form,
-        array $options = []
-    ): void {
+    private function resolveExtensionOptions(AbstractTypeExtension $extension, array $options = []): array
+    {
         $resolver = new OptionsResolver();
         $extension->configureOptions($resolver);
 
-        $extension->finishView($view, $form, $resolver->resolve($options));
+        return $resolver->resolve($options);
     }
 
     /**

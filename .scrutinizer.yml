@@ -1,6 +1,5 @@
 filter:
   excluded_paths:
-    - 'build/'
     - 'Resources/'
     - 'Tests/'
   dependency_paths:
@@ -12,7 +11,7 @@ build:
       tests:
         override:
           - php-scrutinizer-run
-          - phpcs-run --extensions=php --standard=PSR2 .
+          - phpcs-run --extensions=php --standard=PSR2 --ignore=Resources/*,vendor/* .
 
 build_failure_conditions:
   - 'project.metric("scrutinizer.quality", < 9)'

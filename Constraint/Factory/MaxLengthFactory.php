@@ -20,7 +20,11 @@ class MaxLengthFactory implements TranslatableFactoryInterface
 
         return new ParsleyAssert\MaxLength([
             'max' => $constraint->max,
-            'message' => $this->transChoice($constraint->maxMessage, $constraint->max, ['{{ limit }}' => $constraint->max]),
+            'message' => $this->transChoice(
+                $constraint->maxMessage,
+                (int) $constraint->max,
+                ['{{ limit }}' => $constraint->max]
+            ),
         ]);
     }
 

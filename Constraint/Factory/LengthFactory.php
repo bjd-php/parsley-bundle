@@ -30,7 +30,7 @@ class LengthFactory implements TranslatableFactoryInterface
         if ($constraint->min === $constraint->max) {
             $options['message'] = $this->transChoice(
                 $constraint->exactMessage,
-                $constraint->min,
+                (int) $constraint->min,
                 ['{{ limit }}' => $constraint->min]
             );
         }

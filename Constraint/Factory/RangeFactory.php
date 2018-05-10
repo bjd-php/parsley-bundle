@@ -20,14 +20,14 @@ class RangeFactory implements TranslatableFactoryInterface
 
         $options = [];
 
-        if (isset($constraint->min)) {
+        if (null !== $constraint->min) {
             $options += [
                 'min' => $constraint->min,
                 'minMessage' => $this->trans($constraint->minMessage, ['{{ limit }}' => $constraint->min]),
             ];
         }
 
-        if (isset($constraint->max)) {
+        if (null !== $constraint->max) {
             $options += [
                 'max' => $constraint->max,
                 'maxMessage' => $this->trans($constraint->maxMessage, ['{{ limit }}' => $constraint->max]),

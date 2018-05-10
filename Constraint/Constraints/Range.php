@@ -79,7 +79,7 @@ class Range extends Constraint
     {
         $options = ['min' => $defaults['min']];
 
-        if (isset($defaults['minMessage'])) {
+        if (array_key_exists('minMessage', $defaults)) {
             $options['message'] = $defaults['minMessage'];
         }
 
@@ -95,7 +95,7 @@ class Range extends Constraint
     {
         $options = ['max' => $defaults['max']];
 
-        if (isset($defaults['maxMessage'])) {
+        if (array_key_exists('maxMessage', $defaults)) {
             $options['message'] = $defaults['maxMessage'];
         }
 

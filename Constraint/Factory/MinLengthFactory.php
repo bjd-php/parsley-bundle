@@ -22,7 +22,7 @@ class MinLengthFactory implements TranslatableFactoryInterface
             'min' => $constraint->min,
             'message' => $this->transChoice(
                 $constraint->minMessage,
-                $constraint->min,
+                (int) $constraint->min,
                 ['{{ limit }}' => $constraint->min]
             ),
         ]);

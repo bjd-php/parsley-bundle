@@ -21,7 +21,7 @@ abstract class Constraint implements NormalizableInterface
     {
         $options = $this->configure($options);
 
-        if (isset($options['message'])) {
+        if (array_key_exists('message', $options)) {
             $this->message = $options['message'];
         }
     }

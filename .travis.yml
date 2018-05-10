@@ -1,40 +1,27 @@
 language: php
 
 php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
+  - 7.1
+  - 7.2
 
 env:
-  - SYMFONY_VERSION=2.3.*
-  - SYMFONY_VERSION=2.7.*
-  - SYMFONY_VERSION=2.8.*
-  - SYMFONY_VERSION=3.0.*
-  - SYMFONY_VERSION=3.1.*
+  - SYMFONY_VERSION=4.0.*
 
-matrix:
-  exclude:
-    - php: 5.4
-      env: SYMFONY_VERSION=3.0.*
-    - php: 5.4
-      env: SYMFONY_VERSION=3.1.*
+sudo: false
 
-before_install:
-  - pear install pear/PHP_CodeSniffer
-  - phpenv rehash
-  - composer self-update
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 install:
   - composer require symfony/symfony:${SYMFONY_VERSION}
 
 script:
-  - phpunit --coverage-clover=coverage.clover --coverage-text
-  - phpcs --ignore=/vendor/* --extensions=php --encoding=utf-8 --standard=PSR2 -np .
+  - vendor/bin/phpunit --coverage-clover=build/coverage/clover.xml --coverage-text
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --access-token="b64151e5c9d22d8cae4165f73c8c90d4542f1bb03e8e424a6301c3cbbc24ce4b" --format=php-clover coverage.clover
+  - php ocular.phar code-coverage:upload --format=php-clover build/coverage/clover.xml
 
 notifications:
   email:

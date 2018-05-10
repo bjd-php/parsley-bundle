@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults autowire="true" autoconfigure="true" public="false" />
+
+        <instanceof id="JBen87\ParsleyBundle\Constraint\Factory\FactoryInterface">
+            <tag name="jben87_parsley.factory" />
+        </instanceof>
+
+        <instanceof id="JBen87\ParsleyBundle\Constraint\Reader\ReaderInterface">
+            <tag name="jben87_parsley.reader" />
+        </instanceof>
+
+        <prototype namespace="JBen87\ParsleyBundle\" resource="../../*" exclude="../../{Constraint/Constraints,DependencyInjection,Exception,Resources,Tests,vendor}" />
+
+        <service id="JBen87\ParsleyBundle\Constraint\Factory\FactoryRegistry">
+            <argument type="tagged" tag="jben87_parsley.factory" />
+        </service>
+
+        <service id="JBen87\ParsleyBundle\Constraint\Reader\ReaderRegistry">
+            <argument type="tagged" tag="jben87_parsley.reader" />
+        </service>
+
+        <service id="JBen87\ParsleyBundle\Constraint\Factory\DateFactory">
+            <argument key="$datePattern">%jben87_parsley.date_pattern%</argument>
+        </service>
+        <service id="JBen87\ParsleyBundle\Constraint\Factory\DateTimeFactory">
+            <argument key="$dateTimePattern">%jben87_parsley.datetime_pattern%</argument>
+        </service>
+        <service id="JBen87\ParsleyBundle\Constraint\Factory\TimeFactory">
+            <argument key="$timePattern">%jben87_parsley.time_pattern%</argument>
+        </service>
+
+        <service id="JBen87\ParsleyBundle\Form\Extension\ParsleyTypeExtension">
+            <argument key="$enabled">%jben87_parsley.enabled%</argument>
+            <argument key="$triggerEvent">%jben87_parsley.trigger_event%</argument>
+
+            <tag name="form.type_extension" extended-type="Symfony\Component\Form\Extension\Core\Type\FormType" />
+        </service>
+    </services>
+</container>

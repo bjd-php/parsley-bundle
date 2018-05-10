@@ -15,7 +15,9 @@ class LengthFactoryTest extends FactoryTestCase
     private const LIMIT = 10;
     private const ORIGINAL_MESSAGE = 'This value should have {{ min }} to {{ max }} characters.';
     private const TRANSLATED_MESSAGE = 'This value should have '.self::MIN.' to '.self::MIN.' characters.';
-    private const ORIGINAL_EXACT_MESSAGE = 'This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.';
+    private const ORIGINAL_EXACT_MESSAGE = 'This value should have exactly {{ limit }} character.'
+        .'|This value should have exactly {{ limit }} characters.'
+    ;
     private const TRANSLATED_EXACT_MESSAGE = 'This value should have exactly '.self::LIMIT.' characters.';
 
     /**

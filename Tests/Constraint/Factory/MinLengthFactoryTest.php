@@ -12,7 +12,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class MinLengthFactoryTest extends FactoryTestCase
 {
     private const LIMIT = 10;
-    private const ORIGINAL_MESSAGE = 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.';
+    private const ORIGINAL_MESSAGE = 'This value is too short. It should have {{ limit }} character or more.'.
+        '|This value is too short. It should have {{ limit }} characters or more.'
+    ;
     private const TRANSLATED_MESSAGE = 'This value is too short. It should have '.self::LIMIT.' characters or more.';
 
     /**

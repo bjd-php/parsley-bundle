@@ -1,42 +1,24 @@
 # ParsleyBundle
 
 [![Build Status](https://travis-ci.com/jben87/parsley-bundle.svg?branch=master)](https://travis-ci.com/jben87/parsley-bundle)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/J-Ben87/ParsleyBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/J-Ben87/ParsleyBundle/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/J-Ben87/ParsleyBundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/J-Ben87/ParsleyBundle/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jben87/parsley-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jben87/parsley-bundle/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/jben87/parsley-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jben87/parsley-bundle/?branch=master)
 
 Convert Symfony constraints into data-attributes for client-side validation with Parsley.
 
 ## Installation
 
-Classic but always useful.
-
-First install the bundle with composer:
+Install the bundle with composer:
 
 ```bash
-composer require j-ben87/parsley-bundle
+composer require jben87/parsley-bundle
 ```
 
-Don't forget to register the bundle in your `app/AppKernel.php`:
-
-```php
-public function registerBundles()
-{
-    $bundles = [
-        // ...
-        new JBen87\ParsleyBundle\ParsleyBundle(),
-    ];
-    
-    // ...
-}
-```
-
-And finally, you'll need to enable the `serializer` component by exposing the following in your `config.yml` (commented by default):
+Enable the `serializer` component in your `config/packages/framework.yaml`:
 
 ```
 framework:
-    # ...
-    serializer:      { enable_annotations: true }
-    # ...
+    serializer: { enable_annotations: true }
 ```
 
 ## Configuration
@@ -45,57 +27,51 @@ The bundle exposes a basic configuration:
 
 ```yml
 jben87_parsley:
-    trigger_event: blur     # the JavaScript event for which the validation is to be triggered relative to the selected input
+    enabled: true           # enable/disable Parsley validation globally (can be enabled on FormType or Constraint level)
+    trigger_event: 'blur'   # the JavaScript event for which the validation is to be triggered (relative to the selected input)
 ```
 
-## Basic usage
+## Usage
 
 ### Form constraints
 
-Create a `FormType` that extends `Symfony\Component\Form\AbstractType`.
+Create a `FormType`.
 
-The constraints you have defined for each child of your `FormType` will automatically be turned into Parsley data-attributes.
+Any supported constraints you have defined on your form will automatically be turned into Parsley data-attributes.
 
-**Nothing else.** 
-
-> Yes, it's that simple!
+Yes, it's that simple!
 
 ```php
 <?php
 
-namespace AppBundle\Form\Type;
+namespace App\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CustomType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', 'text', [
+            ->add('title', TextType::class, [
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Length(30),
                 ],
             ])
-            ->add('content', 'textarea', [
+            ->add('content', TextareaType::class, [
                 'constraints' => [
                     new Assert\NotBlank(),
                 ],
-            ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'custom';
+            ])
+        ;
     }
 }
 ```
@@ -103,49 +79,32 @@ class CustomType extends AbstractType
 Results in:
 
 ```html
-{% {{ form_widget(form.title) }} %}
-<input type="text" id="custom_title" name="custom[title]" required="required" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-length="[30, 30]" data-parsley-length-message="This value should have exactly 30 characters." data-parsley-id="4">
+<!-- {{ form_widget(form.title) }} -->
+<input type="text" id="title" name="title" required="required" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-length="[30, 30]" data-parsley-length-message="This value should have exactly 30 characters.">
 
-{% {{ form_widget(form.content }} %}
-<textarea id="custom_content" name="custom[content]" required="required" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-id="6"></textarea>
+<!-- {{ form_widget(form.content }} -->
+<textarea id="content" name="content" required="required" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank."></textarea>
 ```
 
-### Entity constraints
+### `data-class` constraints
 
-Create a `FormType` that extends `Symfony\Component\Form\AbstractType` and configure it to use one of your entities.
+Create a `FormType` and configure its `data-class` option.
 
-The constraints you have defined for any properties of the entity will automatically be turned into Parsley data-attributes.
+Any supported constraint you have defined on your class will automatically be turned into Parsley data-attributes.
 
-**Nothing else.** 
-
-> Here again, it's incredibly simple!
+Here again, it's incredibly simple!
 
 ```php
 <?php
 
-namespace AppBundle\Entity;
+namespace App\Model;
 
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity
- */
 class User
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
      * @var string
-     *
-     * @ORM\Column(type="string")
      *
      * @Assert\NotBlank
      * @Assert\Length(max=255)
@@ -154,8 +113,6 @@ class User
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string")
      *
      * @Assert\NotBlank
      * @Assert\Length(max=255)
@@ -170,40 +127,34 @@ And
 ```php
 <?php
 
-namespace AppBundle\Form\Type;
+namespace App\Form\Type;
 
+use App\Model\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CustomType extends AbstractType
+class UserType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('username')
-            ->add('email');
+            ->add('email')
+        ;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => 'AppBundle\Entity\User',
+            'data_class' => User::class,
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'user';
     }
 }
 ```
@@ -212,79 +163,111 @@ Results in:
 
 ```html
 {% {{ form_widget(form.username) }} %}
-<input type="text" id="user_username" name="user[username]" required="required" maxlength="255" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-maxlength="255" data-parsley-maxlength-message="This value is too long. It should have 255 characters or less." data-parsley-id="4">
+<input type="text" id="username" name="username" required="required" maxlength="255" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-maxlength="255" data-parsley-maxlength-message="This value is too long. It should have 255 characters or less.">
 
 {% {{ form_widget(form.email }} %}
-<input type="email" id="user_email" name="user[email]" required="required" maxlength="255" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-maxlength="255" data-parsley-maxlength-message="This value is too long. It should have 255 characters or less." data-parsley-type="email" data-parsley-type-message="This value is not a valid email address." data-parsley-id="8">
+<input type="email" id="email" name="email" required="required" maxlength="255" data-parsley-trigger="blur" data-parsley-required="true" data-parsley-required-message="This value should not be blank." data-parsley-maxlength="255" data-parsley-maxlength-message="This value is too long. It should have 255 characters or less." data-parsley-type="email" data-parsley-type-message="This value is not a valid email address.">
 ```
 
-**Notice:** if you define the same constraint on both `FormType` and entity side, `FormType` constraint will override the entity one.
+**Notice:** if you define the same constraint on both the `FormType` and the configured `data-class`, the `FormType` constraint will override the one configured on the `data-class`.
 
-## Advanced usage
+## Internals
 
-The bundle comes with 2 services to generate the constraints:
+The `ParsleyTypeExtension` is where all the magic happens.
 
-### Builder
+It gathers all Symfony constraints thanks to registered readers and turn them into Parsley constraints through factories.
 
-The `ConstraintBuilder` is a service registered as `jben87_parsley.builder.constraint`.
+It uses the special `ChainFactory` to automatically find the first factory that supports the given Symfony constraint.
 
-It can be used to turn Symfony constraints into Parsley constraints.
+Finally it normalizes the Parsley constraint into data-attributes and merge them with the `FormView` attributes.
 
-- First `configure` the `ConstraintBuilder` with an array of Symfony `Constraint`.
-- Then `build` an array of Parsley `Constraint`.
+## Extending the bundle
+
+You can easily add more constraints by:
+
+- creating a constraint that extends the abstract class `JBen87\ParsleyBundle\Constraint\Constraint`
+- creating a factory that implements the interface `JBen87\ParsleyBundle\Constraint\Factory\FactoryInterface`
+
+Your factory will be automatically registered to be used by the `ChainFactory` service.
 
 ```php
 <?php
 
-use JBen87\ParsleyBundle\Validator\Constraint as ParsleyConstraint;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints as Assert;
+namespace App\Constraint\Constraints;
 
-/** @var Constraint[] $constraints */
-$constraints = [
-    new Assert\NotBlank(),
-    new Assert\Email(),
-];
+use JBen87\ParsleyBundle\Constraint\Constraint;
 
-/** @var ConstraintBuilder $builder */
-$builder = $container->get('jben87_parsley.builder.constraint');
-$builder->configure(['constraints' => $constraints]);
+class Valid extends Constraint
+{
+    /**
+     * @inheritdoc
+     */
+    protected function getAttribute(): string
+    {
+        return 'data-parsley-valid';
+    }
 
-/** @var ParsleyConstraint[] $parsleyConstraints */
-$parsleyConstraints = $builder->build();
+    /**
+     * @inheritdoc
+     */
+    protected function getValue(): string
+    {
+        return 'true';
+    }
+}
 ```
-
-### Factory
-
-Internally, the builder uses the `ConstraintFactory` service, registered as `jben87_parsley.validator.constraint_factory`.
-
-It can be used to create the suitable Parsley constraint for a given Symfony constraint.
 
 ```php
 <?php
 
-use JBen87\ParsleyBundle\Validator\Constraint as ParsleyConstraint;
-use Symfony\Component\Validator\Constraint;
+namespace App\Constraint\Factory;
+
+use App\Constraint\Constraints as ParsleyAssert;
+use JBen87\ParsleyBundle\Constraint\Constraint;
+use JBen87\ParsleyBundle\Constraint\Factory\FactoryTrait;
+use JBen87\ParsleyBundle\Constraint\Factory\TranslatableFactoryInterface;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/** @var Constraint $constraint */
-$constraint = new Assert\NotBlank();
+class ValidFactory implements TranslatableFactoryInterface
+{
+    use FactoryTrait;
 
-/** @var ConstraintFactory $factory */
-$factory = $container->get('jben87_parsley.validator.constraint_factory');
+    /**
+     * @inheritdoc
+     */
+    public function create(SymfonyConstraint $constraint): Constraint
+    {
+        /** @var Assert\Valid $constraint */
 
-/** @var ParsleyConstraint $parsleyConstraint */
-$parsleyConstraint = $factory->create($constraint);
+        return new ParsleyAssert\Valid([
+            'message' => $this->trans($constraint->message),
+        ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function supports(SymfonyConstraint $constraint): bool
+    {
+        return $constraint instanceof Assert\Valid;
+    }
+}
 ```
 
 ## Supported constraints
 
-The following `Constraint` are currently supported:
+The following Symfony constraints are currently supported:
 
+- Symfony\Component\Validator\Constraints\Date
+- Symfony\Component\Validator\Constraints\DateTime
 - Symfony\Component\Validator\Constraints\Email
+- Symfony\Component\Validator\Constraints\GreaterThan
 - Symfony\Component\Validator\Constraints\Length
+- Symfony\Component\Validator\Constraints\LessThan
 - Symfony\Component\Validator\Constraints\NotBlank
 - Symfony\Component\Validator\Constraints\Range
+- Symfony\Component\Validator\Constraints\Time
 
 ## What's next
 

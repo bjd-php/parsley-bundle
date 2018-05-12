@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 class FactoryRegistry
 {
     /**
-     * @var FactoryInterface[]
+     * @var FactoryInterface[]|iterable
      */
     private $factories;
 

@@ -258,11 +258,15 @@ The following Symfony constraints are currently supported:
 - Symfony\Component\Validator\Constraints\DateTime
 - Symfony\Component\Validator\Constraints\Email
 - Symfony\Component\Validator\Constraints\GreaterThan
+- Symfony\Component\Validator\Constraints\GreaterThanOrEqual
 - Symfony\Component\Validator\Constraints\Length
 - Symfony\Component\Validator\Constraints\LessThan
+- Symfony\Component\Validator\Constraints\LessThanOrEqual
 - Symfony\Component\Validator\Constraints\NotBlank
 - Symfony\Component\Validator\Constraints\Range
 - Symfony\Component\Validator\Constraints\Time
+- Symfony\Component\Validator\Constraints\Type
+- Symfony\Component\Validator\Constraints\Url
 
 ## What's next
 

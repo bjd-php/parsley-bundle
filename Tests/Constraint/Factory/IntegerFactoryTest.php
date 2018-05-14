@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class IntegerFactoryTest extends FactoryTestCase
 {
     private const ORIGINAL_MESSAGE = 'This value should be of type {{ type }}.';
-    private const TRANSLATED_MESSAGE = 'This value should be of type integer.';
+    private const TRANSLATED_MESSAGE = 'This value should be of type '.IntegerFactory::TYPE.'.';
 
     /**
      * @inheritdoc
@@ -22,7 +22,7 @@ class IntegerFactoryTest extends FactoryTestCase
         $this->translator
             ->expects($this->once())
             ->method('trans')
-            ->with(static::ORIGINAL_MESSAGE)
+            ->with(static::ORIGINAL_MESSAGE, ['{{ type }}' => IntegerFactory::TYPE])
             ->willReturn(static::TRANSLATED_MESSAGE)
         ;
     }
@@ -40,7 +40,7 @@ class IntegerFactoryTest extends FactoryTestCase
      */
     protected function getOriginalConstraint(): SymfonyConstraint
     {
-        return new Assert\Type(['type' => 'integer']);
+        return new Assert\Type(['type' => IntegerFactory::TYPE]);
     }
 
     /**

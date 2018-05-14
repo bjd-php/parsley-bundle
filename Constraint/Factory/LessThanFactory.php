@@ -20,7 +20,7 @@ class LessThanFactory implements TranslatableFactoryInterface
 
         return new ParsleyAssert\LessThan([
             'value' => $constraint->value,
-            'message' => $this->trans($constraint->message, ['%compared_value%' => $constraint->value]),
+            'message' => $this->trans($constraint->message, ['{{ compared_value }}' => $constraint->value]),
         ]);
     }
 

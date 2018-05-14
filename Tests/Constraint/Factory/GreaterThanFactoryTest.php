@@ -23,7 +23,7 @@ class GreaterThanFactoryTest extends FactoryTestCase
         $this->translator
             ->expects($this->once())
             ->method('trans')
-            ->with(static::ORIGINAL_MESSAGE)
+            ->with(static::ORIGINAL_MESSAGE, ['{{ compared_value }}' => static::VALUE])
             ->willReturn(static::TRANSLATED_MESSAGE)
         ;
     }

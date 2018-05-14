@@ -11,6 +11,8 @@ class NumberFactory implements TranslatableFactoryInterface
 {
     use FactoryTrait;
 
+    const TYPE = 'numeric';
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class NumberFactory implements TranslatableFactoryInterface
         /** @var Assert\Type $constraint */
 
         return new ParsleyAssert\Number([
-            'message' => $this->trans($constraint->message),
+            'message' => $this->trans($constraint->message, ['{{ type }}' => static::TYPE]),
         ]);
     }
 
@@ -28,6 +30,6 @@ class NumberFactory implements TranslatableFactoryInterface
      */
     public function supports(SymfonyConstraint $constraint): bool
     {
-        return $constraint instanceof Assert\Type && 'numeric' === $constraint->type;
+        return $constraint instanceof Assert\Type && static::TYPE === $constraint->type;
     }
 }

@@ -8,8 +8,6 @@ use JBen87\ParsleyBundle\Exception\ConstraintException;
 abstract class Type extends Constraint
 {
     const TYPES = [
-        'alphanum' => 'alphanum',
-        'digits' => 'digits',
         'email' => 'email',
         'integer' => 'integer',
         'number' => 'number',

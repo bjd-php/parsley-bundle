@@ -4,7 +4,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bjd-php/parsley-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/bjd-php/parsley-bundle/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/bjd-php/parsley-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/bjd-php/parsley-bundle/?branch=master)
 
-Convert Symfony constraints into data-attributes for client-side validation with Parsley.
+Convert Symfony constraints into data-attributes for client-side validation with [Parsley](http://parsleyjs.org/).
 
 ## Installation
 
@@ -14,12 +14,7 @@ Install the bundle with composer:
 composer require j-ben87/parsley-bundle
 ```
 
-Enable the `serializer` component in your `config/packages/framework.yaml`:
-
-```
-framework:
-    serializer: { enable_annotations: true }
-```
+Install Parsley library: http://parsleyjs.org/doc/index.html#installation
 
 ## Configuration
 

@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Exception\NoSuchMetadataException;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class EntityReader implements ReaderInterface
+class DataClassReader implements ReaderInterface
 {
     /**
      * @var ValidatorInterface
@@ -51,7 +51,7 @@ class EntityReader implements ReaderInterface
     }
 
     /**
-     * EntityReader priority should be greater than FormTypeReader priority
+     * DataClassReader priority should be greater than FormTypeReader priority
      * so that FormType constraints override entity constraints.
      *
      * @inheritdoc

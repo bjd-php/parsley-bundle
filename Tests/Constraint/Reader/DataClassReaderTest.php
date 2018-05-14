@@ -2,7 +2,7 @@
 
 namespace JBen87\ParsleyBundle\Tests\Constraint\Reader;
 
-use JBen87\ParsleyBundle\Constraint\Reader\EntityReader;
+use JBen87\ParsleyBundle\Constraint\Reader\DataClassReader;
 use PHPUnit\Framework\MockObject\Matcher;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Mapping\GenericMetadata;
 use Symfony\Component\Validator\Mapping\PropertyMetadataInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class EntityReaderTest extends TestCase
+class DataClassReaderTest extends TestCase
 {
     /**
      * @var MockObject|ValidatorInterface
@@ -208,10 +208,10 @@ class EntityReaderTest extends TestCase
     }
 
     /**
-     * @return EntityReader
+     * @return DataClassReader
      */
-    private function createReader(): EntityReader
+    private function createReader(): DataClassReader
     {
-        return new EntityReader($this->validator);
+        return new DataClassReader($this->validator);
     }
 }

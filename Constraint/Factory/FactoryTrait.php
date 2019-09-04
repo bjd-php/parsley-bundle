@@ -2,7 +2,7 @@
 
 namespace JBen87\ParsleyBundle\Constraint\Factory;
 
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait FactoryTrait
 {
@@ -54,6 +54,8 @@ trait FactoryTrait
         string $domain = 'validators',
         string $locale = null
     ): string {
-        return $this->translator->transChoice($id, $number, $parameters, $domain, $locale);
+        $parameters['%count%'] = $number;
+
+        return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 }

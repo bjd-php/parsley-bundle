@@ -60,24 +60,22 @@ class LengthFactoryTest extends FactoryTestCase
                 ]),
                 function (LengthFactoryTest $self): void {
                     $self->translator
-                        ->expects($this->once())
+                        ->expects($this->exactly(2))
                         ->method('trans')
-                        ->with(
-                            static::ORIGINAL_MESSAGE,
-                            ['{{ min }}' => static::LIMIT, '{{ max }}' => static::LIMIT]
+                        ->withConsecutive(
+                            [
+                                static::ORIGINAL_MESSAGE,
+                                ['{{ min }}' => static::LIMIT, '{{ max }}' => static::LIMIT],
+                            ],
+                            [
+                                static::ORIGINAL_EXACT_MESSAGE,
+                                ['{{ limit }}' => static::LIMIT, '%count%' => static::LIMIT],
+                            ]
                         )
-                        ->willReturn(sprintf('This value should have %d to %d characters.', static::MAX, static::MIN))
-                    ;
-
-                    $self->translator
-                        ->expects($this->once())
-                        ->method('transChoice')
-                        ->with(
-                            static::ORIGINAL_EXACT_MESSAGE,
-                            static::LIMIT,
-                            ['{{ limit }}' => static::LIMIT]
+                        ->willReturnOnConsecutiveCalls(
+                            sprintf('This value should have %d to %d characters.', static::MAX, static::MIN),
+                            static::TRANSLATED_EXACT_MESSAGE
                         )
-                        ->willReturn(static::TRANSLATED_EXACT_MESSAGE)
                     ;
                 },
             ],

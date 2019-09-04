@@ -7,8 +7,8 @@ use JBen87\ParsleyBundle\Constraint\Factory\FactoryInterface;
 use JBen87\ParsleyBundle\Constraint\Factory\TranslatableFactoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class FactoryTestCase extends TestCase
 {

@@ -2,7 +2,7 @@
 
 namespace JBen87\ParsleyBundle\Constraint\Factory;
 
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 interface TranslatableFactoryInterface extends FactoryInterface
 {

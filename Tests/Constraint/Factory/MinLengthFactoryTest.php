@@ -24,8 +24,11 @@ class MinLengthFactoryTest extends FactoryTestCase
     {
         $this->translator
             ->expects($this->once())
-            ->method('transChoice')
-            ->with(static::ORIGINAL_MESSAGE, static::LIMIT, ['{{ limit }}' => static::LIMIT])
+            ->method('trans')
+            ->with(
+                static::ORIGINAL_MESSAGE,
+                ['{{ limit }}' => static::LIMIT, '%count%' => static::LIMIT]
+            )
             ->willReturn(static::TRANSLATED_MESSAGE)
         ;
     }

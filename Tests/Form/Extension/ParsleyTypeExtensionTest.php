@@ -50,7 +50,8 @@ class ParsleyTypeExtensionTest extends TestCase
         $extension = $this->createExtension();
         $options = $this->resolveExtensionOptions($extension, []);
 
-        $this->assertSame(FormType::class, $extension->getExtendedType());
+        $this->assertCount(1, ParsleyTypeExtension::getExtendedTypes());
+        $this->assertContains(FormType::class, ParsleyTypeExtension::getExtendedTypes());
         $this->assertTrue($options['parsley_enabled']);
         $this->assertSame('blur', $options['parsley_trigger_event']);
     }

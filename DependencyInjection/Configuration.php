@@ -25,9 +25,9 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
+        $treeBuilder = new TreeBuilder($this->alias);
 
-        $rootNode = $treeBuilder->root($this->alias);
+        $rootNode = $treeBuilder->getRootNode();
         $rootNode
             ->children()
                 ->booleanNode('enabled')

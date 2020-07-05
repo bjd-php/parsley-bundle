@@ -64,8 +64,8 @@ class Range extends Constraint
     {
         $resolver
             ->setRequired(['min', 'max'])
-            ->setAllowedTypes('min', ['int'])
-            ->setAllowedTypes('max', ['int'])
+            ->setAllowedTypes('min', ['numeric'])
+            ->setAllowedTypes('max', ['numeric'])
             ->setDefined(['minMessage', 'maxMessage'])
         ;
     }

@@ -20,14 +20,45 @@ class GreaterThanOrEqualTest extends ConfiguredConstraintTestCase
         $this->expectException(InvalidOptionsException::class);
 
         new ParsleyAssert\GreaterThanOrEqual([
-            'value' => '5',
+            'value' => 'foo',
         ]);
     }
 
     public function testNormalization(): void
     {
+        // integer
         $constraint = new ParsleyAssert\GreaterThanOrEqual([
             'value' => 5,
+        ]);
+
+        $this->assertSame([
+            'data-parsley-gte' => '5',
+            'data-parsley-gte-message' => 'Invalid.',
+        ], $constraint->normalize($this->normalizer));
+
+        // float to int
+        $constraint = new ParsleyAssert\GreaterThanOrEqual([
+            'value' => 5.0,
+        ]);
+
+        $this->assertSame([
+            'data-parsley-gte' => '5',
+            'data-parsley-gte-message' => 'Invalid.',
+        ], $constraint->normalize($this->normalizer));
+
+        // floating
+        $constraint = new ParsleyAssert\GreaterThanOrEqual([
+            'value' => 5.2,
+        ]);
+
+        $this->assertSame([
+            'data-parsley-gte' => '5.2',
+            'data-parsley-gte-message' => 'Invalid.',
+        ], $constraint->normalize($this->normalizer));
+
+        // string
+        $constraint = new ParsleyAssert\GreaterThanOrEqual([
+            'value' => '5',
         ]);
 
         $this->assertSame([

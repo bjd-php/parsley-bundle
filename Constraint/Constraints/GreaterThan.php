@@ -45,7 +45,7 @@ class GreaterThan extends Constraint
     {
         $resolver
             ->setRequired(['value'])
-            ->setAllowedTypes('value', ['int'])
+            ->setAllowedTypes('value', ['numeric'])
         ;
     }
 }

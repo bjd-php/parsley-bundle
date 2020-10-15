@@ -20,14 +20,45 @@ class GreaterThanTest extends ConfiguredConstraintTestCase
         $this->expectException(InvalidOptionsException::class);
 
         new ParsleyAssert\GreaterThan([
-            'value' => '5',
+            'value' => 'foo',
         ]);
     }
 
     public function testNormalization(): void
     {
+        // integer
         $constraint = new ParsleyAssert\GreaterThan([
             'value' => 5,
+        ]);
+
+        $this->assertSame([
+            'data-parsley-gt' => '5',
+            'data-parsley-gt-message' => 'Invalid.',
+        ], $constraint->normalize($this->normalizer));
+
+        // float to int
+        $constraint = new ParsleyAssert\GreaterThan([
+            'value' => 5.0,
+        ]);
+
+        $this->assertSame([
+            'data-parsley-gt' => '5',
+            'data-parsley-gt-message' => 'Invalid.',
+        ], $constraint->normalize($this->normalizer));
+
+        // floating
+        $constraint = new ParsleyAssert\GreaterThan([
+            'value' => 5.2,
+        ]);
+
+        $this->assertSame([
+            'data-parsley-gt' => '5.2',
+            'data-parsley-gt-message' => 'Invalid.',
+        ], $constraint->normalize($this->normalizer));
+
+        // string
+        $constraint = new ParsleyAssert\GreaterThan([
+            'value' => '5',
         ]);
 
         $this->assertSame([

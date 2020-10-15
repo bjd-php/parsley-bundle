@@ -20,7 +20,7 @@ class GreaterThanOrEqualTest extends ConfiguredConstraintTestCase
         $this->expectException(InvalidOptionsException::class);
 
         new ParsleyAssert\GreaterThanOrEqual([
-            'value' => [],
+            'value' => 'foo',
         ]);
     }
 

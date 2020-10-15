@@ -20,7 +20,7 @@ class LessThanTest extends ConfiguredConstraintTestCase
         $this->expectException(InvalidOptionsException::class);
 
         new ParsleyAssert\LessThan([
-            'value' => [],
+            'value' => 'foo',
         ]);
     }
 
@@ -58,7 +58,7 @@ class LessThanTest extends ConfiguredConstraintTestCase
 
         // string
         $constraint = new ParsleyAssert\LessThan([
-            'value' => "10",
+            'value' => '10',
         ]);
 
         $this->assertSame([

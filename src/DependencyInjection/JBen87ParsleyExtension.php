@@ -7,7 +7,7 @@ namespace JBen87\ParsleyBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 final class JBen87ParsleyExtension extends Extension
 {
@@ -27,8 +27,8 @@ final class JBen87ParsleyExtension extends Extension
 
         $this->setDateTimePatternParameters($config, $container);
 
-        $loader = new XmlFileLoader($container, new FileLocator(sprintf('%s/../Resources/config', __DIR__)));
-        $loader->load('services.xml');
+        $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/../config'));
+        $loader->load('services.yaml');
     }
 
     public function getAlias(): string

@@ -39,6 +39,8 @@ Yes, it's that simple!
 ```php
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -47,11 +49,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CustomType extends AbstractType
+final class CustomType extends AbstractType
 {
-    /**
-     * @inheritdoc
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -92,28 +91,26 @@ Here again, it's incredibly simple!
 ```php
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class User
+final class User
 {
     /**
-     * @var string
-     *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      * @Assert\Length(max=255)
      */
-    private $username;
+    private ?string $username = null;
 
     /**
-     * @var string
-     *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      * @Assert\Length(max=255)
-     * @Assert\Email
+     * @Assert\Email()
      */
-    private $email;
+    private ?string $email = null;
 }
 ```
 
@@ -122,6 +119,8 @@ And
 ```php
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form\Type;
 
 use App\Model\User;
@@ -129,11 +128,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserType extends AbstractType
+final class UserType extends AbstractType
 {
-    /**
-     * @inheritdoc
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -142,14 +138,9 @@ class UserType extends AbstractType
         ;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => User::class,
-        ]);
+        $resolver->setDefault('data_class', User::class);
     }
 }
 ```
@@ -188,23 +179,19 @@ Your factory will be automatically registered to be used by the `ChainFactory` s
 ```php
 <?php
 
+declare(strict_types=1);
+
 namespace App\Constraint\Constraints;
 
 use JBen87\ParsleyBundle\Constraint\Constraint;
 
-class Valid extends Constraint
+final class Valid extends Constraint
 {
-    /**
-     * @inheritdoc
-     */
     protected function getAttribute(): string
     {
         return 'data-parsley-valid';
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getValue(): string
     {
         return 'true';
@@ -215,6 +202,8 @@ class Valid extends Constraint
 ```php
 <?php
 
+declare(strict_types=1);
+
 namespace App\Constraint\Factory;
 
 use App\Constraint\Constraints as ParsleyAssert;
@@ -224,13 +213,10 @@ use JBen87\ParsleyBundle\Constraint\Factory\TranslatableFactoryInterface;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class ValidFactory implements TranslatableFactoryInterface
+final class ValidFactory implements TranslatableFactoryInterface
 {
     use FactoryTrait;
 
-    /**
-     * @inheritdoc
-     */
     public function create(SymfonyConstraint $constraint): Constraint
     {
         /** @var Assert\Valid $constraint */
@@ -240,9 +226,6 @@ class ValidFactory implements TranslatableFactoryInterface
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function supports(SymfonyConstraint $constraint): bool
     {
         return $constraint instanceof Assert\Valid;

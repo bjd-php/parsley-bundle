@@ -25,7 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "JBen87\\ParsleyBundle\\": ""
+            "JBen87\\ParsleyBundle\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JBen87\\ParsleyBundle\\Tests\\": "tests"
         }
     },
     "minimum-stability": "stable",

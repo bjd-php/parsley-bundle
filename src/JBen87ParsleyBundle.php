@@ -14,4 +14,9 @@ final class JBen87ParsleyBundle extends Bundle
     {
         return new JBen87ParsleyExtension('jben87_parsley');
     }
+
+    public function getPath(): string
+    {
+        return \dirname(__DIR__);
+    }
 }

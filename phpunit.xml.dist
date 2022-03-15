@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.1/phpunit.xsd"
-         bootstrap="vendor/autoload.php"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          colors="true"
+         bootstrap="vendor/autoload.php"
 >
     <testsuites>
         <testsuite name="JBen87ParsleyBundle Test Suite">
-            <directory>./Tests</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory suffix=".php">.</directory>
+            <directory suffix=".php">src</directory>
             <exclude>
-                <directory>./DependencyInjection</directory>
-                <directory>./Tests</directory>
-                <directory>./vendor</directory>
-                <file>./JBen87ParsleyBundle.php</file>
+                <directory>src/DependencyInjection</directory>
+                <file>JBen87ParsleyBundle.php</file>
             </exclude>
         </whitelist>
     </filter>

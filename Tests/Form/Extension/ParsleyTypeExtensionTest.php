@@ -151,7 +151,7 @@ final class ParsleyTypeExtensionTest extends TestCase
         $extension = $this->createExtension(
             new FactoryRegistry([]),
             new ReaderRegistry([
-                new class([$unsupportedConstraint]) implements ReaderInterface
+                new class ([$unsupportedConstraint]) implements ReaderInterface
                 {
                     private array $data;
 
@@ -201,7 +201,7 @@ final class ParsleyTypeExtensionTest extends TestCase
         $extension = $this->createExtension(
             new FactoryRegistry([$factory1, $factory2]),
             new ReaderRegistry([
-                new class([new Assert\NotBlank(), new Assert\Date()]) implements ReaderInterface
+                new class ([new Assert\NotBlank(), new Assert\Date()]) implements ReaderInterface
                 {
                     private array $data;
 

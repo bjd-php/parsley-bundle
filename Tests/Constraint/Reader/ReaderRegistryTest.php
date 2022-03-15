@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JBen87\ParsleyBundle\Tests\Constraint\Reader;
 
 use JBen87\ParsleyBundle\Constraint\Reader\ReaderInterface;

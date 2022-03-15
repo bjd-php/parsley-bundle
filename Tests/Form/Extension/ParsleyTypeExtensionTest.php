@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JBen87\ParsleyBundle\Tests\Form\Extension;
 
 use JBen87\ParsleyBundle\Constraint\Factory\DateFactory;

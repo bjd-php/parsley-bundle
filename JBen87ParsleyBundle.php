@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JBen87\ParsleyBundle;
 
 use JBen87\ParsleyBundle\DependencyInjection\JBen87ParsleyExtension;

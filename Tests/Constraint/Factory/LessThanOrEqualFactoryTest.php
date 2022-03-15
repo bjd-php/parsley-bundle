@@ -13,51 +13,36 @@ final class LessThanOrEqualFactoryTest extends FactoryTestCase
 {
     private const VALUE = 10;
     private const ORIGINAL_MESSAGE = 'This value should be less than or equal to {{ compared_value }}.';
-    private const TRANSLATED_MESSAGE = 'This value should be less than or equal to '.self::VALUE.'.';
+    private const TRANSLATED_MESSAGE = 'This value should be less than or equal to ' . self::VALUE . '.';
 
-    /**
-     * @inheritdoc
-     */
     protected function setUpCreate(): void
     {
         $this->translator
             ->expects($this->once())
             ->method('trans')
-            ->with(static::ORIGINAL_MESSAGE, ['{{ compared_value }}' => static::VALUE])
-            ->willReturn(static::TRANSLATED_MESSAGE)
+            ->with(self::ORIGINAL_MESSAGE, ['{{ compared_value }}' => self::VALUE])
+            ->willReturn(self::TRANSLATED_MESSAGE)
         ;
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getExpectedConstraint(): Constraint
     {
         return new ParsleyAssert\LessThanOrEqual([
-            'value' => static::VALUE,
-            'message' => static::TRANSLATED_MESSAGE,
+            'value' => self::VALUE,
+            'message' => self::TRANSLATED_MESSAGE,
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getOriginalConstraint(): SymfonyConstraint
     {
-        return new Assert\LessThanOrEqual(static::VALUE);
+        return new Assert\LessThanOrEqual(self::VALUE);
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getUnsupportedConstraint(): SymfonyConstraint
     {
         return new Assert\Valid();
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function createFactory(): FactoryInterface
     {
         return new LessThanOrEqualFactory();

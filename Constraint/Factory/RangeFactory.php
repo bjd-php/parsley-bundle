@@ -11,9 +11,6 @@ final class RangeFactory implements TranslatableFactoryInterface
 {
     use FactoryTrait;
 
-    /**
-     * @inheritdoc
-     */
     public function create(SymfonyConstraint $constraint): Constraint
     {
         /** @var Assert\Range $constraint */
@@ -37,9 +34,6 @@ final class RangeFactory implements TranslatableFactoryInterface
         return new ParsleyAssert\Range($options);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function supports(SymfonyConstraint $constraint): bool
     {
         return $constraint instanceof Assert\Range;

@@ -5,6 +5,7 @@ namespace JBen87\ParsleyBundle\Tests\Form\Extension;
 use JBen87\ParsleyBundle\Constraint\Factory\DateFactory;
 use JBen87\ParsleyBundle\Constraint\Factory\FactoryRegistry;
 use JBen87\ParsleyBundle\Constraint\Factory\RequiredFactory;
+use JBen87\ParsleyBundle\Constraint\Reader\ReaderInterface;
 use JBen87\ParsleyBundle\Constraint\Reader\ReaderRegistry;
 use JBen87\ParsleyBundle\Form\Extension\ParsleyTypeExtension;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -22,14 +23,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class ParsleyTypeExtensionTest extends TestCase
 {
     /**
-     * @var LoggerInterface|MockObject
+     * @var MockObject|LoggerInterface|null
      */
-    private $logger;
+    private ?MockObject $logger = null;
 
     /**
-     * @var MockObject|NormalizerInterface
+     * @var MockObject|NormalizerInterface|null
      */
-    private $normalizer;
+    private ?MockObject $normalizer = null;
 
     public function testConfiguration(): void
     {
@@ -43,9 +44,6 @@ final class ParsleyTypeExtensionTest extends TestCase
     }
 
     /**
-     * @param bool $enabled
-     * @param bool $parsleyEnabled
-     *
      * @dataProvider provideFinishViewDisabled
      */
     public function testFinishViewDisabled(bool $enabled, bool $parsleyEnabled): void
@@ -60,9 +58,6 @@ final class ParsleyTypeExtensionTest extends TestCase
         $this->assertEmpty($view->vars['attr']);
     }
 
-    /**
-     * @return array
-     */
     public function provideFinishViewDisabled(): array
     {
         return [
@@ -112,7 +107,24 @@ final class ParsleyTypeExtensionTest extends TestCase
 
         $this->setUpForm($form);
 
-        $extension = $this->createExtension(new FactoryRegistry([]), new ReaderRegistry([new MockReader([])]));
+        $extension = $this->createExtension(
+            new FactoryRegistry([]),
+            new ReaderRegistry([
+                new class implements ReaderInterface
+                {
+                    public function read(FormInterface $form): array
+                    {
+                        return [];
+                    }
+
+                    public function getPriority(): int
+                    {
+                        return 0;
+                    }
+                },
+            ])
+        );
+
         $options = $this->resolveExtensionOptions($extension);
         $extension->finishView($view, $form, $options);
 
@@ -136,7 +148,27 @@ final class ParsleyTypeExtensionTest extends TestCase
 
         $extension = $this->createExtension(
             new FactoryRegistry([]),
-            new ReaderRegistry([new MockReader([$unsupportedConstraint])])
+            new ReaderRegistry([
+                new class([$unsupportedConstraint]) implements ReaderInterface
+                {
+                    private array $data;
+
+                    public function __construct(array $data)
+                    {
+                        $this->data = $data;
+                    }
+
+                    public function read(FormInterface $form): array
+                    {
+                        return $this->data;
+                    }
+
+                    public function getPriority(): int
+                    {
+                        return 0;
+                    }
+                },
+            ])
         );
 
         $options = $this->resolveExtensionOptions($extension);
@@ -166,7 +198,27 @@ final class ParsleyTypeExtensionTest extends TestCase
 
         $extension = $this->createExtension(
             new FactoryRegistry([$factory1, $factory2]),
-            new ReaderRegistry([new MockReader([new Assert\NotBlank(), new Assert\Date()])])
+            new ReaderRegistry([
+                new class([new Assert\NotBlank(), new Assert\Date()]) implements ReaderInterface
+                {
+                    private array $data;
+
+                    public function __construct(array $data)
+                    {
+                        $this->data = $data;
+                    }
+
+                    public function read(FormInterface $form): array
+                    {
+                        return $this->data;
+                    }
+
+                    public function getPriority(): int
+                    {
+                        return 0;
+                    }
+                },
+            ])
         );
 
         $options = $this->resolveExtensionOptions($extension);
@@ -184,9 +236,6 @@ final class ParsleyTypeExtensionTest extends TestCase
         );
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $this->logger = $this->createMock(LoggerInterface::class);
@@ -194,8 +243,7 @@ final class ParsleyTypeExtensionTest extends TestCase
     }
 
     /**
-     * @param MockObject $form
-     * @param bool $root
+     * @param MockObject|FormInterface $form
      */
     private function setUpForm(MockObject $form, bool $root = false): void
     {
@@ -206,12 +254,6 @@ final class ParsleyTypeExtensionTest extends TestCase
         ;
     }
 
-    /**
-     * @param AbstractTypeExtension $extension
-     * @param array $options
-     *
-     * @return array
-     */
     private function resolveExtensionOptions(AbstractTypeExtension $extension, array $options = []): array
     {
         $resolver = new OptionsResolver();
@@ -220,19 +262,10 @@ final class ParsleyTypeExtensionTest extends TestCase
         return $resolver->resolve($options);
     }
 
-    /**
-     * @param FactoryRegistry $factoryRegistry
-     * @param ReaderRegistry $readerRegistry
-     * @param bool $enabled
-     * @param string $triggerEvent
-     *
-     * @return ParsleyTypeExtension
-     */
     private function createExtension(
         FactoryRegistry $factoryRegistry,
         ReaderRegistry $readerRegistry,
-        bool $enabled = true,
-        string $triggerEvent = 'blur'
+        bool $enabled = true
     ): ParsleyTypeExtension {
         return new ParsleyTypeExtension(
             $factoryRegistry,
@@ -240,7 +273,7 @@ final class ParsleyTypeExtensionTest extends TestCase
             $this->normalizer,
             $readerRegistry,
             $enabled,
-            $triggerEvent
+            'blur'
         );
     }
 }

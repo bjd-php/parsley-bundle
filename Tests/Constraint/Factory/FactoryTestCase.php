@@ -12,21 +12,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class FactoryTestCase extends TestCase
 {
-    /**
-     * @var FactoryInterface
-     */
-    protected $factory;
+    protected ?FactoryInterface $factory = null;
 
     /**
-     * @var MockObject|TranslatorInterface
+     * @var MockObject|TranslatorInterface|null
      */
-    protected $translator;
+    protected ?MockObject $translator = null;
 
     /**
-     * @param Constraint $expected
-     * @param SymfonyConstraint $constraint
-     * @param callable|null $setup
-     *
      * @dataProvider provideCreate
      */
     public function testCreate(Constraint $expected, SymfonyConstraint $constraint, callable $setup = null): void
@@ -40,9 +33,6 @@ abstract class FactoryTestCase extends TestCase
         $this->assertEquals($expected, $this->factory->create($constraint));
     }
 
-    /**
-     * @return array
-     */
     public function provideCreate(): array
     {
         return [
@@ -54,9 +44,6 @@ abstract class FactoryTestCase extends TestCase
     }
 
     /**
-     * @param SymfonyConstraint $supported
-     * @param SymfonyConstraint $unsupported
-     *
      * @dataProvider provideSupports
      */
     public function testSupports(SymfonyConstraint $supported, SymfonyConstraint $unsupported): void
@@ -65,9 +52,6 @@ abstract class FactoryTestCase extends TestCase
         $this->assertTrue($this->factory->supports($supported));
     }
 
-    /**
-     * @return array
-     */
     public function provideSupports(): array
     {
         return [
@@ -78,9 +62,6 @@ abstract class FactoryTestCase extends TestCase
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $this->factory = $this->createFactory();
@@ -95,31 +76,20 @@ abstract class FactoryTestCase extends TestCase
     {
     }
 
-    /**
-     * @return Constraint
-     */
     protected function getExpectedConstraint(): Constraint
     {
         throw new \RuntimeException('Not implemented yet.');
     }
 
-    /**
-     * @return SymfonyConstraint
-     */
     protected function getUnsupportedConstraint(): SymfonyConstraint
     {
         throw new \RuntimeException('Not implemented yet.');
     }
-    /**
-     * @return SymfonyConstraint
-     */
+
     protected function getOriginalConstraint(): SymfonyConstraint
     {
         throw new \RuntimeException('Not implemented yet.');
     }
 
-    /**
-     * @return FactoryInterface
-     */
     abstract protected function createFactory(): FactoryInterface;
 }

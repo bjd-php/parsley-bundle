@@ -11,9 +11,6 @@ final class GreaterThanOrEqualFactory implements TranslatableFactoryInterface
 {
     use FactoryTrait;
 
-    /**
-     * @inheritdoc
-     */
     public function create(SymfonyConstraint $constraint): Constraint
     {
         /** @var Assert\GreaterThan $constraint */
@@ -24,9 +21,6 @@ final class GreaterThanOrEqualFactory implements TranslatableFactoryInterface
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function supports(SymfonyConstraint $constraint): bool
     {
         return $constraint instanceof Assert\GreaterThanOrEqual;

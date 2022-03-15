@@ -15,51 +15,36 @@ final class MaxLengthFactoryTest extends FactoryTestCase
     private const ORIGINAL_MESSAGE = 'This value is too long. It should have {{ limit }} character or less.'
         .'|This value is too long. It should have {{ limit }} characters or less.'
     ;
-    private const TRANSLATED_MESSAGE = 'This value is too long. It should have '.self::LIMIT.' characters or less.';
+    private const TRANSLATED_MESSAGE = 'This value is too long. It should have ' . self::LIMIT . ' characters or less.';
 
-    /**
-     * @inheritdoc
-     */
     protected function setUpCreate(): void
     {
         $this->translator
             ->expects($this->once())
             ->method('trans')
             ->with(
-                static::ORIGINAL_MESSAGE,
-                ['{{ limit }}' => static::LIMIT, '%count%' => static::LIMIT]
+                self::ORIGINAL_MESSAGE,
+                ['{{ limit }}' => self::LIMIT, '%count%' => self::LIMIT]
             )
-            ->willReturn(static::TRANSLATED_MESSAGE)
+            ->willReturn(self::TRANSLATED_MESSAGE)
         ;
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getExpectedConstraint(): Constraint
     {
-        return new ParsleyAssert\MaxLength(['max' => static::LIMIT, 'message' => static::TRANSLATED_MESSAGE]);
+        return new ParsleyAssert\MaxLength(['max' => self::LIMIT, 'message' => self::TRANSLATED_MESSAGE]);
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getOriginalConstraint(): SymfonyConstraint
     {
-        return new Assert\Length(['max' => static::LIMIT]);
+        return new Assert\Length(['max' => self::LIMIT]);
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getUnsupportedConstraint(): SymfonyConstraint
     {
         return new Assert\Valid();
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function createFactory(): FactoryInterface
     {
         return new MaxLengthFactory();

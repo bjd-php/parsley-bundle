@@ -6,14 +6,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait FactoryTrait
 {
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
-     * @param TranslatorInterface $translator
-     *
      * @required
      */
     public function setTranslator(TranslatorInterface $translator): void
@@ -21,14 +16,6 @@ trait FactoryTrait
         $this->translator = $translator;
     }
 
-    /**
-     * @param string $id
-     * @param array $parameters
-     * @param string $domain
-     * @param string|null $locale
-     *
-     * @return string
-     */
     private function trans(
         string $id,
         array $parameters = [],
@@ -38,15 +25,6 @@ trait FactoryTrait
         return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 
-    /**
-     * @param string $id
-     * @param int $number
-     * @param array $parameters
-     * @param string $domain
-     * @param string|null $locale
-     *
-     * @return string
-     */
     private function transChoice(
         string $id,
         int $number,

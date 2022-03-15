@@ -6,13 +6,10 @@ use Symfony\Component\Form\FormInterface;
 
 final class FormTypeReader implements ReaderInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function read(FormInterface $form): array
     {
         $config = $form->getConfig();
-        if (false === $config->hasOption('constraints')) {
+        if (!$config->hasOption('constraints')) {
             return [];
         }
 
@@ -20,8 +17,6 @@ final class FormTypeReader implements ReaderInterface
     }
 
     /**
-     * @inheritdoc
-     *
      * @codeCoverageIgnore
      */
     public function getPriority(): int

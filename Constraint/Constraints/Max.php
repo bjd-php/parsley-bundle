@@ -7,14 +7,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class Max extends Constraint
 {
-    /**
-     * @var int
-     */
-    private $max;
+    private int $max;
 
-    /**
-     * @param array $options
-     */
     public function __construct(array $options = [])
     {
         parent::__construct($options);
@@ -22,25 +16,16 @@ final class Max extends Constraint
         $this->max = $options['max'];
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getAttribute(): string
     {
         return 'data-parsley-max';
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getValue(): string
     {
         return (string) $this->max;
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver

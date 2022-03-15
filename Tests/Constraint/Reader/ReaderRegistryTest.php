@@ -13,17 +13,11 @@ final class ReaderRegistryTest extends TestCase
     {
         $reader1 = new class implements ReaderInterface
         {
-            /**
-             * @inheritdoc
-             */
             public function read(FormInterface $form): array
             {
                 return [];
             }
 
-            /**
-             * @inheritdoc
-             */
             public function getPriority(): int
             {
                 return 10;
@@ -32,17 +26,11 @@ final class ReaderRegistryTest extends TestCase
 
         $reader2 = new class implements ReaderInterface
         {
-            /**
-             * @inheritdoc
-             */
             public function read(FormInterface $form): array
             {
                 return [];
             }
 
-            /**
-             * @inheritdoc
-             */
             public function getPriority(): int
             {
                 return 0;

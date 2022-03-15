@@ -16,44 +16,13 @@ use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
 final class ParsleyTypeExtension extends AbstractTypeExtension
 {
-    /**
-     * @var FactoryRegistry
-     */
-    private $factoryRegistry;
+    private FactoryRegistry $factoryRegistry;
+    private LoggerInterface $logger;
+    private NormalizerInterface $normalizer;
+    private ReaderRegistry $readerRegistry;
+    private bool $enabled;
+    private string $triggerEvent;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var NormalizerInterface
-     */
-    private $normalizer;
-
-    /**
-     * @var ReaderRegistry
-     */
-    private $readerRegistry;
-
-    /**
-     * @var bool
-     */
-    private $enabled;
-
-    /**
-     * @var string
-     */
-    private $triggerEvent;
-
-    /**
-     * @param FactoryRegistry $factoryRegistry
-     * @param LoggerInterface $logger
-     * @param NormalizerInterface $normalizer
-     * @param ReaderRegistry $readerRegistry
-     * @param bool $enabled
-     * @param string $triggerEvent
-     */
     public function __construct(
         FactoryRegistry $factoryRegistry,
         LoggerInterface $logger,
@@ -70,9 +39,6 @@ final class ParsleyTypeExtension extends AbstractTypeExtension
         $this->triggerEvent = $triggerEvent;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         if (false === $options['parsley_enabled']) {
@@ -105,9 +71,6 @@ final class ParsleyTypeExtension extends AbstractTypeExtension
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -116,17 +79,12 @@ final class ParsleyTypeExtension extends AbstractTypeExtension
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public static function getExtendedTypes(): iterable
     {
         yield FormType::class;
     }
 
     /**
-     * @param FormInterface $form
-     *
      * @return SymfonyConstraint[]
      */
     private function getConstraints(FormInterface $form): array

@@ -8,12 +8,12 @@ use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 final class FactoryRegistry
 {
     /**
-     * @var FactoryInterface[]|iterable
+     * @var FactoryInterface[]
      */
-    private $factories;
+    private iterable $factories;
 
     /**
-     * @param FactoryInterface[]|iterable $factories
+     * @param FactoryInterface[] $factories
      */
     public function __construct(iterable $factories)
     {
@@ -21,9 +21,6 @@ final class FactoryRegistry
     }
 
     /**
-     * @param SymfonyConstraint $constraint
-     *
-     * @return FactoryInterface
      * @throws ConstraintException
      */
     public function findForConstraint(SymfonyConstraint $constraint): FactoryInterface

@@ -11,9 +11,6 @@ final class LessThanFactory implements TranslatableFactoryInterface
 {
     use FactoryTrait;
 
-    /**
-     * @inheritdoc
-     */
     public function create(SymfonyConstraint $constraint): Constraint
     {
         /** @var Assert\LessThan $constraint */
@@ -24,9 +21,6 @@ final class LessThanFactory implements TranslatableFactoryInterface
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function supports(SymfonyConstraint $constraint): bool
     {
         return $constraint instanceof Assert\LessThan;

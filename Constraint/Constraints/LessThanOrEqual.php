@@ -8,13 +8,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 final class LessThanOrEqual extends Constraint
 {
     /**
-     * @var int
+     * @var int|float|string
      */
     private $value;
 
-    /**
-     * @param array $options
-     */
     public function __construct(array $options = [])
     {
         parent::__construct($options);
@@ -22,30 +19,21 @@ final class LessThanOrEqual extends Constraint
         $this->value = $options['value'];
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getAttribute(): string
     {
         return 'data-parsley-lte';
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getValue(): string
     {
         return (string) $this->value;
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
             ->setRequired(['value'])
-            ->setAllowedTypes('value', ['int'])
+            ->setAllowedTypes('value', ['numeric'])
         ;
     }
 }

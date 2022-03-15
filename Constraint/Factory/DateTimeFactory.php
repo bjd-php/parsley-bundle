@@ -11,22 +11,13 @@ final class DateTimeFactory implements TranslatableFactoryInterface
 {
     use FactoryTrait;
 
-    /**
-     * @var string
-     */
-    private $pattern;
+    private string $pattern;
 
-    /**
-     * @param string $dateTimePattern
-     */
     public function __construct(string $dateTimePattern)
     {
         $this->pattern = $dateTimePattern;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function create(SymfonyConstraint $constraint): Constraint
     {
         /** @var Assert\DateTime $constraint */
@@ -37,9 +28,6 @@ final class DateTimeFactory implements TranslatableFactoryInterface
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function supports(SymfonyConstraint $constraint): bool
     {
         return $constraint instanceof Assert\DateTime;

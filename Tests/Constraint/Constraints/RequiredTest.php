@@ -6,9 +6,6 @@ use JBen87\ParsleyBundle\Constraint\Constraints as ParsleyAssert;
 
 final class RequiredTest extends ConstraintTestCase
 {
-    /**
-     * @inheritdoc
-     */
     public function testNormalization(): void
     {
         $constraint = new ParsleyAssert\Required();

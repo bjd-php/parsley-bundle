@@ -11,9 +11,6 @@ final class EmailFactory implements TranslatableFactoryInterface
 {
     use FactoryTrait;
 
-    /**
-     * @inheritdoc
-     */
     public function create(SymfonyConstraint $constraint): Constraint
     {
         /** @var Assert\Email $constraint */
@@ -23,9 +20,6 @@ final class EmailFactory implements TranslatableFactoryInterface
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function supports(SymfonyConstraint $constraint): bool
     {
         return $constraint instanceof Assert\Email;

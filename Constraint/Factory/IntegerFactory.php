@@ -11,28 +11,22 @@ final class IntegerFactory implements TranslatableFactoryInterface
 {
     use FactoryTrait;
 
-    const TYPE = 'integer';
-    const TYPE_ALT = 'int';
+    private const TYPE = 'integer';
+    private const TYPE_ALT = 'int';
 
-    /**
-     * @inheritdoc
-     */
     public function create(SymfonyConstraint $constraint): Constraint
     {
         /** @var Assert\Type $constraint */
 
         return new ParsleyAssert\Integer([
-            'message' => $this->trans($constraint->message, ['{{ type }}' => static::TYPE]),
+            'message' => $this->trans($constraint->message, ['{{ type }}' => self::TYPE]),
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function supports(SymfonyConstraint $constraint): bool
     {
         return $constraint instanceof Assert\Type
-            && (static::TYPE === $constraint->type || static::TYPE_ALT === $constraint->type)
+            && (self::TYPE === $constraint->type || self::TYPE_ALT === $constraint->type)
         ;
     }
 }

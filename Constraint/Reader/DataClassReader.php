@@ -9,22 +9,13 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class DataClassReader implements ReaderInterface
 {
-    /**
-     * @var ValidatorInterface
-     */
-    private $validator;
+    private ValidatorInterface $validator;
 
-    /**
-     * @param ValidatorInterface $validator
-     */
     public function __construct(ValidatorInterface $validator)
     {
         $this->validator = $validator;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function read(FormInterface $form): array
     {
         $config = $form->getRoot()->getConfig();
@@ -53,8 +44,6 @@ final class DataClassReader implements ReaderInterface
     /**
      * DataClassReader priority should be greater than FormTypeReader priority
      * so that FormType constraints override entity constraints.
-     *
-     * @inheritdoc
      *
      * @codeCoverageIgnore
      */

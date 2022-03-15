@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.4",
         "monolog/monolog": "^1.23",
         "symfony/form": "^4.2",
         "symfony/framework-bundle": "^4.2",

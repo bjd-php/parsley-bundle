@@ -7,35 +7,26 @@ use JBen87\ParsleyBundle\Exception\ConstraintException;
 
 abstract class Type extends Constraint
 {
-    const TYPES = [
-        'email' => 'email',
-        'integer' => 'integer',
-        'number' => 'number',
-        'url' => 'url',
-    ];
+    protected const TYPE_EMAIL = 'email';
+    protected const TYPE_INTEGER = 'integer';
+    protected const TYPE_NUMBER = 'number';
+    protected const TYPE_URL = 'url';
 
-    /**
-     * @inheritdoc
-     */
+    private const TYPES = [self::TYPE_EMAIL, self::TYPE_INTEGER, self::TYPE_NUMBER, self::TYPE_URL];
+
     protected function getAttribute(): string
     {
         return 'data-parsley-type';
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getValue(): string
     {
-        if (false === in_array($this->getType(), static::TYPES)) {
+        if (!in_array($this->getType(), self::TYPES, true)) {
             throw ConstraintException::createInvalidValueException();
         }
 
         return $this->getType();
     }
 
-    /**
-     * @return string
-     */
     abstract protected function getType(): string;
 }

@@ -14,46 +14,31 @@ final class UrlFactoryTest extends FactoryTestCase
     private const ORIGINAL_MESSAGE = 'This value is not a valid URL.';
     private const TRANSLATED_MESSAGE = 'This value is not a valid URL.';
 
-    /**
-     * @inheritdoc
-     */
     protected function setUpCreate(): void
     {
         $this->translator
             ->expects($this->once())
             ->method('trans')
-            ->with(static::ORIGINAL_MESSAGE)
-            ->willReturn(static::TRANSLATED_MESSAGE)
+            ->with(self::ORIGINAL_MESSAGE)
+            ->willReturn(self::TRANSLATED_MESSAGE)
         ;
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getExpectedConstraint(): Constraint
     {
-        return new ParsleyAssert\Url(['message' => static::TRANSLATED_MESSAGE]);
+        return new ParsleyAssert\Url(['message' => self::TRANSLATED_MESSAGE]);
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getOriginalConstraint(): SymfonyConstraint
     {
         return new Assert\Url();
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getUnsupportedConstraint(): SymfonyConstraint
     {
         return new Assert\Valid();
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function createFactory(): FactoryInterface
     {
         return new UrlFactory();

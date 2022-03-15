@@ -9,22 +9,13 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 final class JBen87ParsleyExtension extends Extension
 {
-    /**
-     * @var string
-     */
-    private $alias;
+    private string $alias;
 
-    /**
-     * @param string $alias
-     */
     public function __construct(string $alias)
     {
         $this->alias = $alias;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration(new Configuration($this->alias), $configs);
@@ -38,18 +29,11 @@ final class JBen87ParsleyExtension extends Extension
         $loader->load('services.xml');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getAlias(): string
     {
         return $this->alias;
     }
 
-    /**
-     * @param array $config
-     * @param ContainerBuilder $container
-     */
     private function setDateTimePatternParameters(array $config, ContainerBuilder $container): void
     {
         $locale = $container->getParameter('locale');

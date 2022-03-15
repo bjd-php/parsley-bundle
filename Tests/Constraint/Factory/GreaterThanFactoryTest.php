@@ -13,48 +13,33 @@ final class GreaterThanFactoryTest extends FactoryTestCase
 {
     private const VALUE = 10;
     private const ORIGINAL_MESSAGE = 'This value should be greater than {{ compared_value }}.';
-    private const TRANSLATED_MESSAGE = 'This value should be greater than '.self::VALUE.'.';
+    private const TRANSLATED_MESSAGE = 'This value should be greater than ' . self::VALUE . '.';
 
-    /**
-     * @inheritdoc
-     */
     protected function setUpCreate(): void
     {
         $this->translator
             ->expects($this->once())
             ->method('trans')
-            ->with(static::ORIGINAL_MESSAGE, ['{{ compared_value }}' => static::VALUE])
-            ->willReturn(static::TRANSLATED_MESSAGE)
+            ->with(self::ORIGINAL_MESSAGE, ['{{ compared_value }}' => self::VALUE])
+            ->willReturn(self::TRANSLATED_MESSAGE)
         ;
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getExpectedConstraint(): Constraint
     {
-        return new ParsleyAssert\GreaterThan(['value' => static::VALUE, 'message' => static::TRANSLATED_MESSAGE]);
+        return new ParsleyAssert\GreaterThan(['value' => self::VALUE, 'message' => self::TRANSLATED_MESSAGE]);
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getOriginalConstraint(): SymfonyConstraint
     {
-        return new Assert\GreaterThan(static::VALUE);
+        return new Assert\GreaterThan(self::VALUE);
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getUnsupportedConstraint(): SymfonyConstraint
     {
         return new Assert\Valid();
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function createFactory(): FactoryInterface
     {
         return new GreaterThanFactory();

@@ -14,55 +14,40 @@ final class RangeFactoryTest extends FactoryTestCase
     private const MIN = 5;
     private const MAX = 10;
     private const ORGIGINAL_MIN_MESSAGE = 'This value should be {{ limit }} or more.';
-    private const TRANSLATED_MIN_MESSAGE = 'This value should be '.self::MIN.' or more.';
+    private const TRANSLATED_MIN_MESSAGE = 'This value should be ' . self::MIN . ' or more.';
     private const ORGIGINAL_MAX_MESSAGE = 'This value should be {{ limit }} or less.';
-    private const TRANSLATED_MAX_MESSAGE = 'This value should be '.self::MAX.' or less.';
+    private const TRANSLATED_MAX_MESSAGE = 'This value should be ' . self::MAX . ' or less.';
 
-    /**
-     * @inheritdoc
-     */
     protected function setUpCreate(): void
     {
         $this->translator
             ->expects($this->exactly(2))
             ->method('trans')
-            ->withConsecutive([static::ORGIGINAL_MIN_MESSAGE], [static::ORGIGINAL_MAX_MESSAGE])
-            ->willReturnOnConsecutiveCalls(static::TRANSLATED_MIN_MESSAGE, static::TRANSLATED_MAX_MESSAGE)
+            ->withConsecutive([self::ORGIGINAL_MIN_MESSAGE], [self::ORGIGINAL_MAX_MESSAGE])
+            ->willReturnOnConsecutiveCalls(self::TRANSLATED_MIN_MESSAGE, self::TRANSLATED_MAX_MESSAGE)
         ;
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getExpectedConstraint(): Constraint
     {
         return new ParsleyAssert\Range([
-            'min' => static::MIN,
-            'max' => static::MAX,
-            'minMessage' => static::TRANSLATED_MIN_MESSAGE,
-            'maxMessage' => static::TRANSLATED_MAX_MESSAGE,
+            'min' => self::MIN,
+            'max' => self::MAX,
+            'minMessage' => self::TRANSLATED_MIN_MESSAGE,
+            'maxMessage' => self::TRANSLATED_MAX_MESSAGE,
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getOriginalConstraint(): SymfonyConstraint
     {
-        return new Assert\Range(['min' => static::MIN, 'max' => static::MAX]);
+        return new Assert\Range(['min' => self::MIN, 'max' => self::MAX]);
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getUnsupportedConstraint(): SymfonyConstraint
     {
         return new Assert\Valid();
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function createFactory(): FactoryInterface
     {
         return new RangeFactory();

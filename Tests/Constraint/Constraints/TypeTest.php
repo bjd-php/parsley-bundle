@@ -11,9 +11,6 @@ final class TypeTest extends ConstraintTestCase
     {
         $constraint = new class extends ParsleyAssert\Type
         {
-            /**
-             * @inheritdoc
-             */
             protected function getType(): string
             {
                 return 'foo';

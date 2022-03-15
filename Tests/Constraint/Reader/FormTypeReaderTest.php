@@ -50,8 +50,8 @@ final class FormTypeReaderTest extends TestCase
     }
 
     /**
-     * @param MockObject $form
-     * @param MockObject $config
+     * @param MockObject|FormInterface $form
+     * @param MockObject|FormConfigInterface $config
      */
     private function setUpForm(MockObject $form, MockObject $config): void
     {
@@ -62,9 +62,6 @@ final class FormTypeReaderTest extends TestCase
         ;
     }
 
-    /**
-     * @return FormTypeReader
-     */
     private function createReader(): FormTypeReader
     {
         return new FormTypeReader();

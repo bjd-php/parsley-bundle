@@ -14,46 +14,31 @@ final class RequiredFactoryTest extends FactoryTestCase
     private const ORIGINAL_MESSAGE = 'This value should not be blank.';
     private const TRANSLATED_MESSAGE = 'This value should not be blank.';
 
-    /**
-     * @inheritdoc
-     */
     protected function setUpCreate(): void
     {
         $this->translator
             ->expects($this->once())
             ->method('trans')
-            ->with(static::ORIGINAL_MESSAGE)
-            ->willReturn(static::TRANSLATED_MESSAGE)
+            ->with(self::ORIGINAL_MESSAGE)
+            ->willReturn(self::TRANSLATED_MESSAGE)
         ;
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getExpectedConstraint(): Constraint
     {
-        return new ParsleyAssert\Required(['message' => static::TRANSLATED_MESSAGE]);
+        return new ParsleyAssert\Required(['message' => self::TRANSLATED_MESSAGE]);
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getOriginalConstraint(): SymfonyConstraint
     {
         return new Assert\NotBlank();
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getUnsupportedConstraint(): SymfonyConstraint
     {
         return new Assert\Valid();
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function createFactory(): FactoryInterface
     {
         return new RequiredFactory();

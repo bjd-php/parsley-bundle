@@ -8,9 +8,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 final class JBen87ParsleyBundle extends Bundle
 {
-    /**
-     * @inheritdoc
-     */
     public function getContainerExtension(): ?ExtensionInterface
     {
         return new JBen87ParsleyExtension('jben87_parsley');

@@ -8,14 +8,8 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final class MaxLength extends Constraint
 {
-    /**
-     * @var int
-     */
-    private $max;
+    private int $max;
 
-    /**
-     * @param array $options
-     */
     public function __construct(array $options = [])
     {
         parent::__construct($options);
@@ -23,33 +17,21 @@ final class MaxLength extends Constraint
         $this->max = $options['max'];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function normalize(NormalizerInterface $normalizer, $format = null, array $context = []): array
     {
         return parent::normalize($normalizer, $format, $context) + ['maxlength' => $this->getValue()];
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getAttribute(): string
     {
         return 'data-parsley-maxlength';
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getValue(): string
     {
         return (string) $this->max;
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver

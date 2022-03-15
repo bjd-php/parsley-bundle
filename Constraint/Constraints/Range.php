@@ -11,11 +11,8 @@ final class Range extends Constraint
     /**
      * @var Constraint[]
      */
-    private $constraints;
+    private array $constraints;
 
-    /**
-     * @param array $options
-     */
     public function __construct(array $options = [])
     {
         parent::__construct($options);
@@ -26,9 +23,6 @@ final class Range extends Constraint
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function normalize(NormalizerInterface $normalizer, $format = null, array $context = []): array
     {
         return array_merge(
@@ -38,8 +32,6 @@ final class Range extends Constraint
     }
 
     /**
-     * @inheritdoc
-     *
      * @codeCoverageIgnore
      */
     protected function getAttribute(): string
@@ -48,8 +40,6 @@ final class Range extends Constraint
     }
 
     /**
-     * @inheritdoc
-     *
      * @codeCoverageIgnore
      */
     protected function getValue(): string
@@ -57,9 +47,6 @@ final class Range extends Constraint
         throw new \RuntimeException('Should not be called.');
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
@@ -70,11 +57,6 @@ final class Range extends Constraint
         ;
     }
 
-    /**
-     * @param array $defaults
-     *
-     * @return Min
-     */
     private function createMin(array $defaults): Min
     {
         $options = ['min' => $defaults['min']];
@@ -86,11 +68,6 @@ final class Range extends Constraint
         return new Min($options);
     }
 
-    /**
-     * @param array $defaults
-     *
-     * @return Max
-     */
     private function createMax(array $defaults): Max
     {
         $options = ['max' => $defaults['max']];

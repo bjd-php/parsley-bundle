@@ -19,9 +19,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 final class DataClassReaderTest extends TestCase
 {
     /**
-     * @var MockObject|ValidatorInterface
+     * @var MockObject|ValidatorInterface|null
      */
-    private $validator;
+    private ?MockObject $validator = null;
 
     public function testReadNoDataClass(): void
     {
@@ -32,8 +32,6 @@ final class DataClassReaderTest extends TestCase
     }
 
     /**
-     * @param callable $setUpValidator
-     *
      * @dataProvider provideReadNoMetadata
      */
     public function testReadNoMetadata(callable $setUpValidator): void
@@ -46,9 +44,6 @@ final class DataClassReaderTest extends TestCase
         $this->assertEmpty($this->createReader()->read($form));
     }
 
-    /**
-     * @return array
-     */
     public function provideReadNoMetadata(): array
     {
         return [
@@ -129,18 +124,13 @@ final class DataClassReaderTest extends TestCase
         $this->assertEquals([new NotBlank(), new NotNull()], $this->createReader()->read($form));
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $this->validator = $this->createMock(ValidatorInterface::class);
     }
 
     /**
-     * @param MockObject $form
-     * @param Matcher\InvokedCount|null $configMatcher
-     * @param null|string $dataClass
+     * @param MockObject|FormInterface $form
      */
     private function setUpForm(
         MockObject $form,
@@ -170,11 +160,15 @@ final class DataClassReaderTest extends TestCase
             ->method('getRoot')
             ->willReturn($rootForm)
         ;
+
+        $form
+            ->method('getName')
+            ->willReturn('Foo')
+        ;
     }
 
     /**
-     * @param MockObject $validator
-     * @param Matcher\InvokedCount $groupMatcher
+     * @param MockObject|ValidatorInterface $validator
      * @param PropertyMetadataInterface[] $propertyMetadata
      */
     private function setUpValidator(
@@ -182,15 +176,11 @@ final class DataClassReaderTest extends TestCase
         Matcher\InvokedCount $groupMatcher,
         array $propertyMetadata
     ): void {
-        if (null === $groupMatcher) {
-            $groupMatcher = $this->never();
-        }
-
         $metadata = $this->createMock(ClassMetadata::class);
         $metadata
             ->expects($this->once())
             ->method('getPropertyMetadata')
-            ->with(null)
+            ->with($this->isType('string'))
             ->willReturn($propertyMetadata)
         ;
         $metadata
@@ -207,9 +197,6 @@ final class DataClassReaderTest extends TestCase
         ;
     }
 
-    /**
-     * @return DataClassReader
-     */
     private function createReader(): DataClassReader
     {
         return new DataClassReader($this->validator);

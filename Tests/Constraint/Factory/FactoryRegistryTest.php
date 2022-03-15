@@ -29,8 +29,6 @@ final class FactoryRegistryTest extends TestCase
 
     /**
      * @param FactoryInterface[] $factories
-     *
-     * @return FactoryRegistry
      */
     private function createRegistry(array $factories): FactoryRegistry
     {

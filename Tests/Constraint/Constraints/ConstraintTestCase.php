@@ -9,15 +9,12 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 abstract class ConstraintTestCase extends TestCase
 {
     /**
-     * @var MockObject|NormalizerInterface
+     * @var MockObject|NormalizerInterface|null
      */
-    protected $normalizer;
+    protected ?MockObject $normalizer = null;
 
     abstract public function testNormalization(): void;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $this->normalizer = $this->createMock(NormalizerInterface::class);

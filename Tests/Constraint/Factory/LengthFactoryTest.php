@@ -14,49 +14,46 @@ final class LengthFactoryTest extends FactoryTestCase
     private const MAX = 10;
     private const LIMIT = 10;
     private const ORIGINAL_MESSAGE = 'This value should have {{ min }} to {{ max }} characters.';
-    private const TRANSLATED_MESSAGE = 'This value should have '.self::MIN.' to '.self::MIN.' characters.';
+    private const TRANSLATED_MESSAGE = 'This value should have ' . self::MIN . ' to ' . self::MIN . ' characters.';
     private const ORIGINAL_EXACT_MESSAGE = 'This value should have exactly {{ limit }} character.'
         .'|This value should have exactly {{ limit }} characters.'
     ;
-    private const TRANSLATED_EXACT_MESSAGE = 'This value should have exactly '.self::LIMIT.' characters.';
+    private const TRANSLATED_EXACT_MESSAGE = 'This value should have exactly ' . self::LIMIT . ' characters.';
 
-    /**
-     * @inheritdoc
-     */
     public function provideCreate(): array
     {
         return [
             [
                 new ParsleyAssert\Length([
-                    'min' => static::MIN,
-                    'max' => static::MAX,
-                    'message' => static::TRANSLATED_MESSAGE,
+                    'min' => self::MIN,
+                    'max' => self::MAX,
+                    'message' => self::TRANSLATED_MESSAGE,
                 ]),
                 new Assert\Length([
-                    'min' => static::MIN,
-                    'max' => static::MAX,
+                    'min' => self::MIN,
+                    'max' => self::MAX,
                 ]),
                 function (LengthFactoryTest $self): void {
                     $self->translator
                         ->expects($this->once())
                         ->method('trans')
                         ->with(
-                            static::ORIGINAL_MESSAGE,
-                            ['{{ min }}' => static::MIN, '{{ max }}' => static::MAX]
+                            self::ORIGINAL_MESSAGE,
+                            ['{{ min }}' => self::MIN, '{{ max }}' => self::MAX]
                         )
-                        ->willReturn(static::TRANSLATED_MESSAGE)
+                        ->willReturn(self::TRANSLATED_MESSAGE)
                     ;
                 },
             ],
             [
                 new ParsleyAssert\Length([
-                    'min' => static::LIMIT,
-                    'max' => static::LIMIT,
-                    'message' => static::TRANSLATED_EXACT_MESSAGE,
+                    'min' => self::LIMIT,
+                    'max' => self::LIMIT,
+                    'message' => self::TRANSLATED_EXACT_MESSAGE,
                 ]),
                 new Assert\Length([
-                    'min' => static::LIMIT,
-                    'max' => static::LIMIT,
+                    'min' => self::LIMIT,
+                    'max' => self::LIMIT,
                 ]),
                 function (LengthFactoryTest $self): void {
                     $self->translator
@@ -64,17 +61,17 @@ final class LengthFactoryTest extends FactoryTestCase
                         ->method('trans')
                         ->withConsecutive(
                             [
-                                static::ORIGINAL_MESSAGE,
-                                ['{{ min }}' => static::LIMIT, '{{ max }}' => static::LIMIT],
+                                self::ORIGINAL_MESSAGE,
+                                ['{{ min }}' => self::LIMIT, '{{ max }}' => self::LIMIT],
                             ],
                             [
-                                static::ORIGINAL_EXACT_MESSAGE,
-                                ['{{ limit }}' => static::LIMIT, '%count%' => static::LIMIT],
+                                self::ORIGINAL_EXACT_MESSAGE,
+                                ['{{ limit }}' => self::LIMIT, '%count%' => self::LIMIT],
                             ]
                         )
                         ->willReturnOnConsecutiveCalls(
-                            sprintf('This value should have %d to %d characters.', static::MAX, static::MIN),
-                            static::TRANSLATED_EXACT_MESSAGE
+                            sprintf('This value should have %d to %d characters.', self::MAX, self::MIN),
+                            self::TRANSLATED_EXACT_MESSAGE
                         )
                     ;
                 },
@@ -82,41 +79,29 @@ final class LengthFactoryTest extends FactoryTestCase
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function setUpCreate(): void
     {
         $this->translator
             ->expects($this->once())
             ->method('trans')
-            ->with(static::ORIGINAL_MESSAGE, ['{{ min }}' => static::MIN, '{{ max }}' => static::MAX])
-            ->willReturn(static::TRANSLATED_MESSAGE)
+            ->with(self::ORIGINAL_MESSAGE, ['{{ min }}' => self::MIN, '{{ max }}' => self::MAX])
+            ->willReturn(self::TRANSLATED_MESSAGE)
         ;
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getOriginalConstraint(): SymfonyConstraint
     {
         return new Assert\Length([
-            'min' => static::MIN,
-            'max' => static::MAX,
+            'min' => self::MIN,
+            'max' => self::MAX,
         ]);
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function getUnsupportedConstraint(): SymfonyConstraint
     {
         return new Assert\Valid();
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function createFactory(): FactoryInterface
     {
         return new LengthFactory();

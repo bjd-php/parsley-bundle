@@ -7,10 +7,10 @@ final class ReaderRegistry
     /**
      * @var ReaderInterface[]
      */
-    private $readers = [];
+    private array $readers = [];
 
     /**
-     * @param ReaderInterface[]|iterable $readers
+     * @param ReaderInterface[] $readers
      */
     public function __construct(iterable $readers)
     {
@@ -23,9 +23,6 @@ final class ReaderRegistry
         });
     }
 
-    /**
-     * @return ReaderInterface[]
-     */
     public function all(): array
     {
         return $this->readers;

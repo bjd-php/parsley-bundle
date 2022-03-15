@@ -9,7 +9,7 @@ use JBen87\ParsleyBundle\Constraint\Factory\IntegerFactory;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class IntegerFactoryTest extends FactoryTestCase
+final class IntegerFactoryTest extends FactoryTestCase
 {
     private const ORIGINAL_MESSAGE = 'This value should be of type {{ type }}.';
     private const TRANSLATED_MESSAGE = 'This value should be of type '.IntegerFactory::TYPE.'.';

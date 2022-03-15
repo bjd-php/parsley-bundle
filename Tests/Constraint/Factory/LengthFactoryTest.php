@@ -8,7 +8,7 @@ use JBen87\ParsleyBundle\Constraint\Factory\LengthFactory;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class LengthFactoryTest extends FactoryTestCase
+final class LengthFactoryTest extends FactoryTestCase
 {
     private const MIN = 5;
     private const MAX = 10;

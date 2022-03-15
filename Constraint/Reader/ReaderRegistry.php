@@ -2,12 +2,12 @@
 
 namespace JBen87\ParsleyBundle\Constraint\Reader;
 
-class ReaderRegistry
+final class ReaderRegistry
 {
     /**
      * @var ReaderInterface[]
      */
-    private $readers;
+    private $readers = [];
 
     /**
      * @param ReaderInterface[]|iterable $readers

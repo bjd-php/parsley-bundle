@@ -9,7 +9,7 @@ use JBen87\ParsleyBundle\Constraint\Factory\RangeFactory;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class RangeFactoryTest extends FactoryTestCase
+final class RangeFactoryTest extends FactoryTestCase
 {
     private const MIN = 5;
     private const MAX = 10;

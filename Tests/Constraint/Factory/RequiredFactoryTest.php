@@ -9,7 +9,7 @@ use JBen87\ParsleyBundle\Constraint\Factory\RequiredFactory;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class RequiredFactoryTest extends FactoryTestCase
+final class RequiredFactoryTest extends FactoryTestCase
 {
     private const ORIGINAL_MESSAGE = 'This value should not be blank.';
     private const TRANSLATED_MESSAGE = 'This value should not be blank.';

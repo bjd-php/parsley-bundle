@@ -5,7 +5,7 @@ namespace JBen87\ParsleyBundle\Constraint\Factory;
 use JBen87\ParsleyBundle\Exception\ConstraintException;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
-class FactoryRegistry
+final class FactoryRegistry
 {
     /**
      * @var FactoryInterface[]|iterable

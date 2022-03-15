@@ -9,7 +9,7 @@ use JBen87\ParsleyBundle\Constraint\Factory\MaxLengthFactory;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class MaxLengthFactoryTest extends FactoryTestCase
+final class MaxLengthFactoryTest extends FactoryTestCase
 {
     private const LIMIT = 10;
     private const ORIGINAL_MESSAGE = 'This value is too long. It should have {{ limit }} character or less.'

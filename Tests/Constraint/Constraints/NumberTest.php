@@ -4,7 +4,7 @@ namespace JBen87\ParsleyBundle\Tests\Constraint\Constraints;
 
 use JBen87\ParsleyBundle\Constraint\Constraints as ParsleyAssert;
 
-class NumberTest extends ConstraintTestCase
+final class NumberTest extends ConstraintTestCase
 {
     public function testNormalization(): void
     {

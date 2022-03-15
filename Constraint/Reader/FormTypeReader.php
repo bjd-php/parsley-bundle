@@ -4,7 +4,7 @@ namespace JBen87\ParsleyBundle\Constraint\Reader;
 
 use Symfony\Component\Form\FormInterface;
 
-class FormTypeReader implements ReaderInterface
+final class FormTypeReader implements ReaderInterface
 {
     /**
      * @inheritdoc

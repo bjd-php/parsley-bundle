@@ -2,7 +2,7 @@
 
 namespace JBen87\ParsleyBundle\Constraint\Constraints;
 
-class Email extends Type
+final class Email extends Type
 {
     /**
      * @inheritdoc

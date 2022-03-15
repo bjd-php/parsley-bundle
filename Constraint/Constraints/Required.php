@@ -4,7 +4,7 @@ namespace JBen87\ParsleyBundle\Constraint\Constraints;
 
 use JBen87\ParsleyBundle\Constraint\Constraint;
 
-class Required extends Constraint
+final class Required extends Constraint
 {
     /**
      * @inheritdoc

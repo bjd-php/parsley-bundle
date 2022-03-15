@@ -2,13 +2,50 @@
 
 namespace JBen87\ParsleyBundle\Constraint\Constraints;
 
-class GreaterThanOrEqual extends GreaterThan
+use JBen87\ParsleyBundle\Constraint\Constraint;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+final class GreaterThanOrEqual extends Constraint
 {
+    /**
+     * @var int
+     */
+    private $value;
+
+    /**
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+
+        $this->value = $options['value'];
+    }
+
     /**
      * @inheritdoc
      */
     protected function getAttribute(): string
     {
         return 'data-parsley-gte';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getValue(): string
+    {
+        return (string) $this->value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver
+            ->setRequired(['value'])
+            ->setAllowedTypes('value', ['int'])
+        ;
     }
 }

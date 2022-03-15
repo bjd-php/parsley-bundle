@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class FormTypeReaderTest extends TestCase
+final class FormTypeReaderTest extends TestCase
 {
     public function testReadNoConstraints(): void
     {

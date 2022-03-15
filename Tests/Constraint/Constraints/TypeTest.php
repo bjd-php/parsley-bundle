@@ -5,7 +5,7 @@ namespace JBen87\ParsleyBundle\Tests\Constraint\Constraints;
 use JBen87\ParsleyBundle\Constraint\Constraints as ParsleyAssert;
 use JBen87\ParsleyBundle\Exception\ConstraintException;
 
-class TypeTest extends ConstraintTestCase
+final class TypeTest extends ConstraintTestCase
 {
     public function testNormalization(): void
     {

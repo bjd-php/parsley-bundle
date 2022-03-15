@@ -9,7 +9,7 @@ use JBen87\ParsleyBundle\Exception\ConstraintException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class FactoryRegistryTest extends TestCase
+final class FactoryRegistryTest extends TestCase
 {
     public function testFindForConstraint(): void
     {

@@ -7,7 +7,7 @@ use JBen87\ParsleyBundle\Constraint\Constraints as ParsleyAssert;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class TimeFactory implements TranslatableFactoryInterface
+final class TimeFactory implements TranslatableFactoryInterface
 {
     use FactoryTrait;
 

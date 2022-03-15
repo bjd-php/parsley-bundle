@@ -9,7 +9,7 @@ use JBen87\ParsleyBundle\Constraint\Factory\LessThanOrEqualFactory;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class LessThanOrEqualFactoryTest extends FactoryTestCase
+final class LessThanOrEqualFactoryTest extends FactoryTestCase
 {
     private const VALUE = 10;
     private const ORIGINAL_MESSAGE = 'This value should be less than or equal to {{ compared_value }}.';

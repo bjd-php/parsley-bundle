@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Mapping\GenericMetadata;
 use Symfony\Component\Validator\Mapping\PropertyMetadataInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class DataClassReaderTest extends TestCase
+final class DataClassReaderTest extends TestCase
 {
     /**
      * @var MockObject|ValidatorInterface

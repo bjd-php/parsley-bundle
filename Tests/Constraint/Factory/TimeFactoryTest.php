@@ -9,7 +9,7 @@ use JBen87\ParsleyBundle\Constraint\Factory\TimeFactory;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class TimeFactoryTest extends FactoryTestCase
+final class TimeFactoryTest extends FactoryTestCase
 {
     private const PATTERN = 'H:i:s';
     private const ORIGINAL_MESSAGE = 'This value is not a valid time.';

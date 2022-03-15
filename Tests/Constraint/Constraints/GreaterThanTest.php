@@ -6,7 +6,7 @@ use JBen87\ParsleyBundle\Constraint\Constraints as ParsleyAssert;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-class GreaterThanTest extends ConfiguredConstraintTestCase
+final class GreaterThanTest extends ConfiguredConstraintTestCase
 {
     public function testEmptyConfiguration(): void
     {

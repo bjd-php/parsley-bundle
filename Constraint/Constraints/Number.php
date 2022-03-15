@@ -2,7 +2,7 @@
 
 namespace JBen87\ParsleyBundle\Constraint\Constraints;
 
-class Number extends Type
+final class Number extends Type
 {
     /**
      * @inheritdoc

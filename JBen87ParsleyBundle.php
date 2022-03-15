@@ -6,7 +6,7 @@ use JBen87\ParsleyBundle\DependencyInjection\JBen87ParsleyExtension;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class JBen87ParsleyBundle extends Bundle
+final class JBen87ParsleyBundle extends Bundle
 {
     /**
      * @inheritdoc

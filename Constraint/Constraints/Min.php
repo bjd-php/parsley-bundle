@@ -5,7 +5,7 @@ namespace JBen87\ParsleyBundle\Constraint\Constraints;
 use JBen87\ParsleyBundle\Constraint\Constraint;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class Min extends Constraint
+final class Min extends Constraint
 {
     /**
      * @var int

@@ -4,7 +4,7 @@ namespace JBen87\ParsleyBundle\Tests\Constraint\Constraints;
 
 use JBen87\ParsleyBundle\Constraint\Constraints as ParsleyAssert;
 
-class RequiredTest extends ConstraintTestCase
+final class RequiredTest extends ConstraintTestCase
 {
     /**
      * @inheritdoc

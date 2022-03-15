@@ -9,7 +9,7 @@ use JBen87\ParsleyBundle\Constraint\Factory\FactoryInterface;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class DateTimeFactoryTest extends FactoryTestCase
+final class DateTimeFactoryTest extends FactoryTestCase
 {
     private const PATTERN = 'Y-m-d H:i:s';
     private const ORIGINAL_MESSAGE = 'This value is not a valid datetime.';

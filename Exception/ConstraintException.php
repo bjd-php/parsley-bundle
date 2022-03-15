@@ -2,7 +2,7 @@
 
 namespace JBen87\ParsleyBundle\Exception;
 
-class ConstraintException extends \Exception
+final class ConstraintException extends \Exception
 {
     /**
      * @return ConstraintException

@@ -14,7 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
-class ParsleyTypeExtension extends AbstractTypeExtension
+final class ParsleyTypeExtension extends AbstractTypeExtension
 {
     /**
      * @var FactoryRegistry

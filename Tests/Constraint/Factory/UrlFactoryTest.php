@@ -9,7 +9,7 @@ use JBen87\ParsleyBundle\Constraint\Factory\UrlFactory;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class UrlFactoryTest extends FactoryTestCase
+final class UrlFactoryTest extends FactoryTestCase
 {
     private const ORIGINAL_MESSAGE = 'This value is not a valid URL.';
     private const TRANSLATED_MESSAGE = 'This value is not a valid URL.';

@@ -7,7 +7,7 @@ use JBen87\ParsleyBundle\Constraint\Constraints as ParsleyAssert;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class GreaterThanFactory implements TranslatableFactoryInterface
+final class GreaterThanFactory implements TranslatableFactoryInterface
 {
     use FactoryTrait;
 

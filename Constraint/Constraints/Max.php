@@ -5,7 +5,7 @@ namespace JBen87\ParsleyBundle\Constraint\Constraints;
 use JBen87\ParsleyBundle\Constraint\Constraint;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class Max extends Constraint
+final class Max extends Constraint
 {
     /**
      * @var int

@@ -9,7 +9,7 @@ use JBen87\ParsleyBundle\Constraint\Factory\FactoryInterface;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class EmailFactoryTest extends FactoryTestCase
+final class EmailFactoryTest extends FactoryTestCase
 {
     private const ORIGINAL_MESSAGE = 'This value is not a valid email address.';
     private const TRANSLATED_MESSAGE = 'This value is not a valid email address.';

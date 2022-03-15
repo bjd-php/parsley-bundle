@@ -5,7 +5,7 @@ namespace JBen87\ParsleyBundle\Constraint\Constraints;
 use JBen87\ParsleyBundle\Constraint\Constraint;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class GreaterThan extends Constraint
+final class GreaterThan extends Constraint
 {
     /**
      * @var int

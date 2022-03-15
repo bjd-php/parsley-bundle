@@ -9,7 +9,7 @@ use JBen87\ParsleyBundle\Constraint\Factory\GreaterThanFactory;
 use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class GreaterThanFactoryTest extends FactoryTestCase
+final class GreaterThanFactoryTest extends FactoryTestCase
 {
     private const VALUE = 10;
     private const ORIGINAL_MESSAGE = 'This value should be greater than {{ compared_value }}.';

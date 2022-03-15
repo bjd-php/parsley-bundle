@@ -2,7 +2,7 @@
 
 namespace JBen87\ParsleyBundle\Constraint\Constraints;
 
-class Url extends Type
+final class Url extends Type
 {
     /**
      * @inheritdoc

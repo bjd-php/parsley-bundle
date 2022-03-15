@@ -6,7 +6,7 @@ use JBen87\ParsleyBundle\Constraint\Constraint;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class MaxLength extends Constraint
+final class MaxLength extends Constraint
 {
     /**
      * @var int

@@ -7,7 +7,7 @@ use JBen87\ParsleyBundle\Constraint\Reader\ReaderRegistry;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 
-class ReaderRegistryTest extends TestCase
+final class ReaderRegistryTest extends TestCase
 {
     public function testAll()
     {

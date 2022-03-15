@@ -2,14 +2,10 @@
 
 namespace JBen87\ParsleyBundle\Tests\Form\Extension;
 
-use JBen87\ParsleyBundle\Constraint\Constraints as ParsleyAssert;
-use JBen87\ParsleyBundle\Constraint\Factory\EmailFactory;
-use JBen87\ParsleyBundle\Constraint\Factory\FactoryInterface;
+use JBen87\ParsleyBundle\Constraint\Factory\DateFactory;
 use JBen87\ParsleyBundle\Constraint\Factory\FactoryRegistry;
 use JBen87\ParsleyBundle\Constraint\Factory\RequiredFactory;
-use JBen87\ParsleyBundle\Constraint\Reader\ReaderInterface;
 use JBen87\ParsleyBundle\Constraint\Reader\ReaderRegistry;
-use JBen87\ParsleyBundle\Exception\ConstraintException;
 use JBen87\ParsleyBundle\Form\Extension\ParsleyTypeExtension;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -20,16 +16,11 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ParsleyTypeExtensionTest extends TestCase
+final class ParsleyTypeExtensionTest extends TestCase
 {
-    /**
-     * @var FactoryRegistry|MockObject
-     */
-    private $factoryRegistry;
-
     /**
      * @var LoggerInterface|MockObject
      */
@@ -40,14 +31,9 @@ class ParsleyTypeExtensionTest extends TestCase
      */
     private $normalizer;
 
-    /**
-     * @var MockObject|ReaderRegistry
-     */
-    private $readerRegistry;
-
     public function testConfiguration(): void
     {
-        $extension = $this->createExtension();
+        $extension = $this->createExtension(new FactoryRegistry([]), new ReaderRegistry([]));
         $options = $this->resolveExtensionOptions($extension, []);
 
         $this->assertCount(1, ParsleyTypeExtension::getExtendedTypes());
@@ -67,7 +53,7 @@ class ParsleyTypeExtensionTest extends TestCase
         $form = $this->createMock(FormInterface::class);
         $view = $this->createMock(FormView::class);
 
-        $extension = $this->createExtension($enabled);
+        $extension = $this->createExtension(new FactoryRegistry([]), new ReaderRegistry([]), $enabled);
         $options = $this->resolveExtensionOptions($extension, ['parsley_enabled' => $parsleyEnabled]);
         $extension->finishView($view, $form, $options);
 
@@ -92,7 +78,7 @@ class ParsleyTypeExtensionTest extends TestCase
 
         $this->setUpForm($form, true);
 
-        $extension = $this->createExtension();
+        $extension = $this->createExtension(new FactoryRegistry([]), new ReaderRegistry([]));
         $options = $this->resolveExtensionOptions($extension);
         $extension->finishView($view, $form, $options);
 
@@ -112,7 +98,7 @@ class ParsleyTypeExtensionTest extends TestCase
 
         $this->setUpForm($form);
 
-        $extension = $this->createExtension();
+        $extension = $this->createExtension(new FactoryRegistry([]), new ReaderRegistry([]));
         $options = $this->resolveExtensionOptions($extension);
         $extension->finishView($view, $form, $options);
 
@@ -126,21 +112,7 @@ class ParsleyTypeExtensionTest extends TestCase
 
         $this->setUpForm($form);
 
-        $reader = $this->createMock(ReaderInterface::class);
-        $reader
-            ->expects($this->once())
-            ->method('read')
-            ->with($this->isInstanceOf(FormInterface::class))
-            ->willReturn([])
-        ;
-
-        $this->readerRegistry
-            ->expects($this->once())
-            ->method('all')
-            ->willReturn([$reader])
-        ;
-
-        $extension = $this->createExtension();
+        $extension = $this->createExtension(new FactoryRegistry([]), new ReaderRegistry([new MockReader([])]));
         $options = $this->resolveExtensionOptions($extension);
         $extension->finishView($view, $form, $options);
 
@@ -156,34 +128,17 @@ class ParsleyTypeExtensionTest extends TestCase
 
         $this->setUpForm($form);
 
-        $this->factoryRegistry
-            ->expects($this->once())
-            ->method('findForConstraint')
-            ->with($unsupportedConstraint)
-            ->willThrowException(ConstraintException::createUnsupportedException())
-        ;
-
         $this->logger
             ->expects($this->once())
             ->method('warning')
             ->with($this->isType('string'), ['constraint' => $unsupportedConstraint])
         ;
 
-        $reader = $this->createMock(ReaderInterface::class);
-        $reader
-            ->expects($this->once())
-            ->method('read')
-            ->with($this->isInstanceOf(FormInterface::class))
-            ->willReturn([$unsupportedConstraint])
-        ;
+        $extension = $this->createExtension(
+            new FactoryRegistry([]),
+            new ReaderRegistry([new MockReader([$unsupportedConstraint])])
+        );
 
-        $this->readerRegistry
-            ->expects($this->once())
-            ->method('all')
-            ->willReturn([$reader])
-        ;
-
-        $extension = $this->createExtension();
         $options = $this->resolveExtensionOptions($extension);
         $extension->finishView($view, $form, $options);
 
@@ -197,52 +152,23 @@ class ParsleyTypeExtensionTest extends TestCase
 
         $this->setUpForm($form);
 
-        $factory1 = $this->createMock(FactoryInterface::class);
-        $factory1
-            ->expects($this->once())
-            ->method('create')
-            ->with($this->isInstanceOf(SymfonyConstraint::class))
-            ->willReturn(new ParsleyAssert\Required())
-        ;
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->method('trans')->willReturn('Invalid.');
 
-        $factory2 = $this->createMock(FactoryInterface::class);
-        $factory2
-            ->expects($this->once())
-            ->method('create')
-            ->with($this->isInstanceOf(SymfonyConstraint::class))
-            ->willReturn(new ParsleyAssert\Pattern(['pattern' => 'foo']))
-        ;
+        $factory1 = new RequiredFactory();
+        $factory1->setTranslator($translator);
 
-        $this->factoryRegistry
-            ->expects($this->exactly(2))
-            ->method('findForConstraint')
-            ->with($this->isInstanceOf(SymfonyConstraint::class))
-            ->willReturnOnConsecutiveCalls($factory1, $factory2)
-        ;
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->method('trans')->willReturn('Invalid.');
 
-        $reader1 = $this->createMock(ReaderInterface::class);
-        $reader1
-            ->expects($this->once())
-            ->method('read')
-            ->with($this->isInstanceOf(FormInterface::class))
-            ->willReturn([new Assert\NotBlank()])
-        ;
+        $factory2 = new DateFactory('foo');
+        $factory2->setTranslator($translator);
 
-        $reader2 = $this->createMock(ReaderInterface::class);
-        $reader2
-            ->expects($this->once())
-            ->method('read')
-            ->with($this->isInstanceOf(FormInterface::class))
-            ->willReturn([new Assert\Email()])
-        ;
+        $extension = $this->createExtension(
+            new FactoryRegistry([$factory1, $factory2]),
+            new ReaderRegistry([new MockReader([new Assert\NotBlank(), new Assert\Date()])])
+        );
 
-        $this->readerRegistry
-            ->expects($this->once())
-            ->method('all')
-            ->willReturn([$reader1, $reader2])
-        ;
-
-        $extension = $this->createExtension();
         $options = $this->resolveExtensionOptions($extension);
         $extension->finishView($view, $form, $options);
 
@@ -263,10 +189,8 @@ class ParsleyTypeExtensionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->factoryRegistry = $this->createMock(FactoryRegistry::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->normalizer = $this->createMock(NormalizerInterface::class);
-        $this->readerRegistry = $this->createMock(ReaderRegistry::class);
     }
 
     /**
@@ -297,18 +221,24 @@ class ParsleyTypeExtensionTest extends TestCase
     }
 
     /**
+     * @param FactoryRegistry $factoryRegistry
+     * @param ReaderRegistry $readerRegistry
      * @param bool $enabled
      * @param string $triggerEvent
      *
      * @return ParsleyTypeExtension
      */
-    private function createExtension(bool $enabled = true, string $triggerEvent = 'blur'): ParsleyTypeExtension
-    {
+    private function createExtension(
+        FactoryRegistry $factoryRegistry,
+        ReaderRegistry $readerRegistry,
+        bool $enabled = true,
+        string $triggerEvent = 'blur'
+    ): ParsleyTypeExtension {
         return new ParsleyTypeExtension(
-            $this->factoryRegistry,
+            $factoryRegistry,
             $this->logger,
             $this->normalizer,
-            $this->readerRegistry,
+            $readerRegistry,
             $enabled,
             $triggerEvent
         );

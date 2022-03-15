@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Exception\NoSuchMetadataException;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class DataClassReader implements ReaderInterface
+final class DataClassReader implements ReaderInterface
 {
     /**
      * @var ValidatorInterface

@@ -1,0 +1,116 @@
+name: 'Tests'
+
+on: 'push'
+
+jobs:
+  phpunit:
+    name: 'PHPUnit'
+    runs-on: 'ubuntu-latest'
+
+    strategy:
+      matrix:
+        include:
+          - php-version: '7.4'
+            symfony-version: '5.4.*'
+          - php-version: '7.4'
+            symfony-version: '6.0.*'
+          - php-version: '8.1'
+            symfony-version: '5.4.*'
+          - php-version: '8.1'
+            symfony-version: '6.0.*'
+
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v2'
+
+      - name: 'Setup PHP'
+        uses: 'shivammathur/setup-php@v2'
+        with:
+          coverage: 'none'
+          php-version: '${{ matrix.php-version }}'
+
+      - name: 'Install dependencies with composer'
+        run: 'composer update --no-interaction --no-progress'
+
+      - name: 'Run tests with phpunit/phpunit'
+        run: 'vendor/bin/phpunit'
+
+  codecov:
+    name: 'Code coverage'
+    runs-on: 'ubuntu-latest'
+
+    strategy:
+      matrix:
+        include:
+          - php-version: '8.1'
+
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v2'
+
+      - name: 'Setup PHP'
+        uses: 'shivammathur/setup-php@v2'
+        with:
+          coverage: 'xdebug'
+          php-version: '${{ matrix.php-version }}'
+
+      - name: 'Install dependencies with composer'
+        run: 'composer update --no-interaction --no-progress'
+
+      - name: 'Run tests with phpunit/phpunit'
+        env:
+          CODECOV_TOKEN: '${{ secrets.CODECOV_TOKEN }}'
+        run: 'vendor/bin/phpunit --coverage-clover coverage.xml'
+
+      - name: 'Upload coverage to Codecov'
+        uses: 'codecov/codecov-action@v1'
+
+  checkstyke:
+    name: 'Checkstyle'
+    runs-on: 'ubuntu-latest'
+
+    strategy:
+      matrix:
+        include:
+          - php-version: '8.1'
+
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v2'
+
+      - name: 'Setup PHP'
+        uses: 'shivammathur/setup-php@v2'
+        with:
+          coverage: 'xdebug'
+          php-version: '${{ matrix.php-version }}'
+
+      - name: 'Install dependencies with composer'
+        run: 'composer update --no-interaction --no-progress'
+
+      - name: 'Run checkstyle with squizlabs/php_codesniffer'
+        run: 'vendor/bin/phpcs'
+
+  phpstan:
+    name: 'PHPStan'
+    runs-on: 'ubuntu-latest'
+
+    strategy:
+      matrix:
+        include:
+          - php-version: '8.1'
+
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v2'
+
+      - name: 'Setup PHP'
+        uses: 'shivammathur/setup-php@v2'
+        with:
+          coverage: 'xdebug'
+          php-version: '${{ matrix.php-version }}'
+
+      - name: 'Install dependencies with composer'
+        run: 'composer update --no-interaction --no-progress'
+
+      - name: 'Run static analysis with phpstan/phpstan'
+        run: 'vendor/bin/phpcs'

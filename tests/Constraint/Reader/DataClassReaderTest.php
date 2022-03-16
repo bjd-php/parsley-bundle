@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace JBen87\ParsleyBundle\Tests\Constraint\Reader;
 
 use JBen87\ParsleyBundle\Constraint\Reader\DataClassReader;
-use PHPUnit\Framework\MockObject\Matcher;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormInterface;
@@ -136,7 +136,7 @@ final class DataClassReaderTest extends TestCase
      */
     private function setUpForm(
         MockObject $form,
-        Matcher\InvokedCount $configMatcher = null,
+        Rule\InvokedCount $configMatcher = null,
         ?string $dataClass = '\\stdClass'
     ): void {
         if (null === $configMatcher) {
@@ -175,7 +175,7 @@ final class DataClassReaderTest extends TestCase
      */
     private function setUpValidator(
         MockObject $validator,
-        Matcher\InvokedCount $groupMatcher,
+        Rule\InvokedCount $groupMatcher,
         array $propertyMetadata
     ): void {
         $metadata = $this->createMock(ClassMetadata::class);

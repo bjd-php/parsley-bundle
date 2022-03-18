@@ -1,0 +1,43 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  _instanceof:
+    JBen87\ParsleyBundle\Constraint\Factory\FactoryInterface:
+      tags: ['jben87_parsley.factory']
+    JBen87\ParsleyBundle\Constraint\Reader\ReaderInterface:
+      tags: ['jben87_parsley.reader']
+
+  JBen87\ParsleyBundle\:
+    resource: '../src/'
+    exclude:
+      - '../src/Constraint/Constraints'
+      - '../src/DependencyInjection'
+      - '../src/Exception'
+
+  JBen87\ParsleyBundle\Constraint\Factory\FactoryRegistry:
+    arguments:
+      $factories: !tagged_iterator 'jben87_parsley.factory'
+
+  JBen87\ParsleyBundle\Constraint\Factory\DateFactory:
+    arguments:
+      $datePattern: '%jben87_parsley.date_pattern%'
+
+  JBen87\ParsleyBundle\Constraint\Factory\DateTimeFactory:
+    arguments:
+      $dateTimePattern: '%jben87_parsley.datetime_pattern%'
+
+  JBen87\ParsleyBundle\Constraint\Factory\TimeFactory:
+    arguments:
+      $timePattern: '%jben87_parsley.time_pattern%'
+
+  JBen87\ParsleyBundle\Constraint\Reader\ReaderRegistry:
+    arguments:
+      $readers: !tagged_iterator 'jben87_parsley.reader'
+
+  JBen87\ParsleyBundle\Form\Extension\ParsleyTypeExtension:
+    arguments:
+      $enabled: '%jben87_parsley.enabled%'
+      $triggerEvent: '%jben87_parsley.trigger_event%'

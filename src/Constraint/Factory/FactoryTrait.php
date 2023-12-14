@@ -11,6 +11,9 @@ trait FactoryTrait
 {
     private TranslatorInterface $translator;
 
+    /**
+     * @required
+     */
     #[Required]
     public function setTranslator(TranslatorInterface $translator): void
     {

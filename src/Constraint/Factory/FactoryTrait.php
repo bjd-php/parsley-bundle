@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace JBen87\ParsleyBundle\Constraint\Factory;
 
+use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait FactoryTrait
@@ -13,6 +14,7 @@ trait FactoryTrait
     /**
      * @required
      */
+    #[Required]
     public function setTranslator(TranslatorInterface $translator): void
     {
         $this->translator = $translator;
